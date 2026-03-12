@@ -18,6 +18,13 @@
     <string>APPL</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>KISE uses your location to check the weather and suggest weather-appropriate outfits.</string>
+    <key>UIAppFonts</key>
+    <array>
+        <string>DMSans-Light.ttf</string>
+        <string>DMSans-Regular.ttf</string>
+        <string>DMSans-Medium.ttf</string>
+        <string>CormorantGaramond-Light.ttf</string>
+    </array>
     <key>UILaunchScreen</key>
     <dict/>
 </dict>

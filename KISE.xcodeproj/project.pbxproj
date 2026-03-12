@@ -7,17 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		155BE472453A3D66DD77F5A3 /* DMSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FFAAB8C612766EB7B31E6BBE /* DMSans-Regular.ttf */; };
+		468188F2F5720FC5F4FD3A40 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32294854B5A55E020F17F1BC /* DesignSystem.swift */; };
 		475D9F3B4E839A8D8C17F6C8 /* GarmentPiece.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8068DB08D6428C347A0B118C /* GarmentPiece.swift */; };
 		5634DA4078C72020DC57D938 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC3A62224376814E6DBDF830 /* Assets.xcassets */; };
 		5DA9DFE649D290A3A1A6BDCB /* OutfitSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD29EC3E6D6168316EDFAA /* OutfitSuggestion.swift */; };
+		6838D86133DDD18009A24A4E /* DMSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1CC0D29476F93352A8E2A7A3 /* DMSans-Light.ttf */; };
 		6A1F7FF9D869BD897B4B8CA3 /* EnumsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB68CB66DE0FE6EFEFE711F /* EnumsTests.swift */; };
 		84E86BF006FD48520DE4056C /* Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71235497E1F72A4E3A56DF79 /* Feedback.swift */; };
 		8A27F0BCA6621405467807E3 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F24ECEE06EA7B6DC1B4DEC6 /* Enums.swift */; };
 		A2230B4110B48BA13287F154 /* StyleProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D1955117A8936E77F1CA86 /* StyleProfile.swift */; };
 		ACCDFCD08D24B976EAB9CBF0 /* MaterialDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6087F7599407960D1AEC7A88 /* MaterialDefaults.swift */; };
 		AFDFE8407E6B2A04CECF20E3 /* GarmentColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE30E75B959E4F6568FB2C6E /* GarmentColor.swift */; };
+		B451F78B00BF4B76CA011B9E /* DMSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CCA71B669F6998C8AD847B87 /* DMSans-Medium.ttf */; };
 		B4CFC33605BD336C3628B227 /* GarmentPieceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D170FD20935D328F6992850 /* GarmentPieceTests.swift */; };
 		CBC8512DD569ECCC6367B9B6 /* KISEApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4F8666D00B7FBAF3B2FAEA /* KISEApp.swift */; };
+		E1A1C8D517605576947CF0DA /* CormorantGaramond-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F85CA45FBBE3EF382E48CE25 /* CormorantGaramond-Light.ttf */; };
 		F272568ECD8B4D0675D8AB6E /* WeatherSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62534F845BFB662A1FFEEF5A /* WeatherSnapshot.swift */; };
 		F869D7A7C8F8A76F1B08D6E8 /* GarmentColorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01A1E23C4B8FE58270EB79D /* GarmentColorTests.swift */; };
 /* End PBXBuildFile section */
@@ -34,7 +39,9 @@
 
 /* Begin PBXFileReference section */
 		0AB68CB66DE0FE6EFEFE711F /* EnumsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumsTests.swift; sourceTree = "<group>"; };
+		1CC0D29476F93352A8E2A7A3 /* DMSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-Light.ttf"; sourceTree = "<group>"; };
 		1D170FD20935D328F6992850 /* GarmentPieceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GarmentPieceTests.swift; sourceTree = "<group>"; };
+		32294854B5A55E020F17F1BC /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		4CF9EDD7CD8277BFBA85C7E4 /* KISE.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KISE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55DD29EC3E6D6168316EDFAA /* OutfitSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutfitSuggestion.swift; sourceTree = "<group>"; };
 		5F24ECEE06EA7B6DC1B4DEC6 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
@@ -47,7 +54,10 @@
 		A01A1E23C4B8FE58270EB79D /* GarmentColorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GarmentColorTests.swift; sourceTree = "<group>"; };
 		A90170CA5BF81E97A6CA4609 /* KISETests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = KISETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC3A62224376814E6DBDF830 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CCA71B669F6998C8AD847B87 /* DMSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-Medium.ttf"; sourceTree = "<group>"; };
 		CE30E75B959E4F6568FB2C6E /* GarmentColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GarmentColor.swift; sourceTree = "<group>"; };
+		F85CA45FBBE3EF382E48CE25 /* CormorantGaramond-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-Light.ttf"; sourceTree = "<group>"; };
+		FFAAB8C612766EB7B31E6BBE /* DMSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -137,6 +147,10 @@
 		417172645185A24E9BCA6CCD /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				F85CA45FBBE3EF382E48CE25 /* CormorantGaramond-Light.ttf */,
+				1CC0D29476F93352A8E2A7A3 /* DMSans-Light.ttf */,
+				CCA71B669F6998C8AD847B87 /* DMSans-Medium.ttf */,
+				FFAAB8C612766EB7B31E6BBE /* DMSans-Regular.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -188,6 +202,7 @@
 		989F8B8BF74FFC643BA10CCC /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				32294854B5A55E020F17F1BC /* DesignSystem.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -346,6 +361,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				5634DA4078C72020DC57D938 /* Assets.xcassets in Resources */,
+				E1A1C8D517605576947CF0DA /* CormorantGaramond-Light.ttf in Resources */,
+				6838D86133DDD18009A24A4E /* DMSans-Light.ttf in Resources */,
+				B451F78B00BF4B76CA011B9E /* DMSans-Medium.ttf in Resources */,
+				155BE472453A3D66DD77F5A3 /* DMSans-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,6 +375,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				468188F2F5720FC5F4FD3A40 /* DesignSystem.swift in Sources */,
 				8A27F0BCA6621405467807E3 /* Enums.swift in Sources */,
 				84E86BF006FD48520DE4056C /* Feedback.swift in Sources */,
 				AFDFE8407E6B2A04CECF20E3 /* GarmentColor.swift in Sources */,
