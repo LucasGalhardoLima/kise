@@ -8,6 +8,8 @@ final class WeatherService {
     private(set) var currentWeather: WeatherSnapshot?
     private(set) var isLoading = false
     private(set) var error: String?
+    /// iOS 26+: significant weather change alert (e.g., "Tomorrow will be 12°C colder")
+    private(set) var significantChangeNote: String?
 
     private let weatherService = WeatherKit.WeatherService.shared
     private let locationManager = LocationManager()
@@ -46,12 +48,45 @@ final class WeatherService {
                 condition: current.condition.rawValue,
                 hourlyForecast: Array(hourlyEntries)
             )
+
+            // iOS 26+: Check for significant temperature changes tomorrow
+            await fetchSignificantChanges(location: location)
         } catch {
             self.error = error.localizedDescription
             // Keep last cached weather if available
         }
 
         isLoading = false
+    }
+
+    private func fetchSignificantChanges(location: CLLocation) async {
+        if #available(iOS 26, *) {
+            do {
+                let daily = try await weatherService.weather(
+                    for: location,
+                    including: .daily
+                )
+                // Compare today and tomorrow
+                let forecasts = Array(daily.prefix(2))
+                if forecasts.count == 2 {
+                    let todayHigh = forecasts[0].highTemperature.converted(to: .celsius).value
+                    let tomorrowHigh = forecasts[1].highTemperature.converted(to: .celsius).value
+                    let delta = tomorrowHigh - todayHigh
+
+                    if abs(delta) >= 8 {
+                        if delta < 0 {
+                            significantChangeNote = "Tomorrow will be \(Int(abs(delta)))°C colder — plan a warmer outfit."
+                        } else {
+                            significantChangeNote = "Tomorrow will be \(Int(delta))°C warmer — lighter layers ahead."
+                        }
+                    } else {
+                        significantChangeNote = nil
+                    }
+                }
+            } catch {
+                // Non-critical — silently skip
+            }
+        }
     }
 }
 
