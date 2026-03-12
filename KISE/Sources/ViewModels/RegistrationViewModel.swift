@@ -3,7 +3,7 @@ import SwiftUI
 import SwiftData
 
 enum RegistrationStep: Int, CaseIterable, Comparable {
-    case category, color, fit, material, weight, formality, confirm
+    case category, color, fit, material, weight, formality
 
     static func < (lhs: RegistrationStep, rhs: RegistrationStep) -> Bool {
         lhs.rawValue < rhs.rawValue
@@ -20,6 +20,7 @@ final class RegistrationViewModel {
     var selectedWeight: FabricWeight?
     var selectedFormality: Formality?
     var userPhotoPath: String?
+    var showAddedConfirmation = false
 
     // MARK: - Computed
 
@@ -33,13 +34,6 @@ final class RegistrationViewModel {
 
     var suggestedFormality: Formality? {
         selectedCategory?.defaultFormality
-    }
-
-    var catalogImageKey: String? {
-        guard let category = selectedCategory,
-              let color = selectedColor,
-              let fit = selectedFit else { return nil }
-        return CatalogImageService.imageKey(category: category, color: color.id, fit: fit)
     }
 
     // MARK: - Actions
@@ -73,7 +67,7 @@ final class RegistrationViewModel {
 
     func selectFormality(_ formality: Formality) {
         selectedFormality = formality
-        currentStep = .confirm
+        // No more confirm step — flow ends here, save is triggered by the view
     }
 
     func goBack() {

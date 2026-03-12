@@ -1,46 +1,6 @@
 // KISE/Sources/Views/Registration/AttributeStepView.swift
 import SwiftUI
 
-// MARK: - Color Picker Step
-
-struct ColorPickerStepView: View {
-    let onSelect: (GarmentColor) -> Void
-
-    private let columns = [
-        GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()),
-        GridItem(.flexible()), GridItem(.flexible()),
-    ]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
-            Text("What color?")
-                .font(KISEDesign.Typography.title)
-                .foregroundStyle(KISEDesign.Colors.textPrimary)
-
-            LazyVGrid(columns: columns, spacing: KISEDesign.Spacing.md) {
-                ForEach(GarmentColor.allColors) { color in
-                    Button {
-                        onSelect(color)
-                    } label: {
-                        VStack(spacing: KISEDesign.Spacing.xs) {
-                            Circle()
-                                .fill(color.color)
-                                .frame(width: 48, height: 48)
-                                .overlay {
-                                    Circle().stroke(KISEDesign.Colors.border, lineWidth: 1)
-                                }
-                            Text(color.name)
-                                .font(KISEDesign.Typography.small)
-                                .foregroundStyle(KISEDesign.Colors.textSecondary)
-                                .lineLimit(1)
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 // MARK: - Generic Option Picker Step
 
 struct OptionPickerStepView<T: Identifiable>: View where T: Equatable {
