@@ -159,6 +159,7 @@ struct SuggestionView: View {
                         ForEach(Occasion.allCases) { occasion in
                             Button {
                                 viewModel.occasion = occasion
+                                Task { await viewModel.regenerate(context: modelContext) }
                             } label: {
                                 Text(occasion.displayName)
                                     .font(KISEDesign.Typography.caption)
@@ -194,7 +195,11 @@ struct SuggestionView: View {
                                 .font(KISEDesign.Typography.small)
                                 .foregroundStyle(KISEDesign.Colors.textTertiary)
                         }
-                        Slider(value: $viewModel.boldness, in: 0...1, step: 0.1)
+                        Slider(value: $viewModel.boldness, in: 0...1, step: 0.1) { editing in
+                            if !editing {
+                                Task { await viewModel.regenerate(context: modelContext) }
+                            }
+                        }
                             .tint(KISEDesign.Colors.accent)
                     }
                 }
