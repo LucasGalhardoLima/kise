@@ -109,30 +109,11 @@ struct WardrobeView: View {
     }
 
     private func garmentCard(_ piece: GarmentPiece) -> some View {
-        VStack(spacing: KISEDesign.Spacing.xs) {
-            Group {
-                if let uiImage = CatalogImageService.loadImage(
-                    category: piece.category, color: piece.color, fit: piece.fit
-                ) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .scaledToFill()
-                } else {
-                    RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
-                        .fill(Color(hex: piece.colorHex).opacity(0.3))
-                        .overlay {
-                            Image(systemName: piece.category.systemIcon)
-                                .foregroundStyle(KISEDesign.Colors.textSecondary)
-                        }
-                }
-            }
-            .aspectRatio(3 / 4, contentMode: .fit)
-            .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.sm))
-
-            Text("\(piece.color.capitalized) \(piece.category.displayName)")
-                .font(KISEDesign.Typography.small)
-                .foregroundStyle(KISEDesign.Colors.textSecondary)
-                .lineLimit(1)
-        }
+        ColorTileView(
+            colorHex: piece.colorHex,
+            colorName: piece.color,
+            category: piece.category.displayName,
+            fit: piece.fit.displayName
+        )
     }
 }
