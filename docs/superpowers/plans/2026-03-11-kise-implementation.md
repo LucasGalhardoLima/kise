@@ -1090,15 +1090,13 @@ enum KISEDesign {
     // MARK: - Typography
 
     enum Typography {
-        static let headingFont = "PlayfairDisplay-Regular"
-        static let headingBoldFont = "PlayfairDisplay-Bold"
-
+        // Japanese functional minimalism: SF Pro only, light weights
         static func heading(_ size: CGFloat) -> Font {
-            .custom(headingFont, size: size)
+            .system(size: size, weight: .light)
         }
 
-        static func headingBold(_ size: CGFloat) -> Font {
-            .custom(headingBoldFont, size: size)
+        static func headingMedium(_ size: CGFloat) -> Font {
+            .system(size: size, weight: .medium)
         }
 
         static func body(_ size: CGFloat) -> Font {
@@ -1156,36 +1154,11 @@ extension View {
 }
 ```
 
-- [ ] **Step 2: Download and bundle Playfair Display font**
-
-Download Playfair Display Regular and Bold from Google Fonts. Place files in `KISE/Sources/Resources/Fonts/`:
-- `PlayfairDisplay-Regular.ttf`
-- `PlayfairDisplay-Bold.ttf`
-
-Add to `Info.plist`:
-```xml
-<key>UIAppFonts</key>
-<array>
-    <string>PlayfairDisplay-Regular.ttf</string>
-    <string>PlayfairDisplay-Bold.ttf</string>
-</array>
-```
-
-Update `project.yml` to include the Resources directory:
-```yaml
-sources:
-  - path: KISE/Sources
-  - path: KISE/Assets.xcassets
-  - path: KISE/Preview Content
-```
-
-(Font files under `KISE/Sources/Resources/` will be picked up by the `KISE/Sources` source path.)
-
-- [ ] **Step 3: Commit**
+- [ ] **Step 2: Commit**
 
 ```bash
-git add KISE/Sources/Views/Shared/DesignSystem.swift KISE/Sources/Resources/ KISE/Info.plist
-git commit -m "feat: add design system with Playfair Display font"
+git add KISE/Sources/Views/Shared/DesignSystem.swift
+git commit -m "feat: add design system (SF Pro, Japanese functional minimalism)"
 ```
 
 ---

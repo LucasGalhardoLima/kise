@@ -1,8 +1,8 @@
-# KISE — Design Specification
+# KISE 着せ — Design Specification
 
-**Intelligent wardrobe consultant.**
+**Your wardrobe, with intention.**
 
-A native iOS app that helps people dress with intention — combining their pieces, style, local weather, and daily context to suggest outfits that make sense.
+A native iOS app that dresses you with purpose — combining your pieces, style, local weather, and daily context to suggest outfits that make sense.
 
 ---
 
@@ -30,9 +30,21 @@ The app starts as a **wardrobe consultant** and evolves into a **personal shoppe
 
 KISE is not a "look suggestion by AI" app. It's a wardrobe partner for people who dress with intention. The real value is closer to a personal image consultant in your pocket.
 
-**The name:** KISE. Short, premium, global.
+**The name:** From Japanese 着せ (kiseru) — "to dress someone." The app dresses you. Four letters, two syllables, global. Phonetically, 気 (ki — spirit/energy) + 背 (se — posture/bearing) add layers of meaning to the brand storytelling.
 
-**Aesthetic:** Recognizable minimalism. Thin serif typography, off-white background, zero noise. Visual references: UNIQLO, COS, Arket, Aesop.
+**Aesthetic:** Japanese functional minimalism. Clean typography with light weight, generous negative space, reduced palette, off-white background. Visual references: MUJI, UNIQLO, COS, Arket, Aesop. The branding breathes the same culture that inspires the Japanese color dictionaries in the product roadmap.
+
+**Japanese language in branding — identity, not interface:**
+
+Japanese appears in deliberate, decorative moments — never in navigation, buttons, or any text the user needs to read to use the app.
+
+Where to use:
+- **Branding:** "KISE 着せ" as visual signature on splash screen, App Store listing, and website. The kanji beside the name works as a seal — users don't need to read it, they need to recognize it.
+- **Easter eggs and craft details:** Subtle moments that reward those who notice. E.g., after completing onboarding, a brief transition with 整う (tonou — "in harmony"). Those who notice are delighted. Those who don't miss nothing.
+- **Color dictionaries feature (V2):** Japanese color harmony names keep their original nomenclature — 桜鼠 (sakura-nezumi), 藍色 (ai-iro). Here, Japanese is content, not decoration.
+
+Where never to use:
+- Navigation, menus, form labels, action buttons, onboarding — 100% in the device's local language.
 
 ---
 
@@ -554,11 +566,12 @@ Tab bar with two tabs: **Home** (suggestion) and **Wardrobe**. Settings accessib
 ### Aesthetic
 
 - Off-white background (#F5F3EF or similar warm neutral)
-- Serif typeface for headings (Playfair Display or similar)
-- Sans-serif for body (SF Pro for readability)
+- Clean, light-weight sans-serif typography (SF Pro) — no serifs, no heavy fonts
+- Generous negative space, reduced palette — Japanese functional minimalism
 - Minimal color in UI — the clothes are the color
 - Cards with subtle shadows, generous spacing
 - No gradients, no neon, no badges, no gamification
+- "KISE 着せ" visual signature on splash/launch screen
 
 **Liquid Glass (iOS 26+):**
 - Standard controls (tab bar, navigation bar, toolbars) automatically adopt Liquid Glass when compiled with Xcode 26. No code changes needed — this happens for free.
@@ -681,4 +694,4 @@ Free → premium transition is natural: the app proves value organizing what you
 
 ---
 
-*KISE. Dress with intention.*
+*KISE. 着せ. Dress with intention.*
