@@ -1,0 +1,572 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5634DA4078C72020DC57D938 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC3A62224376814E6DBDF830 /* Assets.xcassets */; };
+		CBC8512DD569ECCC6367B9B6 /* KISEApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4F8666D00B7FBAF3B2FAEA /* KISEApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BC2F5AE4E48222BC6B0AFCD6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7771E584E911472C6195AF9C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C175C6902E003A5A281136EA;
+			remoteInfo = KISE;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4CF9EDD7CD8277BFBA85C7E4 /* KISE.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KISE.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F4F8666D00B7FBAF3B2FAEA /* KISEApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KISEApp.swift; sourceTree = "<group>"; };
+		A90170CA5BF81E97A6CA4609 /* KISETests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = KISETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC3A62224376814E6DBDF830 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		03D4BE832D9776CBEF650942 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		06B190391990342C0B610AF3 = {
+			isa = PBXGroup;
+			children = (
+				25D387939C15C373875E19FA /* KISE */,
+				20AF3ECFE4CD2019ABBA1E03 /* Preview Content */,
+				8FFF0B919B372489100D032E /* Sources */,
+				D3C1634AD27C6C36F011C37F /* Tests */,
+				D2B326B64A997742A2414D8D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0FA52EA7A2BC5EE18DD9EBE7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CF8CD3B64DF3EC521879D7BE /* Onboarding */,
+				391A7A6074DB9B1EDB669B5F /* Registration */,
+				1F3AFF7E375FFDD0FDA47F19 /* Settings */,
+				989F8B8BF74FFC643BA10CCC /* Shared */,
+				CDE846E8B89BDAD60E84B7C4 /* Suggestion */,
+				33ACB7BAB6D4289CB9469ED2 /* Wardrobe */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1F3AFF7E375FFDD0FDA47F19 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		20AF3ECFE4CD2019ABBA1E03 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Preview Content";
+			path = "KISE/Preview Content";
+			sourceTree = "<group>";
+		};
+		25D387939C15C373875E19FA /* KISE */ = {
+			isa = PBXGroup;
+			children = (
+				BC3A62224376814E6DBDF830 /* Assets.xcassets */,
+			);
+			path = KISE;
+			sourceTree = "<group>";
+		};
+		2BAD82025282781686E0BE6D /* App */ = {
+			isa = PBXGroup;
+			children = (
+				8F4F8666D00B7FBAF3B2FAEA /* KISEApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		33ACB7BAB6D4289CB9469ED2 /* Wardrobe */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Wardrobe;
+			sourceTree = "<group>";
+		};
+		391A7A6074DB9B1EDB669B5F /* Registration */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Registration;
+			sourceTree = "<group>";
+		};
+		408937B94B5A630BADB923F0 /* iOS26 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = iOS26;
+			sourceTree = "<group>";
+		};
+		417172645185A24E9BCA6CCD /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		56283F17ED440A390D549779 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		5C4D593363D336E2558D294B /* iOS26 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = iOS26;
+			sourceTree = "<group>";
+		};
+		60342CEA62A80D8011084D96 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8FFF0B919B372489100D032E /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				2BAD82025282781686E0BE6D /* App */,
+				408937B94B5A630BADB923F0 /* iOS26 */,
+				60342CEA62A80D8011084D96 /* Models */,
+				E84C3983232BF32352E71227 /* Resources */,
+				ED4FA83FCD0E2CAD6885AA3D /* Services */,
+				C2B125FFE44016CD98DDDAE7 /* Utilities */,
+				56283F17ED440A390D549779 /* ViewModels */,
+				0FA52EA7A2BC5EE18DD9EBE7 /* Views */,
+			);
+			name = Sources;
+			path = KISE/Sources;
+			sourceTree = "<group>";
+		};
+		989F8B8BF74FFC643BA10CCC /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		9F6C0EADEF841D01CFCC0D28 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C2B125FFE44016CD98DDDAE7 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		CDE846E8B89BDAD60E84B7C4 /* Suggestion */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Suggestion;
+			sourceTree = "<group>";
+		};
+		CF8CD3B64DF3EC521879D7BE /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		D2B326B64A997742A2414D8D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CF9EDD7CD8277BFBA85C7E4 /* KISE.app */,
+				A90170CA5BF81E97A6CA4609 /* KISETests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D3C1634AD27C6C36F011C37F /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				5C4D593363D336E2558D294B /* iOS26 */,
+				9F6C0EADEF841D01CFCC0D28 /* Models */,
+				D62286958AF6DCDFE2F0F9FB /* Services */,
+				03D4BE832D9776CBEF650942 /* ViewModels */,
+			);
+			name = Tests;
+			path = KISE/Tests;
+			sourceTree = "<group>";
+		};
+		D62286958AF6DCDFE2F0F9FB /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		E84C3983232BF32352E71227 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				417172645185A24E9BCA6CCD /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		ED4FA83FCD0E2CAD6885AA3D /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C175C6902E003A5A281136EA /* KISE */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BEE626521B5E44A5DE8641FE /* Build configuration list for PBXNativeTarget "KISE" */;
+			buildPhases = (
+				758D507784C0E6F5F4FC7481 /* Sources */,
+				5940C4E6B69A64C03B4AA222 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KISE;
+			packageProductDependencies = (
+			);
+			productName = KISE;
+			productReference = 4CF9EDD7CD8277BFBA85C7E4 /* KISE.app */;
+			productType = "com.apple.product-type.application";
+		};
+		EACF5EE7E86C7EB94105250F /* KISETests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28620018A8090967F09B0A5B /* Build configuration list for PBXNativeTarget "KISETests" */;
+			buildPhases = (
+				ABDCBCA6934D60AFC40447F2 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CA95C5B50F7F5665C71EE133 /* PBXTargetDependency */,
+			);
+			name = KISETests;
+			packageProductDependencies = (
+			);
+			productName = KISETests;
+			productReference = A90170CA5BF81E97A6CA4609 /* KISETests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7771E584E911472C6195AF9C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					C175C6902E003A5A281136EA = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 6D06EFCC8C716EF4EBFAA7BD /* Build configuration list for PBXProject "KISE" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 06B190391990342C0B610AF3;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C175C6902E003A5A281136EA /* KISE */,
+				EACF5EE7E86C7EB94105250F /* KISETests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5940C4E6B69A64C03B4AA222 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5634DA4078C72020DC57D938 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		758D507784C0E6F5F4FC7481 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CBC8512DD569ECCC6367B9B6 /* KISEApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ABDCBCA6934D60AFC40447F2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CA95C5B50F7F5665C71EE133 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C175C6902E003A5A281136EA /* KISE */;
+			targetProxy = BC2F5AE4E48222BC6B0AFCD6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		11D6715BD6E5FB41A8B374B5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.kise.app.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KISE.app/KISE";
+			};
+			name = Debug;
+		};
+		19A25AA2D3A4B17BAEFCD05B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = KISE/KISE.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = KISE/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.kise.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		34C463BE2661898FC4A6261D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		48019AE9E78B874B8AD5C6D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.kise.app.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KISE.app/KISE";
+			};
+			name = Release;
+		};
+		9F02E189DA6152B3480932C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = KISE/KISE.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = KISE/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.kise.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		BF5D354362DBC597D4FBA5EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		28620018A8090967F09B0A5B /* Build configuration list for PBXNativeTarget "KISETests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				11D6715BD6E5FB41A8B374B5 /* Debug */,
+				48019AE9E78B874B8AD5C6D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6D06EFCC8C716EF4EBFAA7BD /* Build configuration list for PBXProject "KISE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF5D354362DBC597D4FBA5EB /* Debug */,
+				34C463BE2661898FC4A6261D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BEE626521B5E44A5DE8641FE /* Build configuration list for PBXNativeTarget "KISE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				19A25AA2D3A4B17BAEFCD05B /* Debug */,
+				9F02E189DA6152B3480932C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7771E584E911472C6195AF9C /* Project object */;
+}
