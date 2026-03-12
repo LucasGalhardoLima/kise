@@ -10,6 +10,7 @@ final class SuggestionViewModel {
     var alternativeForPiece: GarmentPiece?
 
     var isLoading = false
+    var isRegenerating = false
     var error: String?
 
     var occasion: Occasion = .everyday
@@ -22,8 +23,12 @@ final class SuggestionViewModel {
         !suggestedPieces.isEmpty || currentSuggestion != nil
     }
 
-    func fetchSuggestion(context: ModelContext) async {
-        isLoading = true
+    func fetchSuggestion(context: ModelContext, regenerating: Bool = false) async {
+        if regenerating {
+            isRegenerating = true
+        } else {
+            isLoading = true
+        }
         error = nil
 
         // Fetch style profile
@@ -114,6 +119,7 @@ final class SuggestionViewModel {
         }
 
         isLoading = false
+        isRegenerating = false
     }
 
     func submitFeedback(liked: Bool, context: ModelContext) {
@@ -125,7 +131,7 @@ final class SuggestionViewModel {
     }
 
     func regenerate(context: ModelContext) async {
-        await fetchSuggestion(context: context)
+        await fetchSuggestion(context: context, regenerating: true)
     }
 
     private func fetchOnDeviceFallback(

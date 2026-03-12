@@ -16,10 +16,13 @@ struct SuggestionView: View {
                 VStack(spacing: KISEDesign.Spacing.lg) {
                     if activePieces.count < 2 {
                         emptyState
-                    } else if viewModel.isLoading {
+                    } else if viewModel.isLoading && viewModel.currentSuggestion == nil {
                         loadingState
-                    } else if let _ = viewModel.currentSuggestion {
+                    } else if viewModel.currentSuggestion != nil {
                         suggestionContent
+                            .opacity(viewModel.isRegenerating ? 0.5 : 1.0)
+                            .allowsHitTesting(!viewModel.isRegenerating)
+                            .animation(.easeInOut(duration: 0.2), value: viewModel.isRegenerating)
                     } else {
                         readyState
                     }
