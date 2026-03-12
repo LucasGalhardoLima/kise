@@ -274,12 +274,11 @@ Create `VESTI/VESTI.entitlements`:
 </plist>
 ```
 
-- [ ] **Step 7: Create minimal app entry point**
+- [ ] **Step 7: Create minimal app entry point (placeholder — models added in Task 3)**
 
 ```swift
 // VESTI/Sources/App/VESTIApp.swift
 import SwiftUI
-import SwiftData
 
 @main
 struct VESTIApp: App {
@@ -287,11 +286,6 @@ struct VESTIApp: App {
         WindowGroup {
             Text("VESTI")
         }
-        .modelContainer(for: [
-            StyleProfile.self,
-            GarmentPiece.self,
-            OutfitSuggestion.self,
-        ])
     }
 }
 ```
@@ -305,7 +299,7 @@ xcodegen generate
 xcodebuild -project VESTI.xcodeproj -scheme VESTI -destination 'platform=iOS Simulator,name=iPhone 16' build 2>&1 | tail -5
 ```
 
-Expected: Build may fail due to missing model types — that's fine, we'll add them in the next task.
+Expected: Build succeeds with the minimal placeholder app.
 
 - [ ] **Step 9: Commit**
 
@@ -335,7 +329,7 @@ final class EnumsTests: XCTestCase {
 
     func testGarmentCategoryDisplayName() {
         XCTAssertEqual(GarmentCategory.tShirt.displayName, "T-Shirt")
-        XCTAssertEqual(GarmentCategory.smartCasual.rawValue, "smartCasual")  // verify raw value
+        XCTAssertEqual(GarmentCategory.tShirt.rawValue, "tShirt")  // verify raw value
     }
 
     func testGarmentCategoryTabGroup() {
@@ -1155,11 +1149,36 @@ extension View {
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [ ] **Step 2: Download and bundle Playfair Display font**
+
+Download Playfair Display Regular and Bold from Google Fonts. Place files in `VESTI/Sources/Resources/Fonts/`:
+- `PlayfairDisplay-Regular.ttf`
+- `PlayfairDisplay-Bold.ttf`
+
+Add to `Info.plist`:
+```xml
+<key>UIAppFonts</key>
+<array>
+    <string>PlayfairDisplay-Regular.ttf</string>
+    <string>PlayfairDisplay-Bold.ttf</string>
+</array>
+```
+
+Update `project.yml` to include the Resources directory:
+```yaml
+sources:
+  - path: VESTI/Sources
+  - path: VESTI/Assets.xcassets
+  - path: VESTI/Preview Content
+```
+
+(Font files under `VESTI/Sources/Resources/` will be picked up by the `VESTI/Sources` source path.)
+
+- [ ] **Step 3: Commit**
 
 ```bash
-git add VESTI/Sources/Views/Shared/DesignSystem.swift
-git commit -m "feat: add design system (colors, typography, spacing)"
+git add VESTI/Sources/Views/Shared/DesignSystem.swift VESTI/Sources/Resources/ VESTI/Info.plist
+git commit -m "feat: add design system with Playfair Display font"
 ```
 
 ---
@@ -3605,7 +3624,7 @@ final class SuggestionService {
         )
     }
 
-    // MARK: - API Call
+    // MARK: - API Call (with single retry per spec)
 
     func fetchSuggestion(
         archetypes: [StyleArchetype],
@@ -3631,6 +3650,17 @@ final class SuggestionService {
         request.httpBody = try JSONSerialization.data(withJSONObject: payload)
         request.timeoutInterval = 15
 
+        // First attempt
+        do {
+            return try await executeRequest(request)
+        } catch {
+            // Single retry after 2 seconds (per spec)
+            try await Task.sleep(nanoseconds: 2_000_000_000)
+            return try await executeRequest(request)
+        }
+    }
+
+    private func executeRequest(_ request: URLRequest) async throws -> SuggestionAPIResponse {
         let (data, response) = try await URLSession.shared.data(for: request)
 
         guard let httpResponse = response as? HTTPURLResponse else {
@@ -3744,6 +3774,7 @@ Expected: Compilation errors.
 // VESTI/Sources/ViewModels/SuggestionViewModel.swift
 import SwiftUI
 import SwiftData
+import CoreLocation
 
 enum SuggestionState: Equatable {
     case empty
@@ -3872,8 +3903,6 @@ final class SuggestionViewModel {
     }
 }
 ```
-
-Note: Add `import CoreLocation` at the top of the file.
 
 - [ ] **Step 4: Run tests to verify they pass**
 
@@ -4574,4 +4603,162 @@ Open `VESTI.xcodeproj` in Xcode, select iPhone 16 simulator, and run. Verify:
 ```bash
 git add -A
 git commit -m "chore: final adjustments after smoke test"
+```
+
+---
+
+### Task 25: Swipe-to-Archive + Stale Suggestion Indicator
+
+**Files:**
+- Modify: `VESTI/Sources/Views/Wardrobe/WardrobeView.swift`
+- Modify: `VESTI/Sources/Views/Suggestion/SuggestionView.swift`
+
+- [ ] **Step 1: Add swipe-to-archive in WardrobeView**
+
+In the `LazyVGrid` `ForEach`, wrap each garment card in a `SwipeAction`:
+
+Replace the garment card `Button` with:
+```swift
+ForEach(viewModel.filterPieces(pieces)) { piece in
+    Button {
+        viewModel.selectedPiece = piece
+    } label: {
+        garmentCard(piece)
+    }
+    .contextMenu {
+        Button(role: .destructive) {
+            withAnimation {
+                WardrobeViewModel.archivePiece(piece)
+                try? modelContext.save()
+            }
+        } label: {
+            Label("Archive", systemImage: "archivebox")
+        }
+    }
+}
+```
+
+(Note: `LazyVGrid` doesn't support `swipeActions` like `List` does. Use `contextMenu` for grid views — long press to archive.)
+
+- [ ] **Step 2: Add stale suggestion indicator in SuggestionView**
+
+Add a computed property and display element in the `.loaded` case:
+
+```swift
+// Add inside SuggestionView
+private var isStale: Bool {
+    guard let suggestion = viewModel.currentSuggestion else { return false }
+    return !Calendar.current.isDateInToday(suggestion.suggestedAt)
+}
+
+// In the .loaded case, before the outfit cards:
+if isStale {
+    Text("From yesterday")
+        .font(VESTIDesign.Typography.small)
+        .foregroundStyle(VESTIDesign.Colors.textTertiary)
+        .padding(.horizontal, VESTIDesign.Spacing.md)
+        .padding(.vertical, VESTIDesign.Spacing.xs)
+        .background(VESTIDesign.Colors.border.opacity(0.3))
+        .clipShape(Capsule())
+}
+```
+
+- [ ] **Step 3: Add `@Environment(\.modelContext)` to WardrobeView if missing**
+
+Ensure `WardrobeView` has: `@Environment(\.modelContext) private var modelContext`
+
+- [ ] **Step 4: Build and verify**
+
+Expected: Build succeeds.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add VESTI/Sources/Views/Wardrobe/WardrobeView.swift VESTI/Sources/Views/Suggestion/SuggestionView.swift
+git commit -m "feat: add context menu archive and stale suggestion indicator"
+```
+
+---
+
+### Task 26: Background Prefetch Service
+
+**Files:**
+- Create: `VESTI/Sources/Services/SuggestionPrefetchService.swift`
+- Modify: `VESTI/Sources/App/VESTIApp.swift`
+
+- [ ] **Step 1: Implement SuggestionPrefetchService**
+
+```swift
+// VESTI/Sources/Services/SuggestionPrefetchService.swift
+import Foundation
+import BackgroundTasks
+import SwiftData
+import CoreLocation
+
+enum SuggestionPrefetchService {
+    static let taskIdentifier = "com.vesti.app.prefetch-suggestion"
+
+    static func register() {
+        BGTaskScheduler.shared.register(
+            forTaskWithIdentifier: taskIdentifier,
+            using: nil
+        ) { task in
+            guard let refreshTask = task as? BGAppRefreshTask else { return }
+            handlePrefetch(task: refreshTask)
+        }
+    }
+
+    static func scheduleNextPrefetch() {
+        let request = BGAppRefreshTaskRequest(identifier: taskIdentifier)
+        // Schedule for early morning
+        request.earliestBeginDate = Calendar.current.nextDate(
+            after: Date(),
+            matching: DateComponents(hour: 6),
+            matchingPolicy: .nextTime
+        )
+        try? BGTaskScheduler.shared.submit(request)
+    }
+
+    private static func handlePrefetch(task: BGAppRefreshTask) {
+        let fetchTask = Task {
+            // Background prefetch logic will go here once
+            // the model container is accessible in background context.
+            // For MVP, this schedules the next refresh and completes.
+            scheduleNextPrefetch()
+            task.setTaskCompleted(success: true)
+        }
+
+        task.expirationHandler = {
+            fetchTask.cancel()
+            task.setTaskCompleted(success: false)
+        }
+    }
+}
+```
+
+- [ ] **Step 2: Register in VESTIApp**
+
+Add to the `VESTIApp` init or use `.onAppear`:
+
+```swift
+// In VESTIApp body, add to WindowGroup:
+.onAppear {
+    SuggestionPrefetchService.register()
+    SuggestionPrefetchService.scheduleNextPrefetch()
+}
+```
+
+Add `BGTaskSchedulerPermittedIdentifiers` to `Info.plist`:
+```xml
+<key>BGTaskSchedulerPermittedIdentifiers</key>
+<array>
+    <string>com.vesti.app.prefetch-suggestion</string>
+</array>
+```
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add VESTI/Sources/Services/SuggestionPrefetchService.swift VESTI/Sources/App/VESTIApp.swift VESTI/Info.plist
+git commit -m "feat: add background prefetch service scaffold for suggestion caching"
 ```
