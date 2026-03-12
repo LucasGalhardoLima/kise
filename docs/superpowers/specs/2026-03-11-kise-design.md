@@ -566,12 +566,14 @@ Tab bar with two tabs: **Home** (suggestion) and **Wardrobe**. Settings accessib
 ### Aesthetic
 
 - Off-white background (#F5F3EF or similar warm neutral)
-- Clean, light-weight sans-serif typography (SF Pro) — no serifs, no heavy fonts
+- **Typography — two layers (identity vs interface):**
+  - **DM Sans** (interface): all UI headings (light weight), body text (regular), buttons (medium). Geometric, quiet, functional.
+  - **Cormorant Garamond Light** (brand): exclusively for the "KISE 着せ" wordmark on splash screen and branding moments. Never in interactive UI.
 - Generous negative space, reduced palette — Japanese functional minimalism
 - Minimal color in UI — the clothes are the color
 - Cards with subtle shadows, generous spacing
 - No gradients, no neon, no badges, no gamification
-- "KISE 着せ" visual signature on splash/launch screen
+- "KISE 着せ" visual signature on splash/launch screen (Cormorant Garamond + kanji)
 
 **Liquid Glass (iOS 26+):**
 - Standard controls (tab bar, navigation bar, toolbars) automatically adopt Liquid Glass when compiled with Xcode 26. No code changes needed — this happens for free.

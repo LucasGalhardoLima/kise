@@ -1088,23 +1088,36 @@ enum KISEDesign {
     }
 
     // MARK: - Typography
+    // Two layers: DM Sans (interface) + Cormorant Garamond (brand identity)
 
     enum Typography {
-        // Japanese functional minimalism: SF Pro only, light weights
+        // Interface font: DM Sans (bundled)
+        static let interfaceFont = "DMSans-Regular"
+        static let interfaceFontLight = "DMSans-Light"
+        static let interfaceFontMedium = "DMSans-Medium"
+
+        // Brand font: Cormorant Garamond (splash/wordmark only)
+        static let brandFont = "CormorantGaramond-Light"
+
         static func heading(_ size: CGFloat) -> Font {
-            .system(size: size, weight: .light)
+            .custom(interfaceFontLight, size: size)
         }
 
         static func headingMedium(_ size: CGFloat) -> Font {
-            .system(size: size, weight: .medium)
+            .custom(interfaceFontMedium, size: size)
         }
 
         static func body(_ size: CGFloat) -> Font {
-            .system(size: size)
+            .custom(interfaceFont, size: size)
         }
 
         static func bodyMedium(_ size: CGFloat) -> Font {
-            .system(size: size, weight: .medium)
+            .custom(interfaceFontMedium, size: size)
+        }
+
+        /// Brand wordmark font — only for "KISE 着せ" signature
+        static func brand(_ size: CGFloat) -> Font {
+            .custom(brandFont, size: size)
         }
 
         // Predefined sizes
@@ -1114,6 +1127,7 @@ enum KISEDesign {
         static let bodyText = body(15)
         static let caption = body(13)
         static let small = body(11)
+        static let brandTitle = brand(36)
     }
 
     // MARK: - Spacing
@@ -1154,11 +1168,32 @@ extension View {
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [ ] **Step 2: Download and bundle fonts**
+
+Download from Google Fonts and place in `KISE/Sources/Resources/Fonts/`:
+- `DMSans-Light.ttf`
+- `DMSans-Regular.ttf`
+- `DMSans-Medium.ttf`
+- `CormorantGaramond-Light.ttf`
+
+Add to `Info.plist`:
+```xml
+<key>UIAppFonts</key>
+<array>
+    <string>DMSans-Light.ttf</string>
+    <string>DMSans-Regular.ttf</string>
+    <string>DMSans-Medium.ttf</string>
+    <string>CormorantGaramond-Light.ttf</string>
+</array>
+```
+
+(Font files under `KISE/Sources/Resources/` are picked up by the `KISE/Sources` source path in project.yml.)
+
+- [ ] **Step 3: Commit**
 
 ```bash
-git add KISE/Sources/Views/Shared/DesignSystem.swift
-git commit -m "feat: add design system (SF Pro, Japanese functional minimalism)"
+git add KISE/Sources/Views/Shared/DesignSystem.swift KISE/Sources/Resources/ KISE/Info.plist
+git commit -m "feat: add design system (DM Sans + Cormorant Garamond, Japanese minimalism)"
 ```
 
 ---
