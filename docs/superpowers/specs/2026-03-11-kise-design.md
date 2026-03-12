@@ -1,4 +1,4 @@
-# VESTI — Design Specification
+# KISE — Design Specification
 
 **Intelligent wardrobe consultant.**
 
@@ -8,7 +8,7 @@ A native iOS app that helps people dress with intention — combining their piec
 
 ## Vision
 
-VESTI treats the wardrobe as a living system that evolves with the person. It's not "what to wear today" — it's "how to intentionally build the way you present yourself to the world."
+KISE treats the wardrobe as a living system that evolves with the person. It's not "what to wear today" — it's "how to intentionally build the way you present yourself to the world."
 
 The app starts as a **wardrobe consultant** and evolves into a **personal shopper** — helping not only to combine what you have, but to intelligently buy what's missing.
 
@@ -28,9 +28,9 @@ The app starts as a **wardrobe consultant** and evolves into a **personal shoppe
 
 ## Positioning
 
-VESTI is not a "look suggestion by AI" app. It's a wardrobe partner for people who dress with intention. The real value is closer to a personal image consultant in your pocket.
+KISE is not a "look suggestion by AI" app. It's a wardrobe partner for people who dress with intention. The real value is closer to a personal image consultant in your pocket.
 
-**The name:** From Latin *vestire*. In Italian, "vesti" means "you dressed" — past tense, with pride, with intention. Short, premium, global.
+**The name:** KISE. Short, premium, global.
 
 **Aesthetic:** Recognizable minimalism. Thin serif typography, off-white background, zero noise. Visual references: UNIQLO, COS, Arket, Aesop.
 
@@ -269,10 +269,10 @@ Presented as a modal/sheet over the wardrobe screen. Step-by-step attribute sele
 
 ### System Prompt Strategy
 
-The Claude API is called with `tool_use` to enforce structured JSON output. The system prompt defines VESTI's persona, style knowledge, and constraints:
+The Claude API is called with `tool_use` to enforce structured JSON output. The system prompt defines KISE's persona, style knowledge, and constraints:
 
 ```
-You are VESTI, a personal wardrobe consultant. You help users dress with intention
+You are KISE, a personal wardrobe consultant. You help users dress with intention
 by selecting outfit combinations from their registered wardrobe pieces.
 
 STYLE CONTEXT:
@@ -562,10 +562,10 @@ Tab bar with two tabs: **Home** (suggestion) and **Wardrobe**. Settings accessib
 
 **Liquid Glass (iOS 26+):**
 - Standard controls (tab bar, navigation bar, toolbars) automatically adopt Liquid Glass when compiled with Xcode 26. No code changes needed — this happens for free.
-- Custom views (outfit cards, archetype selection cards, registration step cards) use `.glassEffect(.regular, in: .rect(cornerRadius:))` conditionally via `#available(iOS 26, *)`. Falls back to the current `.vestiCard()` shadow style on older iOS.
+- Custom views (outfit cards, archetype selection cards, registration step cards) use `.glassEffect(.regular, in: .rect(cornerRadius:))` conditionally via `#available(iOS 26, *)`. Falls back to the current `.kiseCard()` shadow style on older iOS.
 - `GlassEffectContainer` wraps the outfit suggestion layout so multiple outfit cards morph into a unified glass surface.
 - The off-white background works well with Liquid Glass — the translucent material picks up the warm neutral tone and creates depth.
-- VESTI's minimalist positioning aligns naturally with Liquid Glass's clean, translucent aesthetic. No additional adaptation needed for the design language.
+- KISE's minimalist positioning aligns naturally with Liquid Glass's clean, translucent aesthetic. No additional adaptation needed for the design language.
 
 ---
 
@@ -627,7 +627,7 @@ Where `GlassCardModifier` applies `.glassEffect(.regular, in: .rect(cornerRadius
 
 ### Foundation Models (On-Device Suggestion Fallback)
 
-On iOS 26+ devices, Apple's Foundation Models framework provides a 3B parameter on-device LLM via `LanguageModelSession()`. VESTI uses this as an **offline fallback**, not a replacement for Claude:
+On iOS 26+ devices, Apple's Foundation Models framework provides a 3B parameter on-device LLM via `LanguageModelSession()`. KISE uses this as an **offline fallback**, not a replacement for Claude:
 
 **When it activates:**
 - No network connectivity AND no cached suggestion available
@@ -681,4 +681,4 @@ Free → premium transition is natural: the app proves value organizing what you
 
 ---
 
-*VESTI. Dress with intention.*
+*KISE. Dress with intention.*

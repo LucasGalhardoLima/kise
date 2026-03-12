@@ -1,14 +1,14 @@
-# VESTI
+# KISE
 
 Intelligent wardrobe consultant — native iOS app (Swift/SwiftUI).
 
 ## Project Overview
 
-VESTI helps people dress with intention by combining their wardrobe pieces, style preferences, local weather, and daily context to suggest outfits. Built with SwiftUI, powered by Claude API for outfit suggestions.
+KISE helps people dress with intention by combining their wardrobe pieces, style preferences, local weather, and daily context to suggest outfits. Built with SwiftUI, powered by Claude API for outfit suggestions.
 
 ## Design Spec
 
-See `docs/superpowers/specs/2026-03-11-vesti-design.md` for the full design specification.
+See `docs/superpowers/specs/2026-03-11-kise-design.md` for the full design specification.
 
 ## Tech Stack
 

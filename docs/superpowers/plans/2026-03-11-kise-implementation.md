@@ -1,26 +1,26 @@
-# VESTI Implementation Plan
+# KISE Implementation Plan
 
 > **For agentic workers:** REQUIRED: Use superpowers:subagent-driven-development (if subagents available) or superpowers:executing-plans to implement this plan. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build VESTI MVP — an iOS wardrobe consultant app that suggests daily outfits using Claude API, based on the user's style archetypes, registered pieces, weather, and occasion.
+**Goal:** Build KISE MVP — an iOS wardrobe consultant app that suggests daily outfits using Claude API, based on the user's style archetypes, registered pieces, weather, and occasion.
 
 **Architecture:** Native iOS app (SwiftUI + SwiftData) communicates with a stateless Cloudflare Worker proxy that forwards suggestion requests to Claude API. All user data lives on-device. Catalog images are pre-generated and bundled as app assets. WeatherKit provides weather context. iOS 26+ features (Liquid Glass, Foundation Models, WeatherKit v2) are progressively enhanced via `#available` checks.
 
 **Tech Stack:** Swift/SwiftUI, SwiftData, WeatherKit, XCTest, xcodegen (project generation), Cloudflare Workers (TypeScript), Claude API (Anthropic), Apple Foundation Models (iOS 26+ offline fallback), Liquid Glass (iOS 26+ UI enhancement)
 
-**Spec:** `docs/superpowers/specs/2026-03-11-vesti-design.md`
+**Spec:** `docs/superpowers/specs/2026-03-11-kise-design.md`
 
 ---
 
 ## File Structure
 
-### iOS App (`VESTI/`)
+### iOS App (`KISE/`)
 
 ```
-VESTI/
+KISE/
 ├── Sources/
 │   ├── App/
-│   │   ├── VESTIApp.swift                  # App entry, model container, onboarding gate
+│   │   ├── KISEApp.swift                  # App entry, model container, onboarding gate
 │   │   └── AppState.swift                  # Observable app state (has completed onboarding, etc.)
 │   │
 │   ├── Models/
@@ -107,10 +107,10 @@ VESTI/
 └── Info.plist
 ```
 
-### Proxy Server (`vesti-proxy/`)
+### Proxy Server (`kise-proxy/`)
 
 ```
-vesti-proxy/
+kise-proxy/
 ├── src/
 │   ├── index.ts              # Worker entry point, request routing
 │   ├── handler.ts            # Main suggestion handler
@@ -130,15 +130,15 @@ vesti-proxy/
 ### Project Config (repo root)
 
 ```
-vesti/
+kise/
 ├── project.yml               # xcodegen project spec
 ├── CLAUDE.md
 └── docs/
     └── superpowers/
         ├── specs/
-        │   └── 2026-03-11-vesti-design.md
+        │   └── 2026-03-11-kise-design.md
         └── plans/
-            └── 2026-03-11-vesti-implementation.md
+            └── 2026-03-11-kise-implementation.md
 ```
 
 ---
@@ -149,7 +149,7 @@ vesti/
 
 **Files:**
 - Create: `project.yml`
-- Create: `VESTI/Sources/App/VESTIApp.swift`
+- Create: `KISE/Sources/App/KISEApp.swift`
 - Create: `.gitignore`
 
 - [ ] **Step 1: Install xcodegen if needed**
@@ -194,9 +194,9 @@ dist/
 - [ ] **Step 3: Create project.yml for xcodegen**
 
 ```yaml
-name: VESTI
+name: KISE
 options:
-  bundleIdPrefix: com.vesti
+  bundleIdPrefix: com.kise
   deploymentTarget:
     iOS: "17.0"
   xcodeVersion: "16.0"
@@ -209,43 +209,43 @@ settings:
     CURRENT_PROJECT_VERSION: 1
 
 targets:
-  VESTI:
+  KISE:
     type: application
     platform: iOS
     sources:
-      - path: VESTI/Sources
-      - path: VESTI/Assets.xcassets
-      - path: VESTI/Preview Content
+      - path: KISE/Sources
+      - path: KISE/Assets.xcassets
+      - path: KISE/Preview Content
     settings:
       base:
-        INFOPLIST_FILE: VESTI/Info.plist
-        PRODUCT_BUNDLE_IDENTIFIER: com.vesti.app
+        INFOPLIST_FILE: KISE/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.kise.app
         CODE_SIGN_STYLE: Automatic
     entitlements:
-      path: VESTI/VESTI.entitlements
+      path: KISE/KISE.entitlements
       properties:
         com.apple.developer.weatherkit: true
 
-  VESTITests:
+  KISETests:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - path: VESTI/Tests
+      - path: KISE/Tests
     dependencies:
-      - target: VESTI
+      - target: KISE
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.vesti.app.tests
+        PRODUCT_BUNDLE_IDENTIFIER: com.kise.app.tests
 ```
 
 - [ ] **Step 4: Create directory structure**
 
 Run:
 ```bash
-mkdir -p VESTI/Sources/{App,Models,Services,ViewModels,Views/{Onboarding,Registration,Wardrobe,Suggestion,Settings,Shared},Utilities}
-mkdir -p VESTI/Tests/{Models,Services,ViewModels}
-mkdir -p VESTI/Assets.xcassets/{Colors,Catalog,Onboarding}
-mkdir -p VESTI/"Preview Content"
+mkdir -p KISE/Sources/{App,Models,Services,ViewModels,Views/{Onboarding,Registration,Wardrobe,Suggestion,Settings,Shared},Utilities}
+mkdir -p KISE/Tests/{Models,Services,ViewModels}
+mkdir -p KISE/Assets.xcassets/{Colors,Catalog,Onboarding}
+mkdir -p KISE/"Preview Content"
 ```
 
 - [ ] **Step 5: Create Info.plist**
@@ -256,11 +256,11 @@ mkdir -p VESTI/"Preview Content"
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>
-    <string>VESTI</string>
+    <string>KISE</string>
     <key>CFBundleDisplayName</key>
-    <string>VESTI</string>
+    <string>KISE</string>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>VESTI uses your location to check the weather and suggest weather-appropriate outfits.</string>
+    <string>KISE uses your location to check the weather and suggest weather-appropriate outfits.</string>
     <key>UILaunchScreen</key>
     <dict/>
 </dict>
@@ -269,7 +269,7 @@ mkdir -p VESTI/"Preview Content"
 
 - [ ] **Step 6: Create entitlements file**
 
-Create `VESTI/VESTI.entitlements`:
+Create `KISE/KISE.entitlements`:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -284,14 +284,14 @@ Create `VESTI/VESTI.entitlements`:
 - [ ] **Step 7: Create minimal app entry point (placeholder — models added in Task 3)**
 
 ```swift
-// VESTI/Sources/App/VESTIApp.swift
+// KISE/Sources/App/KISEApp.swift
 import SwiftUI
 
 @main
-struct VESTIApp: App {
+struct KISEApp: App {
     var body: some Scene {
         WindowGroup {
-            Text("VESTI")
+            Text("KISE")
         }
     }
 }
@@ -301,9 +301,9 @@ struct VESTIApp: App {
 
 Run:
 ```bash
-cd /Users/lucasgalhardo/Documents/Projects/vesti
+cd /Users/lucasgalhardo/Documents/Projects/kise
 xcodegen generate
-xcodebuild -project VESTI.xcodeproj -scheme VESTI -destination 'platform=iOS Simulator,name=iPhone 16' build 2>&1 | tail -5
+xcodebuild -project KISE.xcodeproj -scheme KISE -destination 'platform=iOS Simulator,name=iPhone 16' build 2>&1 | tail -5
 ```
 
 Expected: Build succeeds with the minimal placeholder app.
@@ -311,7 +311,7 @@ Expected: Build succeeds with the minimal placeholder app.
 - [ ] **Step 9: Commit**
 
 ```bash
-git add .gitignore project.yml VESTI/ VESTI.xcodeproj
+git add .gitignore project.yml KISE/ KISE.xcodeproj
 git commit -m "feat: initialize Xcode project with xcodegen"
 ```
 
@@ -320,17 +320,17 @@ git commit -m "feat: initialize Xcode project with xcodegen"
 ### Task 2: Core Enums and Color Palette
 
 **Files:**
-- Create: `VESTI/Sources/Models/Enums.swift`
-- Create: `VESTI/Sources/Models/GarmentColor.swift`
-- Test: `VESTI/Tests/Models/EnumsTests.swift`
-- Test: `VESTI/Tests/Models/GarmentColorTests.swift`
+- Create: `KISE/Sources/Models/Enums.swift`
+- Create: `KISE/Sources/Models/GarmentColor.swift`
+- Test: `KISE/Tests/Models/EnumsTests.swift`
+- Test: `KISE/Tests/Models/GarmentColorTests.swift`
 
 - [ ] **Step 1: Write tests for enums**
 
 ```swift
-// VESTI/Tests/Models/EnumsTests.swift
+// KISE/Tests/Models/EnumsTests.swift
 import XCTest
-@testable import VESTI
+@testable import KISE
 
 final class EnumsTests: XCTestCase {
 
@@ -380,14 +380,14 @@ final class EnumsTests: XCTestCase {
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `xcodebuild test -project VESTI.xcodeproj -scheme VESTITests -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | grep -E '(Test Case|error:)' | head -20`
+Run: `xcodebuild test -project KISE.xcodeproj -scheme KISETests -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | grep -E '(Test Case|error:)' | head -20`
 
 Expected: Compilation errors — types don't exist yet.
 
 - [ ] **Step 3: Implement Enums.swift**
 
 ```swift
-// VESTI/Sources/Models/Enums.swift
+// KISE/Sources/Models/Enums.swift
 import Foundation
 
 // MARK: - Tab Groups
@@ -566,9 +566,9 @@ enum StyleArchetype: String, Codable, CaseIterable, Identifiable {
 - [ ] **Step 4: Write tests for GarmentColor**
 
 ```swift
-// VESTI/Tests/Models/GarmentColorTests.swift
+// KISE/Tests/Models/GarmentColorTests.swift
 import XCTest
-@testable import VESTI
+@testable import KISE
 
 final class GarmentColorTests: XCTestCase {
 
@@ -601,7 +601,7 @@ final class GarmentColorTests: XCTestCase {
 - [ ] **Step 5: Implement GarmentColor.swift**
 
 ```swift
-// VESTI/Sources/Models/GarmentColor.swift
+// KISE/Sources/Models/GarmentColor.swift
 import SwiftUI
 
 struct GarmentColor: Identifiable, Equatable {
@@ -657,14 +657,14 @@ extension Color {
 
 - [ ] **Step 6: Run tests to verify they pass**
 
-Run: `xcodebuild test -project VESTI.xcodeproj -scheme VESTITests -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | grep -E '(Test Case|Executed)' | tail -20`
+Run: `xcodebuild test -project KISE.xcodeproj -scheme KISETests -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | grep -E '(Test Case|Executed)' | tail -20`
 
 Expected: All enum and color tests pass.
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add VESTI/Sources/Models/Enums.swift VESTI/Sources/Models/GarmentColor.swift VESTI/Tests/Models/EnumsTests.swift VESTI/Tests/Models/GarmentColorTests.swift
+git add KISE/Sources/Models/Enums.swift KISE/Sources/Models/GarmentColor.swift KISE/Tests/Models/EnumsTests.swift KISE/Tests/Models/GarmentColorTests.swift
 git commit -m "feat: add core enums and predefined color palette"
 ```
 
@@ -673,20 +673,20 @@ git commit -m "feat: add core enums and predefined color palette"
 ### Task 3: SwiftData Models
 
 **Files:**
-- Create: `VESTI/Sources/Models/StyleProfile.swift`
-- Create: `VESTI/Sources/Models/GarmentPiece.swift`
-- Create: `VESTI/Sources/Models/OutfitSuggestion.swift`
-- Create: `VESTI/Sources/Models/Feedback.swift`
-- Create: `VESTI/Sources/Models/WeatherSnapshot.swift`
-- Test: `VESTI/Tests/Models/GarmentPieceTests.swift`
+- Create: `KISE/Sources/Models/StyleProfile.swift`
+- Create: `KISE/Sources/Models/GarmentPiece.swift`
+- Create: `KISE/Sources/Models/OutfitSuggestion.swift`
+- Create: `KISE/Sources/Models/Feedback.swift`
+- Create: `KISE/Sources/Models/WeatherSnapshot.swift`
+- Test: `KISE/Tests/Models/GarmentPieceTests.swift`
 
 - [ ] **Step 1: Write tests for GarmentPiece**
 
 ```swift
-// VESTI/Tests/Models/GarmentPieceTests.swift
+// KISE/Tests/Models/GarmentPieceTests.swift
 import XCTest
 import SwiftData
-@testable import VESTI
+@testable import KISE
 
 final class GarmentPieceTests: XCTestCase {
 
@@ -774,14 +774,14 @@ final class GarmentPieceTests: XCTestCase {
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `xcodebuild test -project VESTI.xcodeproj -scheme VESTITests -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | grep -E '(error:)' | head -10`
+Run: `xcodebuild test -project KISE.xcodeproj -scheme KISETests -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | grep -E '(error:)' | head -10`
 
 Expected: Compilation errors — model types don't exist yet.
 
 - [ ] **Step 3: Implement WeatherSnapshot.swift**
 
 ```swift
-// VESTI/Sources/Models/WeatherSnapshot.swift
+// KISE/Sources/Models/WeatherSnapshot.swift
 import Foundation
 
 struct HourlyEntry: Codable, Equatable {
@@ -811,7 +811,7 @@ struct WeatherSnapshot: Codable, Equatable {
 - [ ] **Step 4: Implement Feedback.swift**
 
 ```swift
-// VESTI/Sources/Models/Feedback.swift
+// KISE/Sources/Models/Feedback.swift
 import Foundation
 import SwiftData
 
@@ -841,7 +841,7 @@ final class Feedback {
 - [ ] **Step 5: Implement StyleProfile.swift**
 
 ```swift
-// VESTI/Sources/Models/StyleProfile.swift
+// KISE/Sources/Models/StyleProfile.swift
 import Foundation
 import SwiftData
 
@@ -864,7 +864,7 @@ final class StyleProfile {
 - [ ] **Step 6: Implement GarmentPiece.swift**
 
 ```swift
-// VESTI/Sources/Models/GarmentPiece.swift
+// KISE/Sources/Models/GarmentPiece.swift
 import Foundation
 import SwiftData
 
@@ -916,7 +916,7 @@ final class GarmentPiece {
 - [ ] **Step 7: Implement OutfitSuggestion.swift**
 
 ```swift
-// VESTI/Sources/Models/OutfitSuggestion.swift
+// KISE/Sources/Models/OutfitSuggestion.swift
 import Foundation
 import SwiftData
 
@@ -980,18 +980,18 @@ final class OutfitSuggestion {
 }
 ```
 
-- [ ] **Step 8: Update VESTIApp.swift with correct model container**
+- [ ] **Step 8: Update KISEApp.swift with correct model container**
 
 ```swift
-// VESTI/Sources/App/VESTIApp.swift
+// KISE/Sources/App/KISEApp.swift
 import SwiftUI
 import SwiftData
 
 @main
-struct VESTIApp: App {
+struct KISEApp: App {
     var body: some Scene {
         WindowGroup {
-            Text("VESTI")
+            Text("KISE")
         }
         .modelContainer(for: [
             StyleProfile.self,
@@ -1007,9 +1007,9 @@ struct VESTIApp: App {
 
 Run:
 ```bash
-cd /Users/lucasgalhardo/Documents/Projects/vesti
+cd /Users/lucasgalhardo/Documents/Projects/kise
 xcodegen generate
-xcodebuild test -project VESTI.xcodeproj -scheme VESTITests -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | grep -E '(Test Case|Executed)' | tail -20
+xcodebuild test -project KISE.xcodeproj -scheme KISETests -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | grep -E '(Test Case|Executed)' | tail -20
 ```
 
 Expected: All tests pass.
@@ -1017,7 +1017,7 @@ Expected: All tests pass.
 - [ ] **Step 10: Commit**
 
 ```bash
-git add VESTI/Sources/Models/ VESTI/Tests/Models/ VESTI/Sources/App/VESTIApp.swift
+git add KISE/Sources/Models/ KISE/Tests/Models/ KISE/Sources/App/KISEApp.swift
 git commit -m "feat: add SwiftData models (StyleProfile, GarmentPiece, OutfitSuggestion, Feedback)"
 ```
 
@@ -1026,12 +1026,12 @@ git commit -m "feat: add SwiftData models (StyleProfile, GarmentPiece, OutfitSug
 ### Task 4: Material Defaults Utility
 
 **Files:**
-- Create: `VESTI/Sources/Utilities/MaterialDefaults.swift`
+- Create: `KISE/Sources/Utilities/MaterialDefaults.swift`
 
 - [ ] **Step 1: Implement MaterialDefaults**
 
 ```swift
-// VESTI/Sources/Utilities/MaterialDefaults.swift
+// KISE/Sources/Utilities/MaterialDefaults.swift
 import Foundation
 
 enum MaterialDefaults {
@@ -1050,7 +1050,7 @@ enum MaterialDefaults {
 - [ ] **Step 2: Commit**
 
 ```bash
-git add VESTI/Sources/Utilities/MaterialDefaults.swift
+git add KISE/Sources/Utilities/MaterialDefaults.swift
 git commit -m "feat: add material defaults utility for auto-suggestions"
 ```
 
@@ -1061,16 +1061,16 @@ git commit -m "feat: add material defaults utility for auto-suggestions"
 ### Task 5: Design System
 
 **Files:**
-- Create: `VESTI/Sources/Views/Shared/DesignSystem.swift`
-- Create: `VESTI/Assets.xcassets/Colors/Contents.json` (color set definitions)
+- Create: `KISE/Sources/Views/Shared/DesignSystem.swift`
+- Create: `KISE/Assets.xcassets/Colors/Contents.json` (color set definitions)
 
 - [ ] **Step 1: Implement DesignSystem.swift**
 
 ```swift
-// VESTI/Sources/Views/Shared/DesignSystem.swift
+// KISE/Sources/Views/Shared/DesignSystem.swift
 import SwiftUI
 
-enum VESTIDesign {
+enum KISEDesign {
 
     // MARK: - Colors
 
@@ -1140,25 +1140,25 @@ enum VESTIDesign {
 
 // MARK: - Card Style Modifier
 
-struct VESTICardStyle: ViewModifier {
+struct KISECardStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .background(VESTIDesign.Colors.surface)
-            .clipShape(RoundedRectangle(cornerRadius: VESTIDesign.Radius.md))
-            .shadow(color: VESTIDesign.Colors.cardShadow, radius: 8, x: 0, y: 2)
+            .background(KISEDesign.Colors.surface)
+            .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
+            .shadow(color: KISEDesign.Colors.cardShadow, radius: 8, x: 0, y: 2)
     }
 }
 
 extension View {
-    func vestiCard() -> some View {
-        modifier(VESTICardStyle())
+    func kiseCard() -> some View {
+        modifier(KISECardStyle())
     }
 }
 ```
 
 - [ ] **Step 2: Download and bundle Playfair Display font**
 
-Download Playfair Display Regular and Bold from Google Fonts. Place files in `VESTI/Sources/Resources/Fonts/`:
+Download Playfair Display Regular and Bold from Google Fonts. Place files in `KISE/Sources/Resources/Fonts/`:
 - `PlayfairDisplay-Regular.ttf`
 - `PlayfairDisplay-Bold.ttf`
 
@@ -1174,17 +1174,17 @@ Add to `Info.plist`:
 Update `project.yml` to include the Resources directory:
 ```yaml
 sources:
-  - path: VESTI/Sources
-  - path: VESTI/Assets.xcassets
-  - path: VESTI/Preview Content
+  - path: KISE/Sources
+  - path: KISE/Assets.xcassets
+  - path: KISE/Preview Content
 ```
 
-(Font files under `VESTI/Sources/Resources/` will be picked up by the `VESTI/Sources` source path.)
+(Font files under `KISE/Sources/Resources/` will be picked up by the `KISE/Sources` source path.)
 
 - [ ] **Step 3: Commit**
 
 ```bash
-git add VESTI/Sources/Views/Shared/DesignSystem.swift VESTI/Sources/Resources/ VESTI/Info.plist
+git add KISE/Sources/Views/Shared/DesignSystem.swift KISE/Sources/Resources/ KISE/Info.plist
 git commit -m "feat: add design system with Playfair Display font"
 ```
 
@@ -1193,13 +1193,13 @@ git commit -m "feat: add design system with Playfair Display font"
 ### Task 6: App State + Routing
 
 **Files:**
-- Create: `VESTI/Sources/App/AppState.swift`
-- Modify: `VESTI/Sources/App/VESTIApp.swift`
+- Create: `KISE/Sources/App/AppState.swift`
+- Modify: `KISE/Sources/App/KISEApp.swift`
 
 - [ ] **Step 1: Implement AppState**
 
 ```swift
-// VESTI/Sources/App/AppState.swift
+// KISE/Sources/App/AppState.swift
 import SwiftUI
 import SwiftData
 
@@ -1221,15 +1221,15 @@ final class AppState {
 }
 ```
 
-- [ ] **Step 2: Update VESTIApp.swift with routing**
+- [ ] **Step 2: Update KISEApp.swift with routing**
 
 ```swift
-// VESTI/Sources/App/VESTIApp.swift
+// KISE/Sources/App/KISEApp.swift
 import SwiftUI
 import SwiftData
 
 @main
-struct VESTIApp: App {
+struct KISEApp: App {
     @State private var appState = AppState()
 
     var body: some Scene {
@@ -1274,7 +1274,7 @@ struct MainTabView: View {
                 Text("Wardrobe coming soon")
             }
         }
-        .tint(VESTIDesign.Colors.accent)
+        .tint(KISEDesign.Colors.accent)
     }
 }
 ```
@@ -1282,7 +1282,7 @@ struct MainTabView: View {
 - [ ] **Step 3: Commit**
 
 ```bash
-git add VESTI/Sources/App/
+git add KISE/Sources/App/
 git commit -m "feat: add app state and onboarding/main routing"
 ```
 
@@ -1291,16 +1291,16 @@ git commit -m "feat: add app state and onboarding/main routing"
 ### Task 7: Onboarding ViewModel
 
 **Files:**
-- Create: `VESTI/Sources/ViewModels/OnboardingViewModel.swift`
-- Test: `VESTI/Tests/ViewModels/OnboardingViewModelTests.swift`
+- Create: `KISE/Sources/ViewModels/OnboardingViewModel.swift`
+- Test: `KISE/Tests/ViewModels/OnboardingViewModelTests.swift`
 
 - [ ] **Step 1: Write tests for OnboardingViewModel**
 
 ```swift
-// VESTI/Tests/ViewModels/OnboardingViewModelTests.swift
+// KISE/Tests/ViewModels/OnboardingViewModelTests.swift
 import XCTest
 import SwiftData
-@testable import VESTI
+@testable import KISE
 
 final class OnboardingViewModelTests: XCTestCase {
 
@@ -1358,7 +1358,7 @@ Expected: Compilation errors — OnboardingViewModel doesn't exist.
 - [ ] **Step 3: Implement OnboardingViewModel**
 
 ```swift
-// VESTI/Sources/ViewModels/OnboardingViewModel.swift
+// KISE/Sources/ViewModels/OnboardingViewModel.swift
 import SwiftUI
 import SwiftData
 
@@ -1398,7 +1398,7 @@ Expected: All 4 tests pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add VESTI/Sources/ViewModels/OnboardingViewModel.swift VESTI/Tests/ViewModels/OnboardingViewModelTests.swift
+git add KISE/Sources/ViewModels/OnboardingViewModel.swift KISE/Tests/ViewModels/OnboardingViewModelTests.swift
 git commit -m "feat: add onboarding view model with archetype selection"
 ```
 
@@ -1407,12 +1407,12 @@ git commit -m "feat: add onboarding view model with archetype selection"
 ### Task 8: Style Onboarding View
 
 **Files:**
-- Create: `VESTI/Sources/Views/Onboarding/StyleOnboardingView.swift`
+- Create: `KISE/Sources/Views/Onboarding/StyleOnboardingView.swift`
 
 - [ ] **Step 1: Implement StyleOnboardingView**
 
 ```swift
-// VESTI/Sources/Views/Onboarding/StyleOnboardingView.swift
+// KISE/Sources/Views/Onboarding/StyleOnboardingView.swift
 import SwiftUI
 
 struct StyleOnboardingView: View {
@@ -1421,28 +1421,28 @@ struct StyleOnboardingView: View {
     @State private var viewModel = OnboardingViewModel()
 
     private let columns = [
-        GridItem(.flexible(), spacing: VESTIDesign.Spacing.md),
-        GridItem(.flexible(), spacing: VESTIDesign.Spacing.md),
+        GridItem(.flexible(), spacing: KISEDesign.Spacing.md),
+        GridItem(.flexible(), spacing: KISEDesign.Spacing.md),
     ]
 
     var body: some View {
         VStack(spacing: 0) {
             // Header
-            VStack(spacing: VESTIDesign.Spacing.sm) {
-                Text("VESTI")
-                    .font(VESTIDesign.Typography.largeTitle)
-                    .foregroundStyle(VESTIDesign.Colors.textPrimary)
+            VStack(spacing: KISEDesign.Spacing.sm) {
+                Text("KISE")
+                    .font(KISEDesign.Typography.largeTitle)
+                    .foregroundStyle(KISEDesign.Colors.textPrimary)
 
                 Text("Select the styles that inspire you")
-                    .font(VESTIDesign.Typography.bodyText)
-                    .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                    .font(KISEDesign.Typography.bodyText)
+                    .foregroundStyle(KISEDesign.Colors.textSecondary)
             }
-            .padding(.top, VESTIDesign.Spacing.xxl)
-            .padding(.bottom, VESTIDesign.Spacing.lg)
+            .padding(.top, KISEDesign.Spacing.xxl)
+            .padding(.bottom, KISEDesign.Spacing.lg)
 
             // Archetype Grid
             ScrollView {
-                LazyVGrid(columns: columns, spacing: VESTIDesign.Spacing.md) {
+                LazyVGrid(columns: columns, spacing: KISEDesign.Spacing.md) {
                     ForEach(StyleArchetype.allCases) { archetype in
                         ArchetypeCard(
                             archetype: archetype,
@@ -1455,7 +1455,7 @@ struct StyleOnboardingView: View {
                         }
                     }
                 }
-                .padding(.horizontal, VESTIDesign.Spacing.md)
+                .padding(.horizontal, KISEDesign.Spacing.md)
             }
 
             // Continue Button
@@ -1464,21 +1464,21 @@ struct StyleOnboardingView: View {
                 appState.completeOnboarding()
             } label: {
                 Text("Continue")
-                    .font(VESTIDesign.Typography.subtitle)
-                    .foregroundStyle(VESTIDesign.Colors.background)
+                    .font(KISEDesign.Typography.subtitle)
+                    .foregroundStyle(KISEDesign.Colors.background)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, VESTIDesign.Spacing.md)
+                    .padding(.vertical, KISEDesign.Spacing.md)
                     .background(
                         viewModel.canContinue
-                            ? VESTIDesign.Colors.accent
-                            : VESTIDesign.Colors.textTertiary
+                            ? KISEDesign.Colors.accent
+                            : KISEDesign.Colors.textTertiary
                     )
-                    .clipShape(RoundedRectangle(cornerRadius: VESTIDesign.Radius.md))
+                    .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
             }
             .disabled(!viewModel.canContinue)
-            .padding(VESTIDesign.Spacing.md)
+            .padding(KISEDesign.Spacing.md)
         }
-        .background(VESTIDesign.Colors.background)
+        .background(KISEDesign.Colors.background)
     }
 }
 
@@ -1489,10 +1489,10 @@ private struct ArchetypeCard: View {
     let isSelected: Bool
 
     var body: some View {
-        VStack(spacing: VESTIDesign.Spacing.sm) {
+        VStack(spacing: KISEDesign.Spacing.sm) {
             // Placeholder for moodboard image — replace with actual asset
-            RoundedRectangle(cornerRadius: VESTIDesign.Radius.sm)
-                .fill(VESTIDesign.Colors.border)
+            RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
+                .fill(KISEDesign.Colors.border)
                 .aspectRatio(3 / 4, contentMode: .fit)
                 .overlay {
                     // Attempt to load the archetype image, fall back to text
@@ -1500,21 +1500,21 @@ private struct ArchetypeCard: View {
                         .resizable()
                         .scaledToFill()
                         .clipped()
-                        .clipShape(RoundedRectangle(cornerRadius: VESTIDesign.Radius.sm))
+                        .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.sm))
                         // If image doesn't exist, this will show an empty view
                 }
 
             Text(archetype.displayName)
-                .font(VESTIDesign.Typography.caption)
-                .foregroundStyle(VESTIDesign.Colors.textPrimary)
+                .font(KISEDesign.Typography.caption)
+                .foregroundStyle(KISEDesign.Colors.textPrimary)
         }
-        .padding(VESTIDesign.Spacing.sm)
-        .background(isSelected ? VESTIDesign.Colors.accent.opacity(0.08) : Color.clear)
-        .clipShape(RoundedRectangle(cornerRadius: VESTIDesign.Radius.md))
+        .padding(KISEDesign.Spacing.sm)
+        .background(isSelected ? KISEDesign.Colors.accent.opacity(0.08) : Color.clear)
+        .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
         .overlay {
-            RoundedRectangle(cornerRadius: VESTIDesign.Radius.md)
+            RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
                 .stroke(
-                    isSelected ? VESTIDesign.Colors.accent : Color.clear,
+                    isSelected ? KISEDesign.Colors.accent : Color.clear,
                     lineWidth: 2
                 )
         }
@@ -1524,14 +1524,14 @@ private struct ArchetypeCard: View {
 
 - [ ] **Step 2: Build and verify in simulator/preview**
 
-Run: `xcodebuild build -project VESTI.xcodeproj -scheme VESTI -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | tail -3`
+Run: `xcodebuild build -project KISE.xcodeproj -scheme KISE -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | tail -3`
 
 Expected: Build succeeds.
 
 - [ ] **Step 3: Commit**
 
 ```bash
-git add VESTI/Sources/Views/Onboarding/StyleOnboardingView.swift
+git add KISE/Sources/Views/Onboarding/StyleOnboardingView.swift
 git commit -m "feat: add style onboarding view with archetype moodboard grid"
 ```
 
@@ -1542,15 +1542,15 @@ git commit -m "feat: add style onboarding view with archetype moodboard grid"
 ### Task 9: Catalog Image Service
 
 **Files:**
-- Create: `VESTI/Sources/Services/CatalogImageService.swift`
-- Test: `VESTI/Tests/Services/CatalogImageServiceTests.swift`
+- Create: `KISE/Sources/Services/CatalogImageService.swift`
+- Test: `KISE/Tests/Services/CatalogImageServiceTests.swift`
 
 - [ ] **Step 1: Write tests**
 
 ```swift
-// VESTI/Tests/Services/CatalogImageServiceTests.swift
+// KISE/Tests/Services/CatalogImageServiceTests.swift
 import XCTest
-@testable import VESTI
+@testable import KISE
 
 final class CatalogImageServiceTests: XCTestCase {
 
@@ -1585,7 +1585,7 @@ Expected: Compilation errors.
 - [ ] **Step 3: Implement CatalogImageService**
 
 ```swift
-// VESTI/Sources/Services/CatalogImageService.swift
+// KISE/Sources/Services/CatalogImageService.swift
 import SwiftUI
 
 enum CatalogImageService {
@@ -1631,7 +1631,7 @@ Expected: All 3 tests pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add VESTI/Sources/Services/CatalogImageService.swift VESTI/Tests/Services/CatalogImageServiceTests.swift
+git add KISE/Sources/Services/CatalogImageService.swift KISE/Tests/Services/CatalogImageServiceTests.swift
 git commit -m "feat: add catalog image service with asset key lookup"
 ```
 
@@ -1640,16 +1640,16 @@ git commit -m "feat: add catalog image service with asset key lookup"
 ### Task 10: Registration ViewModel
 
 **Files:**
-- Create: `VESTI/Sources/ViewModels/RegistrationViewModel.swift`
-- Test: `VESTI/Tests/ViewModels/RegistrationViewModelTests.swift`
+- Create: `KISE/Sources/ViewModels/RegistrationViewModel.swift`
+- Test: `KISE/Tests/ViewModels/RegistrationViewModelTests.swift`
 
 - [ ] **Step 1: Write tests**
 
 ```swift
-// VESTI/Tests/ViewModels/RegistrationViewModelTests.swift
+// KISE/Tests/ViewModels/RegistrationViewModelTests.swift
 import XCTest
 import SwiftData
-@testable import VESTI
+@testable import KISE
 
 final class RegistrationViewModelTests: XCTestCase {
 
@@ -1746,7 +1746,7 @@ Expected: Compilation errors.
 - [ ] **Step 3: Implement RegistrationViewModel**
 
 ```swift
-// VESTI/Sources/ViewModels/RegistrationViewModel.swift
+// KISE/Sources/ViewModels/RegistrationViewModel.swift
 import SwiftUI
 import SwiftData
 
@@ -1878,7 +1878,7 @@ Expected: All 9 tests pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add VESTI/Sources/ViewModels/RegistrationViewModel.swift VESTI/Tests/ViewModels/RegistrationViewModelTests.swift
+git add KISE/Sources/ViewModels/RegistrationViewModel.swift KISE/Tests/ViewModels/RegistrationViewModelTests.swift
 git commit -m "feat: add registration view model with step-by-step state machine"
 ```
 
@@ -1887,48 +1887,48 @@ git commit -m "feat: add registration view model with step-by-step state machine
 ### Task 11: Registration Flow Views
 
 **Files:**
-- Create: `VESTI/Sources/Views/Registration/RegistrationFlowView.swift`
-- Create: `VESTI/Sources/Views/Registration/CategoryPickerView.swift`
-- Create: `VESTI/Sources/Views/Registration/AttributeStepView.swift`
-- Create: `VESTI/Sources/Views/Registration/CatalogConfirmView.swift`
+- Create: `KISE/Sources/Views/Registration/RegistrationFlowView.swift`
+- Create: `KISE/Sources/Views/Registration/CategoryPickerView.swift`
+- Create: `KISE/Sources/Views/Registration/AttributeStepView.swift`
+- Create: `KISE/Sources/Views/Registration/CatalogConfirmView.swift`
 
 - [ ] **Step 1: Implement CategoryPickerView**
 
 ```swift
-// VESTI/Sources/Views/Registration/CategoryPickerView.swift
+// KISE/Sources/Views/Registration/CategoryPickerView.swift
 import SwiftUI
 
 struct CategoryPickerView: View {
     let onSelect: (GarmentCategory) -> Void
 
     private let columns = [
-        GridItem(.flexible(), spacing: VESTIDesign.Spacing.md),
-        GridItem(.flexible(), spacing: VESTIDesign.Spacing.md),
-        GridItem(.flexible(), spacing: VESTIDesign.Spacing.md),
+        GridItem(.flexible(), spacing: KISEDesign.Spacing.md),
+        GridItem(.flexible(), spacing: KISEDesign.Spacing.md),
+        GridItem(.flexible(), spacing: KISEDesign.Spacing.md),
     ]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: VESTIDesign.Spacing.lg) {
+        VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
             Text("What type of piece?")
-                .font(VESTIDesign.Typography.title)
-                .foregroundStyle(VESTIDesign.Colors.textPrimary)
+                .font(KISEDesign.Typography.title)
+                .foregroundStyle(KISEDesign.Colors.textPrimary)
 
-            LazyVGrid(columns: columns, spacing: VESTIDesign.Spacing.md) {
+            LazyVGrid(columns: columns, spacing: KISEDesign.Spacing.md) {
                 ForEach(GarmentCategory.allCases) { category in
                     Button {
                         onSelect(category)
                     } label: {
-                        VStack(spacing: VESTIDesign.Spacing.sm) {
+                        VStack(spacing: KISEDesign.Spacing.sm) {
                             Image(systemName: category.systemIcon)
                                 .font(.system(size: 28))
                                 .frame(height: 36)
                             Text(category.displayName)
-                                .font(VESTIDesign.Typography.caption)
+                                .font(KISEDesign.Typography.caption)
                         }
-                        .foregroundStyle(VESTIDesign.Colors.textPrimary)
+                        .foregroundStyle(KISEDesign.Colors.textPrimary)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, VESTIDesign.Spacing.md)
-                        .vestiCard()
+                        .padding(.vertical, KISEDesign.Spacing.md)
+                        .kiseCard()
                     }
                 }
             }
@@ -1958,7 +1958,7 @@ extension GarmentCategory {
 - [ ] **Step 2: Implement AttributeStepView**
 
 ```swift
-// VESTI/Sources/Views/Registration/AttributeStepView.swift
+// KISE/Sources/Views/Registration/AttributeStepView.swift
 import SwiftUI
 
 // MARK: - Color Picker Step
@@ -1972,26 +1972,26 @@ struct ColorPickerStepView: View {
     ]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: VESTIDesign.Spacing.lg) {
+        VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
             Text("What color?")
-                .font(VESTIDesign.Typography.title)
-                .foregroundStyle(VESTIDesign.Colors.textPrimary)
+                .font(KISEDesign.Typography.title)
+                .foregroundStyle(KISEDesign.Colors.textPrimary)
 
-            LazyVGrid(columns: columns, spacing: VESTIDesign.Spacing.md) {
+            LazyVGrid(columns: columns, spacing: KISEDesign.Spacing.md) {
                 ForEach(GarmentColor.allColors) { color in
                     Button {
                         onSelect(color)
                     } label: {
-                        VStack(spacing: VESTIDesign.Spacing.xs) {
+                        VStack(spacing: KISEDesign.Spacing.xs) {
                             Circle()
                                 .fill(color.color)
                                 .frame(width: 48, height: 48)
                                 .overlay {
-                                    Circle().stroke(VESTIDesign.Colors.border, lineWidth: 1)
+                                    Circle().stroke(KISEDesign.Colors.border, lineWidth: 1)
                                 }
                             Text(color.name)
-                                .font(VESTIDesign.Typography.small)
-                                .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                                .font(KISEDesign.Typography.small)
+                                .foregroundStyle(KISEDesign.Colors.textSecondary)
                                 .lineLimit(1)
                         }
                     }
@@ -2011,31 +2011,31 @@ struct OptionPickerStepView<T: Identifiable>: View where T: Equatable {
     let onSelect: (T) -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: VESTIDesign.Spacing.lg) {
+        VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
             Text(title)
-                .font(VESTIDesign.Typography.title)
-                .foregroundStyle(VESTIDesign.Colors.textPrimary)
+                .font(KISEDesign.Typography.title)
+                .foregroundStyle(KISEDesign.Colors.textPrimary)
 
-            VStack(spacing: VESTIDesign.Spacing.sm) {
+            VStack(spacing: KISEDesign.Spacing.sm) {
                 ForEach(options) { option in
                     Button {
                         onSelect(option)
                     } label: {
                         HStack {
                             Text(labelFor(option))
-                                .font(VESTIDesign.Typography.bodyText)
-                                .foregroundStyle(VESTIDesign.Colors.textPrimary)
+                                .font(KISEDesign.Typography.bodyText)
+                                .foregroundStyle(KISEDesign.Colors.textPrimary)
 
                             Spacer()
 
                             if let suggested, suggested.id as AnyHashable == option.id as AnyHashable {
                                 Text("Suggested")
-                                    .font(VESTIDesign.Typography.small)
-                                    .foregroundStyle(VESTIDesign.Colors.textTertiary)
+                                    .font(KISEDesign.Typography.small)
+                                    .foregroundStyle(KISEDesign.Colors.textTertiary)
                             }
                         }
-                        .padding(VESTIDesign.Spacing.md)
-                        .vestiCard()
+                        .padding(KISEDesign.Spacing.md)
+                        .kiseCard()
                     }
                 }
             }
@@ -2050,22 +2050,22 @@ struct MaterialPickerStepView: View {
     let onSelect: (String) -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: VESTIDesign.Spacing.lg) {
+        VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
             Text("What material?")
-                .font(VESTIDesign.Typography.title)
-                .foregroundStyle(VESTIDesign.Colors.textPrimary)
+                .font(KISEDesign.Typography.title)
+                .foregroundStyle(KISEDesign.Colors.textPrimary)
 
-            VStack(spacing: VESTIDesign.Spacing.sm) {
+            VStack(spacing: KISEDesign.Spacing.sm) {
                 ForEach(materials, id: \.self) { material in
                     Button {
                         onSelect(material)
                     } label: {
                         Text(material.capitalized)
-                            .font(VESTIDesign.Typography.bodyText)
-                            .foregroundStyle(VESTIDesign.Colors.textPrimary)
+                            .font(KISEDesign.Typography.bodyText)
+                            .foregroundStyle(KISEDesign.Colors.textPrimary)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(VESTIDesign.Spacing.md)
-                            .vestiCard()
+                            .padding(KISEDesign.Spacing.md)
+                            .kiseCard()
                     }
                 }
             }
@@ -2077,7 +2077,7 @@ struct MaterialPickerStepView: View {
 - [ ] **Step 3: Implement CatalogConfirmView**
 
 ```swift
-// VESTI/Sources/Views/Registration/CatalogConfirmView.swift
+// KISE/Sources/Views/Registration/CatalogConfirmView.swift
 import SwiftUI
 
 struct CatalogConfirmView: View {
@@ -2089,10 +2089,10 @@ struct CatalogConfirmView: View {
     let onTakePhoto: () -> Void
 
     var body: some View {
-        VStack(spacing: VESTIDesign.Spacing.lg) {
+        VStack(spacing: KISEDesign.Spacing.lg) {
             Text("Does this look like your piece?")
-                .font(VESTIDesign.Typography.title)
-                .foregroundStyle(VESTIDesign.Colors.textPrimary)
+                .font(KISEDesign.Typography.title)
+                .foregroundStyle(KISEDesign.Colors.textPrimary)
 
             // Catalog image or placeholder
             Group {
@@ -2102,41 +2102,41 @@ struct CatalogConfirmView: View {
                         .scaledToFit()
                 } else {
                     // Placeholder when no catalog image exists
-                    RoundedRectangle(cornerRadius: VESTIDesign.Radius.md)
+                    RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
                         .fill(color.color.opacity(0.3))
                         .overlay {
-                            VStack(spacing: VESTIDesign.Spacing.sm) {
+                            VStack(spacing: KISEDesign.Spacing.sm) {
                                 Image(systemName: category.systemIcon)
                                     .font(.system(size: 48))
                                 Text("\(color.name) \(category.displayName)")
-                                    .font(VESTIDesign.Typography.caption)
+                                    .font(KISEDesign.Typography.caption)
                             }
-                            .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                            .foregroundStyle(KISEDesign.Colors.textSecondary)
                         }
                 }
             }
             .frame(maxWidth: 280, maxHeight: 360)
-            .vestiCard()
+            .kiseCard()
 
-            VStack(spacing: VESTIDesign.Spacing.sm) {
+            VStack(spacing: KISEDesign.Spacing.sm) {
                 Button {
                     onConfirm()
                 } label: {
                     Text("Yes, that's it")
-                        .font(VESTIDesign.Typography.subtitle)
-                        .foregroundStyle(VESTIDesign.Colors.background)
+                        .font(KISEDesign.Typography.subtitle)
+                        .foregroundStyle(KISEDesign.Colors.background)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, VESTIDesign.Spacing.md)
-                        .background(VESTIDesign.Colors.accent)
-                        .clipShape(RoundedRectangle(cornerRadius: VESTIDesign.Radius.md))
+                        .padding(.vertical, KISEDesign.Spacing.md)
+                        .background(KISEDesign.Colors.accent)
+                        .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
                 }
 
                 Button {
                     onTakePhoto()
                 } label: {
                     Text("Not quite — I'll take a photo")
-                        .font(VESTIDesign.Typography.bodyText)
-                        .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                        .font(KISEDesign.Typography.bodyText)
+                        .foregroundStyle(KISEDesign.Colors.textSecondary)
                 }
             }
         }
@@ -2147,7 +2147,7 @@ struct CatalogConfirmView: View {
 - [ ] **Step 4: Implement RegistrationFlowView**
 
 ```swift
-// VESTI/Sources/Views/Registration/RegistrationFlowView.swift
+// KISE/Sources/Views/Registration/RegistrationFlowView.swift
 import SwiftUI
 
 struct RegistrationFlowView: View {
@@ -2233,9 +2233,9 @@ struct RegistrationFlowView: View {
                         }
                     }
                 }
-                .padding(VESTIDesign.Spacing.md)
+                .padding(KISEDesign.Spacing.md)
             }
-            .background(VESTIDesign.Colors.background)
+            .background(KISEDesign.Colors.background)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -2256,14 +2256,14 @@ struct RegistrationFlowView: View {
 
 - [ ] **Step 5: Build and verify**
 
-Run: `xcodebuild build -project VESTI.xcodeproj -scheme VESTI -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | tail -3`
+Run: `xcodebuild build -project KISE.xcodeproj -scheme KISE -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | tail -3`
 
 Expected: Build succeeds.
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add VESTI/Sources/Views/Registration/
+git add KISE/Sources/Views/Registration/
 git commit -m "feat: add piece registration flow (category, color, fit, material, weight, formality, confirm)"
 ```
 
@@ -2274,16 +2274,16 @@ git commit -m "feat: add piece registration flow (category, color, fit, material
 ### Task 12: Wardrobe ViewModel
 
 **Files:**
-- Create: `VESTI/Sources/ViewModels/WardrobeViewModel.swift`
-- Test: `VESTI/Tests/ViewModels/WardrobeViewModelTests.swift`
+- Create: `KISE/Sources/ViewModels/WardrobeViewModel.swift`
+- Test: `KISE/Tests/ViewModels/WardrobeViewModelTests.swift`
 
 - [ ] **Step 1: Write tests**
 
 ```swift
-// VESTI/Tests/ViewModels/WardrobeViewModelTests.swift
+// KISE/Tests/ViewModels/WardrobeViewModelTests.swift
 import XCTest
 import SwiftData
-@testable import VESTI
+@testable import KISE
 
 final class WardrobeViewModelTests: XCTestCase {
 
@@ -2356,7 +2356,7 @@ Expected: Compilation errors.
 - [ ] **Step 3: Implement WardrobeViewModel**
 
 ```swift
-// VESTI/Sources/ViewModels/WardrobeViewModel.swift
+// KISE/Sources/ViewModels/WardrobeViewModel.swift
 import SwiftUI
 import SwiftData
 
@@ -2393,7 +2393,7 @@ Expected: All 4 tests pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add VESTI/Sources/ViewModels/WardrobeViewModel.swift VESTI/Tests/ViewModels/WardrobeViewModelTests.swift
+git add KISE/Sources/ViewModels/WardrobeViewModel.swift KISE/Tests/ViewModels/WardrobeViewModelTests.swift
 git commit -m "feat: add wardrobe view model with tab filtering and archiving"
 ```
 
@@ -2402,15 +2402,15 @@ git commit -m "feat: add wardrobe view model with tab filtering and archiving"
 ### Task 13: Wardrobe Views
 
 **Files:**
-- Create: `VESTI/Sources/Views/Wardrobe/WardrobeView.swift`
-- Create: `VESTI/Sources/Views/Wardrobe/GarmentDetailView.swift`
-- Create: `VESTI/Sources/Views/Shared/EmptyStateView.swift`
-- Modify: `VESTI/Sources/App/VESTIApp.swift` — wire up MainTabView
+- Create: `KISE/Sources/Views/Wardrobe/WardrobeView.swift`
+- Create: `KISE/Sources/Views/Wardrobe/GarmentDetailView.swift`
+- Create: `KISE/Sources/Views/Shared/EmptyStateView.swift`
+- Modify: `KISE/Sources/App/KISEApp.swift` — wire up MainTabView
 
 - [ ] **Step 1: Implement EmptyStateView**
 
 ```swift
-// VESTI/Sources/Views/Shared/EmptyStateView.swift
+// KISE/Sources/Views/Shared/EmptyStateView.swift
 import SwiftUI
 
 struct EmptyStateView: View {
@@ -2427,29 +2427,29 @@ struct EmptyStateView: View {
     }
 
     var body: some View {
-        VStack(spacing: VESTIDesign.Spacing.md) {
+        VStack(spacing: KISEDesign.Spacing.md) {
             Text(title)
-                .font(VESTIDesign.Typography.title)
-                .foregroundStyle(VESTIDesign.Colors.textPrimary)
+                .font(KISEDesign.Typography.title)
+                .foregroundStyle(KISEDesign.Colors.textPrimary)
 
             Text(message)
-                .font(VESTIDesign.Typography.bodyText)
-                .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                .font(KISEDesign.Typography.bodyText)
+                .foregroundStyle(KISEDesign.Colors.textSecondary)
                 .multilineTextAlignment(.center)
 
             if let actionLabel, let action {
                 Button(action: action) {
                     Text(actionLabel)
-                        .font(VESTIDesign.Typography.subtitle)
-                        .foregroundStyle(VESTIDesign.Colors.background)
-                        .padding(.horizontal, VESTIDesign.Spacing.xl)
-                        .padding(.vertical, VESTIDesign.Spacing.md)
-                        .background(VESTIDesign.Colors.accent)
-                        .clipShape(RoundedRectangle(cornerRadius: VESTIDesign.Radius.md))
+                        .font(KISEDesign.Typography.subtitle)
+                        .foregroundStyle(KISEDesign.Colors.background)
+                        .padding(.horizontal, KISEDesign.Spacing.xl)
+                        .padding(.vertical, KISEDesign.Spacing.md)
+                        .background(KISEDesign.Colors.accent)
+                        .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
                 }
             }
         }
-        .padding(VESTIDesign.Spacing.xl)
+        .padding(KISEDesign.Spacing.xl)
     }
 }
 ```
@@ -2457,7 +2457,7 @@ struct EmptyStateView: View {
 - [ ] **Step 2: Implement GarmentDetailView**
 
 ```swift
-// VESTI/Sources/Views/Wardrobe/GarmentDetailView.swift
+// KISE/Sources/Views/Wardrobe/GarmentDetailView.swift
 import SwiftUI
 
 struct GarmentDetailView: View {
@@ -2465,7 +2465,7 @@ struct GarmentDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: VESTIDesign.Spacing.lg) {
+            VStack(spacing: KISEDesign.Spacing.lg) {
                 // Image
                 Group {
                     if let uiImage = CatalogImageService.loadImage(
@@ -2475,21 +2475,21 @@ struct GarmentDetailView: View {
                             .resizable()
                             .scaledToFit()
                     } else {
-                        RoundedRectangle(cornerRadius: VESTIDesign.Radius.md)
+                        RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
                             .fill(Color(hex: piece.colorHex).opacity(0.3))
                             .aspectRatio(3 / 4, contentMode: .fit)
                             .overlay {
                                 Image(systemName: piece.category.systemIcon)
                                     .font(.system(size: 48))
-                                    .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                                    .foregroundStyle(KISEDesign.Colors.textSecondary)
                             }
                     }
                 }
                 .frame(maxWidth: 280)
-                .vestiCard()
+                .kiseCard()
 
                 // Attributes
-                VStack(spacing: VESTIDesign.Spacing.sm) {
+                VStack(spacing: KISEDesign.Spacing.sm) {
                     attributeRow("Category", piece.category.displayName)
                     attributeRow("Color", piece.color.capitalized)
                     attributeRow("Fit", piece.fit.displayName)
@@ -2497,11 +2497,11 @@ struct GarmentDetailView: View {
                     attributeRow("Weight", piece.weight.displayName)
                     attributeRow("Formality", piece.formality.displayName)
                 }
-                .padding(VESTIDesign.Spacing.md)
+                .padding(KISEDesign.Spacing.md)
             }
-            .padding(VESTIDesign.Spacing.md)
+            .padding(KISEDesign.Spacing.md)
         }
-        .background(VESTIDesign.Colors.background)
+        .background(KISEDesign.Colors.background)
         .navigationTitle(piece.category.displayName)
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -2509,14 +2509,14 @@ struct GarmentDetailView: View {
     private func attributeRow(_ label: String, _ value: String) -> some View {
         HStack {
             Text(label)
-                .font(VESTIDesign.Typography.bodyText)
-                .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                .font(KISEDesign.Typography.bodyText)
+                .foregroundStyle(KISEDesign.Colors.textSecondary)
             Spacer()
             Text(value)
-                .font(VESTIDesign.Typography.bodyText)
-                .foregroundStyle(VESTIDesign.Colors.textPrimary)
+                .font(KISEDesign.Typography.bodyText)
+                .foregroundStyle(KISEDesign.Colors.textPrimary)
         }
-        .padding(.vertical, VESTIDesign.Spacing.xs)
+        .padding(.vertical, KISEDesign.Spacing.xs)
     }
 }
 ```
@@ -2524,7 +2524,7 @@ struct GarmentDetailView: View {
 - [ ] **Step 3: Implement WardrobeView**
 
 ```swift
-// VESTI/Sources/Views/Wardrobe/WardrobeView.swift
+// KISE/Sources/Views/Wardrobe/WardrobeView.swift
 import SwiftUI
 import SwiftData
 
@@ -2535,9 +2535,9 @@ struct WardrobeView: View {
     @State private var viewModel = WardrobeViewModel()
 
     private let columns = [
-        GridItem(.flexible(), spacing: VESTIDesign.Spacing.md),
-        GridItem(.flexible(), spacing: VESTIDesign.Spacing.md),
-        GridItem(.flexible(), spacing: VESTIDesign.Spacing.md),
+        GridItem(.flexible(), spacing: KISEDesign.Spacing.md),
+        GridItem(.flexible(), spacing: KISEDesign.Spacing.md),
+        GridItem(.flexible(), spacing: KISEDesign.Spacing.md),
     ]
 
     var body: some View {
@@ -2545,14 +2545,14 @@ struct WardrobeView: View {
             VStack(spacing: 0) {
                 // Tab filter
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: VESTIDesign.Spacing.sm) {
+                    HStack(spacing: KISEDesign.Spacing.sm) {
                         tabButton("All", tab: nil)
                         ForEach(TabGroup.allCases, id: \.self) { tab in
                             tabButton(tab.rawValue.capitalized, tab: tab)
                         }
                     }
-                    .padding(.horizontal, VESTIDesign.Spacing.md)
-                    .padding(.vertical, VESTIDesign.Spacing.sm)
+                    .padding(.horizontal, KISEDesign.Spacing.md)
+                    .padding(.vertical, KISEDesign.Spacing.sm)
                 }
 
                 // Grid or empty state
@@ -2567,7 +2567,7 @@ struct WardrobeView: View {
                     Spacer()
                 } else {
                     ScrollView {
-                        LazyVGrid(columns: columns, spacing: VESTIDesign.Spacing.md) {
+                        LazyVGrid(columns: columns, spacing: KISEDesign.Spacing.md) {
                             ForEach(viewModel.filterPieces(pieces)) { piece in
                                 Button {
                                     viewModel.selectedPiece = piece
@@ -2576,11 +2576,11 @@ struct WardrobeView: View {
                                 }
                             }
                         }
-                        .padding(VESTIDesign.Spacing.md)
+                        .padding(KISEDesign.Spacing.md)
                     }
                 }
             }
-            .background(VESTIDesign.Colors.background)
+            .background(KISEDesign.Colors.background)
             .navigationTitle("Wardrobe")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
@@ -2608,25 +2608,25 @@ struct WardrobeView: View {
             withAnimation { viewModel.selectedTab = tab }
         } label: {
             Text(label)
-                .font(VESTIDesign.Typography.caption)
+                .font(KISEDesign.Typography.caption)
                 .foregroundStyle(
                     viewModel.selectedTab == tab
-                        ? VESTIDesign.Colors.background
-                        : VESTIDesign.Colors.textPrimary
+                        ? KISEDesign.Colors.background
+                        : KISEDesign.Colors.textPrimary
                 )
-                .padding(.horizontal, VESTIDesign.Spacing.md)
-                .padding(.vertical, VESTIDesign.Spacing.sm)
+                .padding(.horizontal, KISEDesign.Spacing.md)
+                .padding(.vertical, KISEDesign.Spacing.sm)
                 .background(
                     viewModel.selectedTab == tab
-                        ? VESTIDesign.Colors.accent
-                        : VESTIDesign.Colors.surface
+                        ? KISEDesign.Colors.accent
+                        : KISEDesign.Colors.surface
                 )
                 .clipShape(Capsule())
         }
     }
 
     private func garmentCard(_ piece: GarmentPiece) -> some View {
-        VStack(spacing: VESTIDesign.Spacing.xs) {
+        VStack(spacing: KISEDesign.Spacing.xs) {
             Group {
                 if let uiImage = CatalogImageService.loadImage(
                     category: piece.category, color: piece.color, fit: piece.fit
@@ -2635,27 +2635,27 @@ struct WardrobeView: View {
                         .resizable()
                         .scaledToFill()
                 } else {
-                    RoundedRectangle(cornerRadius: VESTIDesign.Radius.sm)
+                    RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
                         .fill(Color(hex: piece.colorHex).opacity(0.3))
                         .overlay {
                             Image(systemName: piece.category.systemIcon)
-                                .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                                .foregroundStyle(KISEDesign.Colors.textSecondary)
                         }
                 }
             }
             .aspectRatio(3 / 4, contentMode: .fit)
-            .clipShape(RoundedRectangle(cornerRadius: VESTIDesign.Radius.sm))
+            .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.sm))
 
             Text("\(piece.color.capitalized) \(piece.category.displayName)")
-                .font(VESTIDesign.Typography.small)
-                .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                .font(KISEDesign.Typography.small)
+                .foregroundStyle(KISEDesign.Colors.textSecondary)
                 .lineLimit(1)
         }
     }
 }
 ```
 
-- [ ] **Step 4: Update MainTabView in VESTIApp.swift**
+- [ ] **Step 4: Update MainTabView in KISEApp.swift**
 
 Replace the placeholder `MainTabView` with:
 
@@ -2670,21 +2670,21 @@ struct MainTabView: View {
                 WardrobeView()
             }
         }
-        .tint(VESTIDesign.Colors.accent)
+        .tint(KISEDesign.Colors.accent)
     }
 }
 ```
 
 - [ ] **Step 5: Build and verify**
 
-Run: `xcodebuild build -project VESTI.xcodeproj -scheme VESTI -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | tail -3`
+Run: `xcodebuild build -project KISE.xcodeproj -scheme KISE -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | tail -3`
 
 Expected: Build succeeds.
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add VESTI/Sources/Views/Wardrobe/ VESTI/Sources/Views/Shared/EmptyStateView.swift VESTI/Sources/App/VESTIApp.swift
+git add KISE/Sources/Views/Wardrobe/ KISE/Sources/Views/Shared/EmptyStateView.swift KISE/Sources/App/KISEApp.swift
 git commit -m "feat: add wardrobe view with grid, tab filtering, detail view, and empty state"
 ```
 
@@ -2695,22 +2695,22 @@ git commit -m "feat: add wardrobe view with grid, tab filtering, detail view, an
 ### Task 14: Proxy Project Setup
 
 **Files:**
-- Create: `vesti-proxy/package.json`
-- Create: `vesti-proxy/tsconfig.json`
-- Create: `vesti-proxy/wrangler.toml`
-- Create: `vesti-proxy/src/types.ts`
+- Create: `kise-proxy/package.json`
+- Create: `kise-proxy/tsconfig.json`
+- Create: `kise-proxy/wrangler.toml`
+- Create: `kise-proxy/src/types.ts`
 
 - [ ] **Step 1: Initialize proxy project**
 
 ```bash
-mkdir -p vesti-proxy/src vesti-proxy/test
+mkdir -p kise-proxy/src kise-proxy/test
 ```
 
 - [ ] **Step 2: Create package.json**
 
 ```json
 {
-  "name": "vesti-proxy",
+  "name": "kise-proxy",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -2753,7 +2753,7 @@ mkdir -p vesti-proxy/src vesti-proxy/test
 - [ ] **Step 4: Create wrangler.toml**
 
 ```toml
-name = "vesti-proxy"
+name = "kise-proxy"
 main = "src/index.ts"
 compatibility_date = "2024-05-01"
 
@@ -2764,7 +2764,7 @@ compatibility_date = "2024-05-01"
 - [ ] **Step 5: Create types.ts**
 
 ```typescript
-// vesti-proxy/src/types.ts
+// kise-proxy/src/types.ts
 
 export interface HourlyForecast {
   hour: number;
@@ -2826,12 +2826,12 @@ export interface Env {
 
 - [ ] **Step 6: Install dependencies**
 
-Run: `cd vesti-proxy && npm install`
+Run: `cd kise-proxy && npm install`
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add vesti-proxy/package.json vesti-proxy/tsconfig.json vesti-proxy/wrangler.toml vesti-proxy/src/types.ts
+git add kise-proxy/package.json kise-proxy/tsconfig.json kise-proxy/wrangler.toml kise-proxy/src/types.ts
 git commit -m "feat: initialize proxy server project (Cloudflare Worker)"
 ```
 
@@ -2840,15 +2840,15 @@ git commit -m "feat: initialize proxy server project (Cloudflare Worker)"
 ### Task 15: System Prompt Builder + Archetype Briefs
 
 **Files:**
-- Create: `vesti-proxy/src/archetypes.ts`
-- Create: `vesti-proxy/src/tool-schema.ts`
-- Create: `vesti-proxy/src/prompt.ts`
-- Test: `vesti-proxy/test/prompt.test.ts`
+- Create: `kise-proxy/src/archetypes.ts`
+- Create: `kise-proxy/src/tool-schema.ts`
+- Create: `kise-proxy/src/prompt.ts`
+- Test: `kise-proxy/test/prompt.test.ts`
 
 - [ ] **Step 1: Write tests**
 
 ```typescript
-// vesti-proxy/test/prompt.test.ts
+// kise-proxy/test/prompt.test.ts
 import { describe, it, expect } from 'vitest';
 import { buildSystemPrompt } from '../src/prompt';
 import { ARCHETYPE_BRIEFS } from '../src/archetypes';
@@ -2875,7 +2875,7 @@ describe('buildSystemPrompt', () => {
 
   it('handles unknown archetypes gracefully', () => {
     const prompt = buildSystemPrompt(['unknown-style']);
-    expect(prompt).toContain('VESTI');
+    expect(prompt).toContain('KISE');
     // Should not crash, just skip unknown archetype
   });
 });
@@ -2895,14 +2895,14 @@ describe('ARCHETYPE_BRIEFS', () => {
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `cd vesti-proxy && npx vitest run --reporter=verbose 2>&1 | tail -20`
+Run: `cd kise-proxy && npx vitest run --reporter=verbose 2>&1 | tail -20`
 
 Expected: Import errors — modules don't exist.
 
 - [ ] **Step 3: Implement archetypes.ts**
 
 ```typescript
-// vesti-proxy/src/archetypes.ts
+// kise-proxy/src/archetypes.ts
 
 export const ARCHETYPE_BRIEFS: Record<string, string> = {
   'old-money': `Old Money: Structured silhouettes, neutral palette (navy, cream, olive, gray, camel), quality fabrics, understated elegance. Think: well-fitted chinos + fine knit sweater + structured outerwear. Avoid logos, bold prints, or anything that screams for attention. The outfit should look expensive through fit and fabric, not branding. Layering is key — a collared shirt under a crewneck sweater is a signature move.`,
@@ -2922,7 +2922,7 @@ export const ARCHETYPE_BRIEFS: Record<string, string> = {
 - [ ] **Step 4: Implement tool-schema.ts**
 
 ```typescript
-// vesti-proxy/src/tool-schema.ts
+// kise-proxy/src/tool-schema.ts
 
 export const SUGGEST_OUTFIT_TOOL = {
   name: 'suggest_outfit',
@@ -2960,7 +2960,7 @@ export const SUGGEST_OUTFIT_TOOL = {
 - [ ] **Step 5: Implement prompt.ts**
 
 ```typescript
-// vesti-proxy/src/prompt.ts
+// kise-proxy/src/prompt.ts
 
 import { ARCHETYPE_BRIEFS } from './archetypes';
 
@@ -2971,7 +2971,7 @@ export function buildSystemPrompt(archetypes: string[]): string {
     .map((brief) => `- ${brief}`)
     .join('\n');
 
-  return `You are VESTI, a personal wardrobe consultant. You help users dress with intention by selecting outfit combinations from their registered wardrobe pieces.
+  return `You are KISE, a personal wardrobe consultant. You help users dress with intention by selecting outfit combinations from their registered wardrobe pieces.
 
 STYLE CONTEXT:
 The user's style archetypes define the "outfit formulas" you should follow:
@@ -3002,14 +3002,14 @@ If the wardrobe has too few pieces to form a coherent outfit for the given occas
 
 - [ ] **Step 6: Run tests to verify they pass**
 
-Run: `cd vesti-proxy && npx vitest run --reporter=verbose 2>&1 | tail -20`
+Run: `cd kise-proxy && npx vitest run --reporter=verbose 2>&1 | tail -20`
 
 Expected: All 5 tests pass.
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add vesti-proxy/src/archetypes.ts vesti-proxy/src/tool-schema.ts vesti-proxy/src/prompt.ts vesti-proxy/test/prompt.test.ts
+git add kise-proxy/src/archetypes.ts kise-proxy/src/tool-schema.ts kise-proxy/src/prompt.ts kise-proxy/test/prompt.test.ts
 git commit -m "feat: add system prompt builder with archetype briefs and tool schema"
 ```
 
@@ -3018,14 +3018,14 @@ git commit -m "feat: add system prompt builder with archetype briefs and tool sc
 ### Task 16: Request Handler + Worker Entry
 
 **Files:**
-- Create: `vesti-proxy/src/handler.ts`
-- Create: `vesti-proxy/src/index.ts`
-- Test: `vesti-proxy/test/handler.test.ts`
+- Create: `kise-proxy/src/handler.ts`
+- Create: `kise-proxy/src/index.ts`
+- Test: `kise-proxy/test/handler.test.ts`
 
 - [ ] **Step 1: Write tests**
 
 ```typescript
-// vesti-proxy/test/handler.test.ts
+// kise-proxy/test/handler.test.ts
 import { describe, it, expect, vi } from 'vitest';
 import { buildClaudeRequest } from '../src/handler';
 
@@ -3050,7 +3050,7 @@ describe('buildClaudeRequest', () => {
     });
 
     expect(request.model).toContain('claude');
-    expect(request.system).toContain('VESTI');
+    expect(request.system).toContain('KISE');
     expect(request.tools).toHaveLength(1);
     expect(request.tools[0].name).toBe('suggest_outfit');
     expect(request.messages).toHaveLength(1);
@@ -3099,7 +3099,7 @@ Expected: Import errors.
 - [ ] **Step 3: Implement handler.ts**
 
 ```typescript
-// vesti-proxy/src/handler.ts
+// kise-proxy/src/handler.ts
 
 import { buildSystemPrompt } from './prompt';
 import { SUGGEST_OUTFIT_TOOL } from './tool-schema';
@@ -3192,7 +3192,7 @@ export async function handleSuggestionRequest(
 - [ ] **Step 4: Implement index.ts (Worker entry)**
 
 ```typescript
-// vesti-proxy/src/index.ts
+// kise-proxy/src/index.ts
 
 import { handleSuggestionRequest } from './handler';
 import type { SuggestionRequest, Env } from './types';
@@ -3256,14 +3256,14 @@ export default {
 
 - [ ] **Step 5: Run tests to verify they pass**
 
-Run: `cd vesti-proxy && npx vitest run --reporter=verbose 2>&1 | tail -20`
+Run: `cd kise-proxy && npx vitest run --reporter=verbose 2>&1 | tail -20`
 
 Expected: All handler tests pass.
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add vesti-proxy/src/handler.ts vesti-proxy/src/index.ts vesti-proxy/test/handler.test.ts
+git add kise-proxy/src/handler.ts kise-proxy/src/index.ts kise-proxy/test/handler.test.ts
 git commit -m "feat: add proxy request handler and Cloudflare Worker entry point"
 ```
 
@@ -3274,15 +3274,15 @@ git commit -m "feat: add proxy request handler and Cloudflare Worker entry point
 ### Task 17: Weather Service
 
 **Files:**
-- Create: `VESTI/Sources/Services/WeatherService.swift`
-- Test: `VESTI/Tests/Services/WeatherServiceTests.swift`
+- Create: `KISE/Sources/Services/WeatherService.swift`
+- Test: `KISE/Tests/Services/WeatherServiceTests.swift`
 
 - [ ] **Step 1: Write tests**
 
 ```swift
-// VESTI/Tests/Services/WeatherServiceTests.swift
+// KISE/Tests/Services/WeatherServiceTests.swift
 import XCTest
-@testable import VESTI
+@testable import KISE
 
 final class WeatherServiceTests: XCTestCase {
 
@@ -3367,7 +3367,7 @@ Expected: Compilation errors.
 - [ ] **Step 3: Implement WeatherService**
 
 ```swift
-// VESTI/Sources/Services/WeatherService.swift
+// KISE/Sources/Services/WeatherService.swift
 import Foundation
 import WeatherKit
 import CoreLocation
@@ -3441,7 +3441,7 @@ Expected: All 5 tests pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add VESTI/Sources/Services/WeatherService.swift VESTI/Tests/Services/WeatherServiceTests.swift
+git add KISE/Sources/Services/WeatherService.swift KISE/Tests/Services/WeatherServiceTests.swift
 git commit -m "feat: add weather service with WeatherKit integration and caching"
 ```
 
@@ -3450,15 +3450,15 @@ git commit -m "feat: add weather service with WeatherKit integration and caching
 ### Task 18: Suggestion Service (API Client)
 
 **Files:**
-- Create: `VESTI/Sources/Services/SuggestionService.swift`
-- Test: `VESTI/Tests/Services/SuggestionServiceTests.swift`
+- Create: `KISE/Sources/Services/SuggestionService.swift`
+- Test: `KISE/Tests/Services/SuggestionServiceTests.swift`
 
 - [ ] **Step 1: Write tests**
 
 ```swift
-// VESTI/Tests/Services/SuggestionServiceTests.swift
+// KISE/Tests/Services/SuggestionServiceTests.swift
 import XCTest
-@testable import VESTI
+@testable import KISE
 
 final class SuggestionServiceTests: XCTestCase {
 
@@ -3533,7 +3533,7 @@ Expected: Compilation errors.
 - [ ] **Step 3: Implement SuggestionService**
 
 ```swift
-// VESTI/Sources/Services/SuggestionService.swift
+// KISE/Sources/Services/SuggestionService.swift
 import Foundation
 
 struct SuggestionAPIResponse {
@@ -3545,7 +3545,7 @@ struct SuggestionAPIResponse {
 
 final class SuggestionService {
     // TODO: Replace with actual proxy URL after deployment
-    static let proxyBaseURL = "https://vesti-proxy.YOUR_DOMAIN.workers.dev"
+    static let proxyBaseURL = "https://kise-proxy.YOUR_DOMAIN.workers.dev"
 
     // MARK: - Payload Building
 
@@ -3708,7 +3708,7 @@ Expected: All 3 tests pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add VESTI/Sources/Services/SuggestionService.swift VESTI/Tests/Services/SuggestionServiceTests.swift
+git add KISE/Sources/Services/SuggestionService.swift KISE/Tests/Services/SuggestionServiceTests.swift
 git commit -m "feat: add suggestion service with proxy API client and response parsing"
 ```
 
@@ -3717,16 +3717,16 @@ git commit -m "feat: add suggestion service with proxy API client and response p
 ### Task 19: Suggestion ViewModel
 
 **Files:**
-- Create: `VESTI/Sources/ViewModels/SuggestionViewModel.swift`
-- Test: `VESTI/Tests/ViewModels/SuggestionViewModelTests.swift`
+- Create: `KISE/Sources/ViewModels/SuggestionViewModel.swift`
+- Test: `KISE/Tests/ViewModels/SuggestionViewModelTests.swift`
 
 - [ ] **Step 1: Write tests**
 
 ```swift
-// VESTI/Tests/ViewModels/SuggestionViewModelTests.swift
+// KISE/Tests/ViewModels/SuggestionViewModelTests.swift
 import XCTest
 import SwiftData
-@testable import VESTI
+@testable import KISE
 
 final class SuggestionViewModelTests: XCTestCase {
 
@@ -3778,7 +3778,7 @@ Expected: Compilation errors.
 - [ ] **Step 3: Implement SuggestionViewModel**
 
 ```swift
-// VESTI/Sources/ViewModels/SuggestionViewModel.swift
+// KISE/Sources/ViewModels/SuggestionViewModel.swift
 import SwiftUI
 import SwiftData
 import CoreLocation
@@ -3918,7 +3918,7 @@ Expected: All 3 tests pass.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add VESTI/Sources/ViewModels/SuggestionViewModel.swift VESTI/Tests/ViewModels/SuggestionViewModelTests.swift
+git add KISE/Sources/ViewModels/SuggestionViewModel.swift KISE/Tests/ViewModels/SuggestionViewModelTests.swift
 git commit -m "feat: add suggestion view model with fetch, feedback, and state management"
 ```
 
@@ -3929,15 +3929,15 @@ git commit -m "feat: add suggestion view model with fetch, feedback, and state m
 ### Task 20: Suggestion Views
 
 **Files:**
-- Create: `VESTI/Sources/Views/Suggestion/OutfitCardView.swift`
-- Create: `VESTI/Sources/Views/Suggestion/SuggestionLoadingView.swift`
-- Create: `VESTI/Sources/Views/Suggestion/SuggestionControlsView.swift`
-- Create: `VESTI/Sources/Views/Suggestion/SuggestionView.swift`
+- Create: `KISE/Sources/Views/Suggestion/OutfitCardView.swift`
+- Create: `KISE/Sources/Views/Suggestion/SuggestionLoadingView.swift`
+- Create: `KISE/Sources/Views/Suggestion/SuggestionControlsView.swift`
+- Create: `KISE/Sources/Views/Suggestion/SuggestionView.swift`
 
 - [ ] **Step 1: Implement OutfitCardView**
 
 ```swift
-// VESTI/Sources/Views/Suggestion/OutfitCardView.swift
+// KISE/Sources/Views/Suggestion/OutfitCardView.swift
 import SwiftUI
 
 struct OutfitCardView: View {
@@ -3950,7 +3950,7 @@ struct OutfitCardView: View {
     }
 
     var body: some View {
-        VStack(spacing: VESTIDesign.Spacing.sm) {
+        VStack(spacing: KISEDesign.Spacing.sm) {
             Group {
                 if let uiImage = CatalogImageService.loadImage(
                     category: piece.category, color: piece.color, fit: piece.fit
@@ -3959,34 +3959,34 @@ struct OutfitCardView: View {
                         .resizable()
                         .scaledToFit()
                 } else {
-                    RoundedRectangle(cornerRadius: VESTIDesign.Radius.sm)
+                    RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
                         .fill(Color(hex: piece.colorHex).opacity(0.3))
                         .aspectRatio(4 / 3, contentMode: .fit)
                         .overlay {
-                            VStack(spacing: VESTIDesign.Spacing.xs) {
+                            VStack(spacing: KISEDesign.Spacing.xs) {
                                 Image(systemName: piece.category.systemIcon)
                                     .font(.system(size: 32))
                                 Text("\(piece.color.capitalized) \(piece.category.displayName)")
-                                    .font(VESTIDesign.Typography.caption)
+                                    .font(KISEDesign.Typography.caption)
                             }
-                            .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                            .foregroundStyle(KISEDesign.Colors.textSecondary)
                         }
                 }
             }
-            .clipShape(RoundedRectangle(cornerRadius: VESTIDesign.Radius.sm))
+            .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.sm))
 
             Text("\(piece.color.capitalized) \(piece.category.displayName)")
-                .font(VESTIDesign.Typography.caption)
-                .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                .font(KISEDesign.Typography.caption)
+                .foregroundStyle(KISEDesign.Colors.textSecondary)
 
             if let alternativeLabel {
                 Text(alternativeLabel)
-                    .font(VESTIDesign.Typography.small)
-                    .foregroundStyle(VESTIDesign.Colors.textTertiary)
+                    .font(KISEDesign.Typography.small)
+                    .foregroundStyle(KISEDesign.Colors.textTertiary)
                     .italic()
             }
         }
-        .vestiCard()
+        .kiseCard()
     }
 }
 ```
@@ -3994,28 +3994,28 @@ struct OutfitCardView: View {
 - [ ] **Step 2: Implement SuggestionLoadingView**
 
 ```swift
-// VESTI/Sources/Views/Suggestion/SuggestionLoadingView.swift
+// KISE/Sources/Views/Suggestion/SuggestionLoadingView.swift
 import SwiftUI
 
 struct SuggestionLoadingView: View {
     @State private var isAnimating = false
 
     var body: some View {
-        VStack(spacing: VESTIDesign.Spacing.lg) {
+        VStack(spacing: KISEDesign.Spacing.lg) {
             ForEach(0..<3, id: \.self) { _ in
-                RoundedRectangle(cornerRadius: VESTIDesign.Radius.md)
-                    .fill(VESTIDesign.Colors.border)
+                RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
+                    .fill(KISEDesign.Colors.border)
                     .frame(height: 120)
                     .opacity(isAnimating ? 0.4 : 0.8)
             }
 
-            RoundedRectangle(cornerRadius: VESTIDesign.Radius.sm)
-                .fill(VESTIDesign.Colors.border)
+            RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
+                .fill(KISEDesign.Colors.border)
                 .frame(height: 20)
                 .frame(maxWidth: 200)
                 .opacity(isAnimating ? 0.4 : 0.8)
         }
-        .padding(VESTIDesign.Spacing.md)
+        .padding(KISEDesign.Spacing.md)
         .onAppear {
             withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
                 isAnimating = true
@@ -4028,7 +4028,7 @@ struct SuggestionLoadingView: View {
 - [ ] **Step 3: Implement SuggestionControlsView**
 
 ```swift
-// VESTI/Sources/Views/Suggestion/SuggestionControlsView.swift
+// KISE/Sources/Views/Suggestion/SuggestionControlsView.swift
 import SwiftUI
 
 struct SuggestionControlsView: View {
@@ -4036,31 +4036,31 @@ struct SuggestionControlsView: View {
     @Binding var boldness: Double
 
     var body: some View {
-        VStack(spacing: VESTIDesign.Spacing.md) {
+        VStack(spacing: KISEDesign.Spacing.md) {
             // Occasion selector
-            VStack(alignment: .leading, spacing: VESTIDesign.Spacing.sm) {
+            VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
                 Text("Occasion")
-                    .font(VESTIDesign.Typography.caption)
-                    .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                    .font(KISEDesign.Typography.caption)
+                    .foregroundStyle(KISEDesign.Colors.textSecondary)
 
-                HStack(spacing: VESTIDesign.Spacing.sm) {
+                HStack(spacing: KISEDesign.Spacing.sm) {
                     ForEach(Occasion.allCases) { occ in
                         Button {
                             occasion = occ
                         } label: {
                             Text(occ.displayName)
-                                .font(VESTIDesign.Typography.small)
+                                .font(KISEDesign.Typography.small)
                                 .foregroundStyle(
                                     occasion == occ
-                                        ? VESTIDesign.Colors.background
-                                        : VESTIDesign.Colors.textPrimary
+                                        ? KISEDesign.Colors.background
+                                        : KISEDesign.Colors.textPrimary
                                 )
-                                .padding(.horizontal, VESTIDesign.Spacing.md)
-                                .padding(.vertical, VESTIDesign.Spacing.sm)
+                                .padding(.horizontal, KISEDesign.Spacing.md)
+                                .padding(.vertical, KISEDesign.Spacing.sm)
                                 .background(
                                     occasion == occ
-                                        ? VESTIDesign.Colors.accent
-                                        : VESTIDesign.Colors.surface
+                                        ? KISEDesign.Colors.accent
+                                        : KISEDesign.Colors.surface
                                 )
                                 .clipShape(Capsule())
                         }
@@ -4069,27 +4069,27 @@ struct SuggestionControlsView: View {
             }
 
             // Boldness slider
-            VStack(alignment: .leading, spacing: VESTIDesign.Spacing.sm) {
+            VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
                 Text("Boldness")
-                    .font(VESTIDesign.Typography.caption)
-                    .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                    .font(KISEDesign.Typography.caption)
+                    .foregroundStyle(KISEDesign.Colors.textSecondary)
 
                 HStack {
                     Text("Safe")
-                        .font(VESTIDesign.Typography.small)
-                        .foregroundStyle(VESTIDesign.Colors.textTertiary)
+                        .font(KISEDesign.Typography.small)
+                        .foregroundStyle(KISEDesign.Colors.textTertiary)
                     Slider(value: $boldness, in: 0...1, step: 0.1)
-                        .tint(VESTIDesign.Colors.accent)
+                        .tint(KISEDesign.Colors.accent)
                     Text("Bold")
-                        .font(VESTIDesign.Typography.small)
-                        .foregroundStyle(VESTIDesign.Colors.textTertiary)
+                        .font(KISEDesign.Typography.small)
+                        .foregroundStyle(KISEDesign.Colors.textTertiary)
                 }
             }
         }
-        .padding(VESTIDesign.Spacing.md)
-        .background(VESTIDesign.Colors.surface)
-        .clipShape(RoundedRectangle(cornerRadius: VESTIDesign.Radius.lg))
-        .shadow(color: VESTIDesign.Colors.cardShadow, radius: 12)
+        .padding(KISEDesign.Spacing.md)
+        .background(KISEDesign.Colors.surface)
+        .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.lg))
+        .shadow(color: KISEDesign.Colors.cardShadow, radius: 12)
     }
 }
 ```
@@ -4097,7 +4097,7 @@ struct SuggestionControlsView: View {
 - [ ] **Step 4: Implement SuggestionView (Home Screen)**
 
 ```swift
-// VESTI/Sources/Views/Suggestion/SuggestionView.swift
+// KISE/Sources/Views/Suggestion/SuggestionView.swift
 import SwiftUI
 import SwiftData
 import CoreLocation
@@ -4116,7 +4116,7 @@ struct SuggestionView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: VESTIDesign.Spacing.lg) {
+                VStack(spacing: KISEDesign.Spacing.lg) {
                     // Pull-down controls
                     if viewModel.showControls {
                         SuggestionControlsView(
@@ -4147,7 +4147,7 @@ struct SuggestionView: View {
                     case .loaded:
                         if let suggestion = viewModel.currentSuggestion {
                             // Outfit cards
-                            VStack(spacing: VESTIDesign.Spacing.md) {
+                            VStack(spacing: KISEDesign.Spacing.md) {
                                 ForEach(viewModel.suggestedPieces) { piece in
                                     OutfitCardView(piece: piece)
                                 }
@@ -4155,33 +4155,33 @@ struct SuggestionView: View {
 
                             // Reasoning
                             Text(suggestion.reasoning)
-                                .font(VESTIDesign.Typography.bodyText)
-                                .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                                .font(KISEDesign.Typography.bodyText)
+                                .foregroundStyle(KISEDesign.Colors.textSecondary)
                                 .multilineTextAlignment(.center)
-                                .padding(.horizontal, VESTIDesign.Spacing.md)
+                                .padding(.horizontal, KISEDesign.Spacing.md)
 
                             // Layering note
                             if let note = suggestion.layeringNote {
-                                HStack(spacing: VESTIDesign.Spacing.sm) {
+                                HStack(spacing: KISEDesign.Spacing.sm) {
                                     Image(systemName: "cloud.sun")
-                                        .foregroundStyle(VESTIDesign.Colors.textTertiary)
+                                        .foregroundStyle(KISEDesign.Colors.textTertiary)
                                     Text(note)
-                                        .font(VESTIDesign.Typography.caption)
-                                        .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                                        .font(KISEDesign.Typography.caption)
+                                        .foregroundStyle(KISEDesign.Colors.textSecondary)
                                 }
-                                .padding(VESTIDesign.Spacing.md)
-                                .background(VESTIDesign.Colors.border.opacity(0.3))
-                                .clipShape(RoundedRectangle(cornerRadius: VESTIDesign.Radius.sm))
+                                .padding(KISEDesign.Spacing.md)
+                                .background(KISEDesign.Colors.border.opacity(0.3))
+                                .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.sm))
                             }
 
                             // Feedback + Regenerate
-                            HStack(spacing: VESTIDesign.Spacing.xl) {
+                            HStack(spacing: KISEDesign.Spacing.xl) {
                                 Button {
                                     viewModel.submitFeedback(liked: false, context: modelContext)
                                 } label: {
                                     Image(systemName: "hand.thumbsdown")
                                         .font(.system(size: 20))
-                                        .foregroundStyle(VESTIDesign.Colors.disliked)
+                                        .foregroundStyle(KISEDesign.Colors.disliked)
                                 }
 
                                 Button {
@@ -4189,7 +4189,7 @@ struct SuggestionView: View {
                                 } label: {
                                     Image(systemName: "arrow.clockwise")
                                         .font(.system(size: 20))
-                                        .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                                        .foregroundStyle(KISEDesign.Colors.textSecondary)
                                 }
 
                                 Button {
@@ -4197,17 +4197,17 @@ struct SuggestionView: View {
                                 } label: {
                                     Image(systemName: "hand.thumbsup")
                                         .font(.system(size: 20))
-                                        .foregroundStyle(VESTIDesign.Colors.liked)
+                                        .foregroundStyle(KISEDesign.Colors.liked)
                                 }
                             }
-                            .padding(.top, VESTIDesign.Spacing.md)
+                            .padding(.top, KISEDesign.Spacing.md)
                         }
                     }
                 }
-                .padding(VESTIDesign.Spacing.md)
+                .padding(KISEDesign.Spacing.md)
             }
-            .background(VESTIDesign.Colors.background)
-            .navigationTitle("VESTI")
+            .background(KISEDesign.Colors.background)
+            .navigationTitle("KISE")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -4259,14 +4259,14 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
 
 - [ ] **Step 5: Build and verify**
 
-Run: `xcodebuild build -project VESTI.xcodeproj -scheme VESTI -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | tail -3`
+Run: `xcodebuild build -project KISE.xcodeproj -scheme KISE -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | tail -3`
 
 Expected: Build succeeds.
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add VESTI/Sources/Views/Suggestion/
+git add KISE/Sources/Views/Suggestion/
 git commit -m "feat: add suggestion home screen with outfit cards, feedback, and controls"
 ```
 
@@ -4275,12 +4275,12 @@ git commit -m "feat: add suggestion home screen with outfit cards, feedback, and
 ### Task 21: Settings View
 
 **Files:**
-- Create: `VESTI/Sources/Views/Settings/SettingsView.swift`
+- Create: `KISE/Sources/Views/Settings/SettingsView.swift`
 
 - [ ] **Step 1: Implement SettingsView**
 
 ```swift
-// VESTI/Sources/Views/Settings/SettingsView.swift
+// KISE/Sources/Views/Settings/SettingsView.swift
 import SwiftUI
 import SwiftData
 
@@ -4291,41 +4291,41 @@ struct SettingsView: View {
     @State private var selectedArchetypes: Set<StyleArchetype> = []
 
     private let columns = [
-        GridItem(.flexible(), spacing: VESTIDesign.Spacing.md),
-        GridItem(.flexible(), spacing: VESTIDesign.Spacing.md),
+        GridItem(.flexible(), spacing: KISEDesign.Spacing.md),
+        GridItem(.flexible(), spacing: KISEDesign.Spacing.md),
     ]
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: VESTIDesign.Spacing.lg) {
+                VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
                     // Style Archetypes
-                    VStack(alignment: .leading, spacing: VESTIDesign.Spacing.md) {
+                    VStack(alignment: .leading, spacing: KISEDesign.Spacing.md) {
                         Text("Your Styles")
-                            .font(VESTIDesign.Typography.title)
-                            .foregroundStyle(VESTIDesign.Colors.textPrimary)
+                            .font(KISEDesign.Typography.title)
+                            .foregroundStyle(KISEDesign.Colors.textPrimary)
 
-                        LazyVGrid(columns: columns, spacing: VESTIDesign.Spacing.md) {
+                        LazyVGrid(columns: columns, spacing: KISEDesign.Spacing.md) {
                             ForEach(StyleArchetype.allCases) { archetype in
                                 Button {
                                     toggleArchetype(archetype)
                                 } label: {
                                     Text(archetype.displayName)
-                                        .font(VESTIDesign.Typography.caption)
-                                        .foregroundStyle(VESTIDesign.Colors.textPrimary)
+                                        .font(KISEDesign.Typography.caption)
+                                        .foregroundStyle(KISEDesign.Colors.textPrimary)
                                         .frame(maxWidth: .infinity)
-                                        .padding(VESTIDesign.Spacing.md)
+                                        .padding(KISEDesign.Spacing.md)
                                         .background(
                                             selectedArchetypes.contains(archetype)
-                                                ? VESTIDesign.Colors.accent.opacity(0.1)
-                                                : VESTIDesign.Colors.surface
+                                                ? KISEDesign.Colors.accent.opacity(0.1)
+                                                : KISEDesign.Colors.surface
                                         )
-                                        .clipShape(RoundedRectangle(cornerRadius: VESTIDesign.Radius.md))
+                                        .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
                                         .overlay {
-                                            RoundedRectangle(cornerRadius: VESTIDesign.Radius.md)
+                                            RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
                                                 .stroke(
                                                     selectedArchetypes.contains(archetype)
-                                                        ? VESTIDesign.Colors.accent : VESTIDesign.Colors.border,
+                                                        ? KISEDesign.Colors.accent : KISEDesign.Colors.border,
                                                     lineWidth: 1
                                                 )
                                         }
@@ -4337,23 +4337,23 @@ struct SettingsView: View {
                     Divider()
 
                     // About
-                    VStack(alignment: .leading, spacing: VESTIDesign.Spacing.sm) {
+                    VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
                         Text("About")
-                            .font(VESTIDesign.Typography.title)
-                            .foregroundStyle(VESTIDesign.Colors.textPrimary)
+                            .font(KISEDesign.Typography.title)
+                            .foregroundStyle(KISEDesign.Colors.textPrimary)
 
-                        Text("VESTI v1.0")
-                            .font(VESTIDesign.Typography.bodyText)
-                            .foregroundStyle(VESTIDesign.Colors.textSecondary)
+                        Text("KISE v1.0")
+                            .font(KISEDesign.Typography.bodyText)
+                            .foregroundStyle(KISEDesign.Colors.textSecondary)
 
                         Text("Dress with intention.")
-                            .font(VESTIDesign.Typography.caption)
-                            .foregroundStyle(VESTIDesign.Colors.textTertiary)
+                            .font(KISEDesign.Typography.caption)
+                            .foregroundStyle(KISEDesign.Colors.textTertiary)
                     }
                 }
-                .padding(VESTIDesign.Spacing.md)
+                .padding(KISEDesign.Spacing.md)
             }
-            .background(VESTIDesign.Colors.background)
+            .background(KISEDesign.Colors.background)
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -4395,7 +4395,7 @@ struct SettingsView: View {
 - [ ] **Step 2: Commit**
 
 ```bash
-git add VESTI/Sources/Views/Settings/SettingsView.swift
+git add KISE/Sources/Views/Settings/SettingsView.swift
 git commit -m "feat: add settings view with archetype editing"
 ```
 
@@ -4404,17 +4404,17 @@ git commit -m "feat: add settings view with archetype editing"
 ### Task 22: Wire Everything Together
 
 **Files:**
-- Modify: `VESTI/Sources/App/VESTIApp.swift`
+- Modify: `KISE/Sources/App/KISEApp.swift`
 
 - [ ] **Step 1: Update MainTabView and ContentView**
 
 ```swift
-// VESTI/Sources/App/VESTIApp.swift
+// KISE/Sources/App/KISEApp.swift
 import SwiftUI
 import SwiftData
 
 @main
-struct VESTIApp: App {
+struct KISEApp: App {
     @State private var appState = AppState()
 
     var body: some Scene {
@@ -4470,7 +4470,7 @@ struct MainTabView: View {
                     }
             }
         }
-        .tint(VESTIDesign.Colors.accent)
+        .tint(KISEDesign.Colors.accent)
         .sheet(isPresented: $showSettings) {
             SettingsView()
         }
@@ -4481,7 +4481,7 @@ struct MainTabView: View {
 - [ ] **Step 2: Create PreviewData for SwiftUI previews**
 
 ```swift
-// VESTI/Preview Content/PreviewData.swift
+// KISE/Preview Content/PreviewData.swift
 import SwiftData
 import Foundation
 
@@ -4506,10 +4506,10 @@ enum PreviewData {
 
 Run:
 ```bash
-cd /Users/lucasgalhardo/Documents/Projects/vesti
+cd /Users/lucasgalhardo/Documents/Projects/kise
 xcodegen generate
-xcodebuild build -project VESTI.xcodeproj -scheme VESTI -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | tail -5
-xcodebuild test -project VESTI.xcodeproj -scheme VESTITests -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | grep -E '(Executed|FAIL)' | tail -5
+xcodebuild build -project KISE.xcodeproj -scheme KISE -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | tail -5
+xcodebuild test -project KISE.xcodeproj -scheme KISETests -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | grep -E '(Executed|FAIL)' | tail -5
 ```
 
 Expected: Build succeeds, all tests pass.
@@ -4517,7 +4517,7 @@ Expected: Build succeeds, all tests pass.
 - [ ] **Step 4: Commit**
 
 ```bash
-git add VESTI/Sources/App/VESTIApp.swift VESTI/"Preview Content"/PreviewData.swift
+git add KISE/Sources/App/KISEApp.swift KISE/"Preview Content"/PreviewData.swift
 git commit -m "feat: wire up all views — onboarding, wardrobe, suggestions, settings"
 ```
 
@@ -4531,32 +4531,32 @@ Run: `npm install -g wrangler` (skip if already installed)
 
 - [ ] **Step 2: Login to Cloudflare**
 
-Run: `cd vesti-proxy && wrangler login`
+Run: `cd kise-proxy && wrangler login`
 
 - [ ] **Step 3: Set the Anthropic API key as a secret**
 
-Run: `cd vesti-proxy && wrangler secret put ANTHROPIC_API_KEY`
+Run: `cd kise-proxy && wrangler secret put ANTHROPIC_API_KEY`
 
 Enter your Anthropic API key when prompted.
 
 - [ ] **Step 4: Deploy**
 
-Run: `cd vesti-proxy && npm run deploy`
+Run: `cd kise-proxy && npm run deploy`
 
-Expected: Deployment succeeds, outputs a URL like `https://vesti-proxy.YOUR_SUBDOMAIN.workers.dev`
+Expected: Deployment succeeds, outputs a URL like `https://kise-proxy.YOUR_SUBDOMAIN.workers.dev`
 
 - [ ] **Step 5: Update SuggestionService with the deployed URL**
 
-In `VESTI/Sources/Services/SuggestionService.swift`, update:
+In `KISE/Sources/Services/SuggestionService.swift`, update:
 ```swift
-static let proxyBaseURL = "https://vesti-proxy.YOUR_SUBDOMAIN.workers.dev"
+static let proxyBaseURL = "https://kise-proxy.YOUR_SUBDOMAIN.workers.dev"
 ```
 
 - [ ] **Step 6: Test the proxy manually**
 
 Run:
 ```bash
-curl -X POST https://vesti-proxy.YOUR_SUBDOMAIN.workers.dev/suggest \
+curl -X POST https://kise-proxy.YOUR_SUBDOMAIN.workers.dev/suggest \
   -H "Content-Type: application/json" \
   -d '{
     "style_archetypes": ["old-money", "minimalist"],
@@ -4576,7 +4576,7 @@ Expected: JSON response with pieces, reasoning, and optionally layering_note and
 - [ ] **Step 7: Commit the URL update**
 
 ```bash
-git add VESTI/Sources/Services/SuggestionService.swift
+git add KISE/Sources/Services/SuggestionService.swift
 git commit -m "feat: configure proxy URL for deployed Cloudflare Worker"
 ```
 
@@ -4587,17 +4587,17 @@ git commit -m "feat: configure proxy URL for deployed Cloudflare Worker"
 - [ ] **Step 1: Run full test suite**
 
 ```bash
-cd /Users/lucasgalhardo/Documents/Projects/vesti
+cd /Users/lucasgalhardo/Documents/Projects/kise
 xcodegen generate
-xcodebuild test -project VESTI.xcodeproj -scheme VESTITests -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | grep -E '(Executed|FAIL)'
-cd vesti-proxy && npx vitest run
+xcodebuild test -project KISE.xcodeproj -scheme KISETests -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | grep -E '(Executed|FAIL)'
+cd kise-proxy && npx vitest run
 ```
 
 Expected: All iOS and proxy tests pass.
 
 - [ ] **Step 2: Run the app in simulator**
 
-Open `VESTI.xcodeproj` in Xcode, select iPhone 16 simulator, and run. Verify:
+Open `KISE.xcodeproj` in Xcode, select iPhone 16 simulator, and run. Verify:
 1. Onboarding shows archetype grid
 2. Selecting 1+ archetypes and tapping Continue saves profile
 3. Wardrobe screen shows empty state with "Add Piece" button
@@ -4617,8 +4617,8 @@ git commit -m "chore: final adjustments after smoke test"
 ### Task 25: Swipe-to-Archive + Stale Suggestion Indicator
 
 **Files:**
-- Modify: `VESTI/Sources/Views/Wardrobe/WardrobeView.swift`
-- Modify: `VESTI/Sources/Views/Suggestion/SuggestionView.swift`
+- Modify: `KISE/Sources/Views/Wardrobe/WardrobeView.swift`
+- Modify: `KISE/Sources/Views/Suggestion/SuggestionView.swift`
 
 - [ ] **Step 1: Add swipe-to-archive in WardrobeView**
 
@@ -4661,11 +4661,11 @@ private var isStale: Bool {
 // In the .loaded case, before the outfit cards:
 if isStale {
     Text("From yesterday")
-        .font(VESTIDesign.Typography.small)
-        .foregroundStyle(VESTIDesign.Colors.textTertiary)
-        .padding(.horizontal, VESTIDesign.Spacing.md)
-        .padding(.vertical, VESTIDesign.Spacing.xs)
-        .background(VESTIDesign.Colors.border.opacity(0.3))
+        .font(KISEDesign.Typography.small)
+        .foregroundStyle(KISEDesign.Colors.textTertiary)
+        .padding(.horizontal, KISEDesign.Spacing.md)
+        .padding(.vertical, KISEDesign.Spacing.xs)
+        .background(KISEDesign.Colors.border.opacity(0.3))
         .clipShape(Capsule())
 }
 ```
@@ -4681,7 +4681,7 @@ Expected: Build succeeds.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add VESTI/Sources/Views/Wardrobe/WardrobeView.swift VESTI/Sources/Views/Suggestion/SuggestionView.swift
+git add KISE/Sources/Views/Wardrobe/WardrobeView.swift KISE/Sources/Views/Suggestion/SuggestionView.swift
 git commit -m "feat: add context menu archive and stale suggestion indicator"
 ```
 
@@ -4690,20 +4690,20 @@ git commit -m "feat: add context menu archive and stale suggestion indicator"
 ### Task 26: Background Prefetch Service
 
 **Files:**
-- Create: `VESTI/Sources/Services/SuggestionPrefetchService.swift`
-- Modify: `VESTI/Sources/App/VESTIApp.swift`
+- Create: `KISE/Sources/Services/SuggestionPrefetchService.swift`
+- Modify: `KISE/Sources/App/KISEApp.swift`
 
 - [ ] **Step 1: Implement SuggestionPrefetchService**
 
 ```swift
-// VESTI/Sources/Services/SuggestionPrefetchService.swift
+// KISE/Sources/Services/SuggestionPrefetchService.swift
 import Foundation
 import BackgroundTasks
 import SwiftData
 import CoreLocation
 
 enum SuggestionPrefetchService {
-    static let taskIdentifier = "com.vesti.app.prefetch-suggestion"
+    static let taskIdentifier = "com.kise.app.prefetch-suggestion"
 
     static func register() {
         BGTaskScheduler.shared.register(
@@ -4743,12 +4743,12 @@ enum SuggestionPrefetchService {
 }
 ```
 
-- [ ] **Step 2: Register in VESTIApp**
+- [ ] **Step 2: Register in KISEApp**
 
-Add to the `VESTIApp` init or use `.onAppear`:
+Add to the `KISEApp` init or use `.onAppear`:
 
 ```swift
-// In VESTIApp body, add to WindowGroup:
+// In KISEApp body, add to WindowGroup:
 .onAppear {
     SuggestionPrefetchService.register()
     SuggestionPrefetchService.scheduleNextPrefetch()
@@ -4759,14 +4759,14 @@ Add `BGTaskSchedulerPermittedIdentifiers` to `Info.plist`:
 ```xml
 <key>BGTaskSchedulerPermittedIdentifiers</key>
 <array>
-    <string>com.vesti.app.prefetch-suggestion</string>
+    <string>com.kise.app.prefetch-suggestion</string>
 </array>
 ```
 
 - [ ] **Step 3: Commit**
 
 ```bash
-git add VESTI/Sources/Services/SuggestionPrefetchService.swift VESTI/Sources/App/VESTIApp.swift VESTI/Info.plist
+git add KISE/Sources/Services/SuggestionPrefetchService.swift KISE/Sources/App/KISEApp.swift KISE/Info.plist
 git commit -m "feat: add background prefetch service scaffold for suggestion caching"
 ```
 
@@ -4777,18 +4777,18 @@ git commit -m "feat: add background prefetch service scaffold for suggestion cac
 ### Task 27: Liquid Glass Card Modifier
 
 **Files:**
-- Create: `VESTI/Sources/iOS26/GlassCardModifier.swift`
-- Modify: `VESTI/Sources/Views/Shared/DesignSystem.swift`
+- Create: `KISE/Sources/iOS26/GlassCardModifier.swift`
+- Modify: `KISE/Sources/Views/Shared/DesignSystem.swift`
 
 - [ ] **Step 1: Implement GlassCardModifier**
 
 ```swift
-// VESTI/Sources/iOS26/GlassCardModifier.swift
+// KISE/Sources/iOS26/GlassCardModifier.swift
 import SwiftUI
 
 /// Applies Liquid Glass on iOS 26+, falls back to shadow card on older versions.
 struct GlassCardModifier: ViewModifier {
-    var cornerRadius: CGFloat = VESTIDesign.Radius.md
+    var cornerRadius: CGFloat = KISEDesign.Radius.md
 
     func body(content: Content) -> some View {
         if #available(iOS 26, *) {
@@ -4796,48 +4796,48 @@ struct GlassCardModifier: ViewModifier {
                 .glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
         } else {
             content
-                .background(VESTIDesign.Colors.surface)
+                .background(KISEDesign.Colors.surface)
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-                .shadow(color: VESTIDesign.Colors.cardShadow, radius: 8, x: 0, y: 2)
+                .shadow(color: KISEDesign.Colors.cardShadow, radius: 8, x: 0, y: 2)
         }
     }
 }
 
 extension View {
     /// Preferred card style — uses Liquid Glass on iOS 26+, shadow card on older versions.
-    func vestiGlassCard(cornerRadius: CGFloat = VESTIDesign.Radius.md) -> some View {
+    func kiseGlassCard(cornerRadius: CGFloat = KISEDesign.Radius.md) -> some View {
         modifier(GlassCardModifier(cornerRadius: cornerRadius))
     }
 }
 ```
 
-- [ ] **Step 2: Update DesignSystem.swift — add vestiCard to use glass when available**
+- [ ] **Step 2: Update DesignSystem.swift — add kiseCard to use glass when available**
 
-Update the existing `VESTICardStyle` modifier to delegate:
+Update the existing `KISECardStyle` modifier to delegate:
 
 ```swift
-struct VESTICardStyle: ViewModifier {
+struct KISECardStyle: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 26, *) {
             content
-                .glassEffect(.regular, in: .rect(cornerRadius: VESTIDesign.Radius.md))
+                .glassEffect(.regular, in: .rect(cornerRadius: KISEDesign.Radius.md))
         } else {
             content
-                .background(VESTIDesign.Colors.surface)
-                .clipShape(RoundedRectangle(cornerRadius: VESTIDesign.Radius.md))
-                .shadow(color: VESTIDesign.Colors.cardShadow, radius: 8, x: 0, y: 2)
+                .background(KISEDesign.Colors.surface)
+                .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
+                .shadow(color: KISEDesign.Colors.cardShadow, radius: 8, x: 0, y: 2)
         }
     }
 }
 ```
 
-This means every existing `.vestiCard()` call in the app automatically gets Liquid Glass on iOS 26+ with zero changes to the view layer.
+This means every existing `.kiseCard()` call in the app automatically gets Liquid Glass on iOS 26+ with zero changes to the view layer.
 
 - [ ] **Step 3: Build and verify on both iOS 17 and iOS 26 simulators**
 
 Run:
 ```bash
-xcodebuild build -project VESTI.xcodeproj -scheme VESTI -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | tail -3
+xcodebuild build -project KISE.xcodeproj -scheme KISE -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | tail -3
 ```
 
 Expected: Build succeeds (Xcode 26 handles the `#available` checks at compile time).
@@ -4845,7 +4845,7 @@ Expected: Build succeeds (Xcode 26 handles the `#available` checks at compile ti
 - [ ] **Step 4: Commit**
 
 ```bash
-git add VESTI/Sources/iOS26/GlassCardModifier.swift VESTI/Sources/Views/Shared/DesignSystem.swift
+git add KISE/Sources/iOS26/GlassCardModifier.swift KISE/Sources/Views/Shared/DesignSystem.swift
 git commit -m "feat: add Liquid Glass progressive enhancement for cards (iOS 26+)"
 ```
 
@@ -4854,16 +4854,16 @@ git commit -m "feat: add Liquid Glass progressive enhancement for cards (iOS 26+
 ### Task 28: Foundation Models On-Device Suggestion Fallback
 
 **Files:**
-- Create: `VESTI/Sources/iOS26/OnDeviceSuggestionService.swift`
-- Test: `VESTI/Tests/iOS26/OnDeviceSuggestionServiceTests.swift`
-- Modify: `VESTI/Sources/ViewModels/SuggestionViewModel.swift`
+- Create: `KISE/Sources/iOS26/OnDeviceSuggestionService.swift`
+- Test: `KISE/Tests/iOS26/OnDeviceSuggestionServiceTests.swift`
+- Modify: `KISE/Sources/ViewModels/SuggestionViewModel.swift`
 
 - [ ] **Step 1: Write tests**
 
 ```swift
-// VESTI/Tests/iOS26/OnDeviceSuggestionServiceTests.swift
+// KISE/Tests/iOS26/OnDeviceSuggestionServiceTests.swift
 import XCTest
-@testable import VESTI
+@testable import KISE
 
 final class OnDeviceSuggestionServiceTests: XCTestCase {
 
@@ -4909,7 +4909,7 @@ Expected: Compilation errors — `OnDeviceSuggestionService` doesn't exist.
 - [ ] **Step 3: Implement OnDeviceSuggestionService**
 
 ```swift
-// VESTI/Sources/iOS26/OnDeviceSuggestionService.swift
+// KISE/Sources/iOS26/OnDeviceSuggestionService.swift
 import Foundation
 
 #if canImport(FoundationModels)
@@ -5051,7 +5051,7 @@ Expected: Tests pass (on-device tests are gated behind `#available`).
 - [ ] **Step 6: Commit**
 
 ```bash
-git add VESTI/Sources/iOS26/OnDeviceSuggestionService.swift VESTI/Tests/iOS26/OnDeviceSuggestionServiceTests.swift VESTI/Sources/ViewModels/SuggestionViewModel.swift
+git add KISE/Sources/iOS26/OnDeviceSuggestionService.swift KISE/Tests/iOS26/OnDeviceSuggestionServiceTests.swift KISE/Sources/ViewModels/SuggestionViewModel.swift
 git commit -m "feat: add Foundation Models on-device suggestion fallback (iOS 26+)"
 ```
 
@@ -5060,13 +5060,13 @@ git commit -m "feat: add Foundation Models on-device suggestion fallback (iOS 26
 ### Task 29: WeatherKit v2 Enhancements
 
 **Files:**
-- Create: `VESTI/Sources/iOS26/WeatherServiceV2.swift`
-- Modify: `VESTI/Sources/Services/WeatherService.swift`
+- Create: `KISE/Sources/iOS26/WeatherServiceV2.swift`
+- Modify: `KISE/Sources/Services/WeatherService.swift`
 
 - [ ] **Step 1: Implement WeatherServiceV2 extensions**
 
 ```swift
-// VESTI/Sources/iOS26/WeatherServiceV2.swift
+// KISE/Sources/iOS26/WeatherServiceV2.swift
 import Foundation
 import WeatherKit
 import CoreLocation
@@ -5128,6 +5128,6 @@ func fetchTomorrowNote(for location: CLLocation) async -> String? {
 - [ ] **Step 3: Commit**
 
 ```bash
-git add VESTI/Sources/iOS26/WeatherServiceV2.swift VESTI/Sources/Services/WeatherService.swift
+git add KISE/Sources/iOS26/WeatherServiceV2.swift KISE/Sources/Services/WeatherService.swift
 git commit -m "feat: add WeatherKit v2 significant change alerts (iOS 26+)"
 ```
