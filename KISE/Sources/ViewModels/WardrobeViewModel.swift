@@ -10,8 +10,17 @@ final class WardrobeViewModel {
 
     func filterPieces(_ pieces: [GarmentPiece]) -> [GarmentPiece] {
         let active = pieces.filter(\.isActive)
-        guard let tab = selectedTab else { return active }
-        return active.filter { $0.category.tabGroup == tab }
+        let filtered: [GarmentPiece]
+        if let tab = selectedTab {
+            filtered = active.filter { $0.category.tabGroup == tab }
+        } else {
+            filtered = active
+        }
+        return filtered.sorted { a, b in
+            let colorA = GarmentColor.resolve(color: a.color, hex: a.colorHex)
+            let colorB = GarmentColor.resolve(color: b.color, hex: b.colorHex)
+            return colorA.hueSortValue < colorB.hueSortValue
+        }
     }
 
     func activePieceCount(_ pieces: [GarmentPiece]) -> Int {

@@ -64,4 +64,15 @@ final class WardrobeViewModelTests: XCTestCase {
         pieces[0].isActive = false
         XCTAssertEqual(vm.activePieceCount(pieces), 2)
     }
+
+    @MainActor
+    func testFilterPiecesSortedByHue() {
+        let white = GarmentPiece(category: .tShirt, color: "white", colorHex: "#FFFFFF", fit: .slim, material: "cotton", weight: .light, formality: .casual)
+        let navy = GarmentPiece(category: .polo, color: "navy", colorHex: "#1B2A4A", fit: .regular, material: "cotton", weight: .mid, formality: .smartCasual)
+
+        let vm = WardrobeViewModel()
+        vm.selectedTab = nil
+        let sorted = vm.filterPieces([white, navy])
+        XCTAssertEqual(sorted.first?.color, "navy", "Chromatic colors should sort before neutrals")
+    }
 }
