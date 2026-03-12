@@ -1,0 +1,105 @@
+// KISE/Sources/Views/Registration/RegistrationFlowView.swift
+import SwiftUI
+
+struct RegistrationFlowView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    @State private var viewModel = RegistrationViewModel()
+    @State private var showCamera = false
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack {
+                    switch viewModel.currentStep {
+                    case .category:
+                        CategoryPickerView { category in
+                            withAnimation { viewModel.selectCategory(category) }
+                        }
+
+                    case .color:
+                        ColorPickerStepView { color in
+                            withAnimation { viewModel.selectColor(color) }
+                        }
+
+                    case .fit:
+                        OptionPickerStepView(
+                            title: "What fit?",
+                            options: viewModel.availableFits,
+                            labelFor: { $0.displayName },
+                            suggested: nil
+                        ) { fit in
+                            withAnimation { viewModel.selectFit(fit) }
+                        }
+
+                    case .material:
+                        MaterialPickerStepView(
+                            materials: viewModel.availableMaterials
+                        ) { material in
+                            withAnimation { viewModel.selectMaterial(material) }
+                        }
+
+                    case .weight:
+                        OptionPickerStepView(
+                            title: "Fabric weight?",
+                            options: FabricWeight.allCases,
+                            labelFor: { $0.displayName },
+                            suggested: viewModel.selectedWeight
+                        ) { weight in
+                            withAnimation { viewModel.selectWeight(weight) }
+                        }
+
+                    case .formality:
+                        OptionPickerStepView(
+                            title: "Formality level?",
+                            options: Formality.allCases,
+                            labelFor: { $0.displayName },
+                            suggested: viewModel.suggestedFormality
+                        ) { formality in
+                            withAnimation { viewModel.selectFormality(formality) }
+                        }
+
+                    case .confirm:
+                        if let category = viewModel.selectedCategory,
+                           let color = viewModel.selectedColor,
+                           let fit = viewModel.selectedFit {
+                            CatalogConfirmView(
+                                imageKey: viewModel.catalogImageKey,
+                                category: category,
+                                color: color,
+                                fit: fit,
+                                onConfirm: {
+                                    if viewModel.savePiece(context: modelContext) {
+                                        dismiss()
+                                    }
+                                },
+                                onTakePhoto: {
+                                    // TODO: Camera integration post-MVP
+                                    // For now, save without photo
+                                    if viewModel.savePiece(context: modelContext) {
+                                        dismiss()
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+                .padding(KISEDesign.Spacing.md)
+            }
+            .background(KISEDesign.Colors.background)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    if viewModel.currentStep > .category {
+                        Button("Back") {
+                            withAnimation { viewModel.goBack() }
+                        }
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+            }
+        }
+    }
+}
