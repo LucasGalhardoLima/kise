@@ -45,7 +45,7 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Home", systemImage: "tshirt")
                 }
-            Text("Wardrobe coming soon")
+            WardrobeView()
                 .tabItem {
                     Label("Wardrobe", systemImage: "cabinet")
                 }
