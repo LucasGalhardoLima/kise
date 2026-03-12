@@ -1,0 +1,68 @@
+<h2>How should the color dictionary style translate to KISE?</h2>
+<p class="subtitle">Three interpretations of the 配色辞典 overlapping-block aesthetic for outfit suggestions</p>
+
+<div class="cards">
+
+  <!-- Option A: Faithful reproduction -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#fafaf8; padding:32px 24px; display:flex; align-items:center; justify-content:center; min-height:280px;">
+      <div style="position:relative; width:220px; height:200px;">
+        <!-- Dominant: Navy chinos (largest) -->
+        <div style="position:absolute; left:20px; top:40px; width:160px; height:120px; background:#2c3e6b; box-shadow:0 1px 3px rgba(0,0,0,0.08);"></div>
+        <!-- Cream polo (medium, overlapping) -->
+        <div style="position:absolute; left:60px; top:10px; width:120px; height:90px; background:#f0e6d3; box-shadow:0 1px 3px rgba(0,0,0,0.08);"></div>
+        <!-- Brown shoes (small accent) -->
+        <div style="position:absolute; left:100px; top:130px; width:80px; height:55px; background:#8b6347; box-shadow:0 1px 3px rgba(0,0,0,0.08);"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Faithful 配色辞典</h3>
+      <p>Overlapping blocks, asymmetric, exactly like the dictionary. Largest block = anchor piece. Feels artful and intentional.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Simplified vertical stack with overlap -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#fafaf8; padding:32px 24px; display:flex; align-items:center; justify-content:center; min-height:280px;">
+      <div style="position:relative; width:200px; height:200px;">
+        <!-- Top piece: cream polo -->
+        <div style="position:absolute; left:30px; top:0; width:140px; height:70px; background:#f0e6d3; box-shadow:0 1px 3px rgba(0,0,0,0.08);"></div>
+        <!-- Middle piece: navy chinos (largest, overlaps both) -->
+        <div style="position:absolute; left:15px; top:50px; width:170px; height:80px; background:#2c3e6b; box-shadow:0 1px 3px rgba(0,0,0,0.08);"></div>
+        <!-- Bottom piece: brown shoes -->
+        <div style="position:absolute; left:45px; top:115px; width:110px; height:55px; background:#8b6347; box-shadow:0 1px 3px rgba(0,0,0,0.08);"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Vertical Flow</h3>
+      <p>Blocks arranged top-to-bottom following the body (top → bottom → shoes). Still overlapping, but with a natural outfit reading order.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Minimal horizontal palette with proportional widths -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#fafaf8; padding:32px 24px; display:flex; align-items:center; justify-content:center; min-height:280px;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:16px;">
+        <!-- Color composition as horizontal strip with varying heights -->
+        <div style="position:relative; width:200px; height:160px;">
+          <div style="position:absolute; left:0; top:20px; width:200px; height:90px; background:#2c3e6b;"></div>
+          <div style="position:absolute; left:0; top:0; width:130px; height:65px; background:#f0e6d3;"></div>
+          <div style="position:absolute; right:0; bottom:0; width:100px; height:50px; background:#8b6347;"></div>
+        </div>
+        <!-- Labels underneath -->
+        <div style="display:flex; gap:16px; font-size:11px; color:#888; font-family:system-ui;">
+          <span>Cream Polo</span>
+          <span>Navy Chinos</span>
+          <span>Brown Shoes</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Tight Composition</h3>
+      <p>Blocks flush against edges, no gaps, more geometric and modern. Labels below like the dictionary. Most compact.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:24px;">All three use the same outfit: Cream Polo + Navy Chinos + Brown Shoes</p>

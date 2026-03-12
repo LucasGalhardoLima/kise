@@ -8,24 +8,23 @@ struct GarmentDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: KISEDesign.Spacing.lg) {
-                // Image
-                Group {
-                    if let uiImage = CatalogImageService.loadImage(
-                        category: piece.category, color: piece.color, fit: piece.fit
-                    ) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .scaledToFit()
-                    } else {
-                        RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
-                            .fill(Color(hex: piece.colorHex).opacity(0.3))
-                            .aspectRatio(3 / 4, contentMode: .fit)
-                            .overlay {
-                                Image(systemName: piece.category.systemIcon)
-                                    .font(.system(size: 48))
-                                    .foregroundStyle(KISEDesign.Colors.textSecondary)
+                // Color swatch
+                VStack(spacing: KISEDesign.Spacing.sm) {
+                    let garmentColor = GarmentColor.resolve(color: piece.color, hex: piece.colorHex)
+
+                    RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
+                        .fill(Color(hex: piece.colorHex))
+                        .aspectRatio(3 / 4, contentMode: .fit)
+                        .overlay {
+                            if garmentColor.needsBorder {
+                                RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
+                                    .strokeBorder(KISEDesign.Colors.border, lineWidth: 1)
                             }
-                    }
+                        }
+
+                    Text(garmentColor.name)
+                        .font(KISEDesign.Typography.caption)
+                        .foregroundStyle(KISEDesign.Colors.textSecondary)
                 }
                 .frame(maxWidth: 280)
                 .kiseCard()

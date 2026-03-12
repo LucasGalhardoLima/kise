@@ -68,7 +68,6 @@ final class RegistrationViewModelTests: XCTestCase {
         XCTAssertEqual(piece?.category, .jeans)
         XCTAssertEqual(piece?.color, "indigo")
         XCTAssertEqual(piece?.fit, .straight)
-        XCTAssertEqual(piece?.catalogImageID, "jeans_indigo_straight")
     }
 
     func testGoBack() {
@@ -78,6 +77,18 @@ final class RegistrationViewModelTests: XCTestCase {
         XCTAssertEqual(vm.currentStep, .fit)
         vm.goBack()
         XCTAssertEqual(vm.currentStep, .color)
+    }
+
+    func testFormalityIsLastStep() {
+        let vm = RegistrationViewModel()
+        vm.selectCategory(.jeans)
+        vm.selectColor(GarmentColor.byName("indigo")!)
+        vm.selectFit(.straight)
+        vm.selectMaterial("denim")
+        vm.selectWeight(.mid)
+        vm.selectFormality(.casual)
+        // After formality, step stays at .formality (no .confirm)
+        XCTAssertEqual(vm.currentStep, .formality)
     }
 
     func testReset() {

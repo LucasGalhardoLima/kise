@@ -5,7 +5,6 @@ struct RegistrationFlowView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var viewModel = RegistrationViewModel()
-    @State private var showCamera = false
 
     var body: some View {
         NavigationStack {
@@ -18,7 +17,7 @@ struct RegistrationFlowView: View {
                         }
 
                     case .color:
-                        ColorPickerStepView { color in
+                        CuratedColorPicker { color in
                             withAnimation { viewModel.selectColor(color) }
                         }
 
@@ -56,31 +55,13 @@ struct RegistrationFlowView: View {
                             labelFor: { $0.displayName },
                             suggested: viewModel.suggestedFormality
                         ) { formality in
-                            withAnimation { viewModel.selectFormality(formality) }
-                        }
-
-                    case .confirm:
-                        if let category = viewModel.selectedCategory,
-                           let color = viewModel.selectedColor,
-                           let fit = viewModel.selectedFit {
-                            CatalogConfirmView(
-                                imageKey: viewModel.catalogImageKey,
-                                category: category,
-                                color: color,
-                                fit: fit,
-                                onConfirm: {
-                                    if viewModel.savePiece(context: modelContext) {
-                                        dismiss()
-                                    }
-                                },
-                                onTakePhoto: {
-                                    // TODO: Camera integration post-MVP
-                                    // For now, save without photo
-                                    if viewModel.savePiece(context: modelContext) {
-                                        dismiss()
-                                    }
+                            viewModel.selectFormality(formality)
+                            if viewModel.savePiece(context: modelContext) {
+                                viewModel.showAddedConfirmation = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                                    dismiss()
                                 }
-                            )
+                            }
                         }
                     }
                 }
@@ -98,6 +79,23 @@ struct RegistrationFlowView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Cancel") { dismiss() }
+                }
+            }
+            .overlay {
+                if viewModel.showAddedConfirmation {
+                    VStack {
+                        Spacer()
+                        Text("Added!")
+                            .font(KISEDesign.Typography.subtitle)
+                            .foregroundStyle(KISEDesign.Colors.background)
+                            .padding(.horizontal, KISEDesign.Spacing.xl)
+                            .padding(.vertical, KISEDesign.Spacing.md)
+                            .background(KISEDesign.Colors.accent)
+                            .clipShape(Capsule())
+                            .padding(.bottom, KISEDesign.Spacing.xxl)
+                    }
+                    .transition(.opacity.combined(with: .move(edge: .bottom)))
+                    .animation(.easeOut(duration: 0.3), value: viewModel.showAddedConfirmation)
                 }
             }
         }

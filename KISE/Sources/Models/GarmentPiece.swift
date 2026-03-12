@@ -16,13 +16,6 @@ final class GarmentPiece {
     var isActive: Bool
     var createdAt: Date
 
-    /// Computed catalog image asset key: {category}_{color}_{fit}
-    var catalogImageID: String {
-        let colorKey = GarmentColor.byName(color)?.assetKey ?? color.lowercased()
-        return "\(category.rawValue)_\(colorKey)_\(fit.rawValue)"
-            .replacingOccurrences(of: "tShirt", with: "tshirt")
-    }
-
     init(
         category: GarmentCategory,
         color: String,

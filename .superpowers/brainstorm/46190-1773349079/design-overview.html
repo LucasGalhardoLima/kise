@@ -1,0 +1,98 @@
+<h2>KISE Color-First Redesign — Overview</h2>
+<p class="subtitle">The two main views side by side</p>
+
+<div class="split">
+
+  <!-- Wardrobe View -->
+  <div class="mockup">
+    <div class="mockup-header">Wardrobe — Color Tile Grid</div>
+    <div class="mockup-body" style="background:#fafaf8; padding:16px;">
+      <!-- Tab bar -->
+      <div style="display:flex; gap:8px; margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid #e8e5e0;">
+        <span style="font-size:13px; font-weight:600; color:#1a1a1a; padding:4px 12px; background:#f0ece6; border-radius:12px;">Tops</span>
+        <span style="font-size:13px; color:#999; padding:4px 12px;">Bottoms</span>
+        <span style="font-size:13px; color:#999; padding:4px 12px;">Outerwear</span>
+        <span style="font-size:13px; color:#999; padding:4px 12px;">Shoes</span>
+      </div>
+
+      <!-- Color tile grid — 3 across, sorted by hue -->
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;">
+        <!-- White T-Shirt -->
+        <div style="text-align:center;">
+          <div style="width:100%; aspect-ratio:1; background:#f5f5f0; border-radius:12px; border:1px solid #e8e5e0;"></div>
+          <div style="font-size:10px; color:#888; margin-top:4px; line-height:1.3;">White<br><span style="color:#bbb;">T-Shirt · Slim</span></div>
+        </div>
+        <!-- Cream Polo -->
+        <div style="text-align:center;">
+          <div style="width:100%; aspect-ratio:1; background:#f0e6d3; border-radius:12px;"></div>
+          <div style="font-size:10px; color:#888; margin-top:4px; line-height:1.3;">Cream<br><span style="color:#bbb;">Polo · Regular</span></div>
+        </div>
+        <!-- Light Blue Shirt -->
+        <div style="text-align:center;">
+          <div style="width:100%; aspect-ratio:1; background:#a8c4d8; border-radius:12px;"></div>
+          <div style="font-size:10px; color:#888; margin-top:4px; line-height:1.3;">Light Blue<br><span style="color:#bbb;">Shirt · Slim</span></div>
+        </div>
+        <!-- Sage Sweater -->
+        <div style="text-align:center;">
+          <div style="width:100%; aspect-ratio:1; background:#b2bfa0; border-radius:12px;"></div>
+          <div style="font-size:10px; color:#888; margin-top:4px; line-height:1.3;">Sage<br><span style="color:#bbb;">Sweater · Regular</span></div>
+        </div>
+        <!-- Navy Polo -->
+        <div style="text-align:center;">
+          <div style="width:100%; aspect-ratio:1; background:#2c3e6b; border-radius:12px;"></div>
+          <div style="font-size:10px; color:#888; margin-top:4px; line-height:1.3;">Navy<br><span style="color:#bbb;">Polo · Regular</span></div>
+        </div>
+        <!-- Charcoal Sweater -->
+        <div style="text-align:center;">
+          <div style="width:100%; aspect-ratio:1; background:#4a4a4a; border-radius:12px;"></div>
+          <div style="font-size:10px; color:#888; margin-top:4px; line-height:1.3;">Charcoal<br><span style="color:#bbb;">Sweater · Oversized</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Suggestion View -->
+  <div class="mockup">
+    <div class="mockup-header">Today — 配色辞典 Suggestion</div>
+    <div class="mockup-body" style="background:#fafaf8; padding:24px;">
+      <!-- Title -->
+      <div style="font-size:11px; color:#999; margin-bottom:20px; text-align:center;">Everyday · Balanced</div>
+
+      <!-- 配色辞典 composition -->
+      <div style="position:relative; width:100%; height:200px; margin:0 auto 20px;">
+        <!-- Anchor: Navy chinos (largest) -->
+        <div style="position:absolute; left:10%; top:25%; width:65%; height:55%; background:#2c3e6b; box-shadow:0 1px 4px rgba(0,0,0,0.06);"></div>
+        <!-- Top: Cream polo (medium) -->
+        <div style="position:absolute; left:25%; top:5%; width:50%; height:40%; background:#f0e6d3; box-shadow:0 1px 4px rgba(0,0,0,0.06);"></div>
+        <!-- Accent: Brown shoes (small) -->
+        <div style="position:absolute; right:10%; bottom:5%; width:35%; height:28%; background:#8b6347; box-shadow:0 1px 4px rgba(0,0,0,0.06);"></div>
+      </div>
+
+      <!-- Labels -->
+      <div style="display:flex; justify-content:center; gap:16px; font-size:10px; color:#999; margin-bottom:16px;">
+        <span>Cream Polo</span>
+        <span style="color:#ddd;">|</span>
+        <span>Navy Chinos</span>
+        <span style="color:#ddd;">|</span>
+        <span>Brown Shoes</span>
+      </div>
+
+      <!-- Reasoning -->
+      <div style="font-size:11px; color:#888; line-height:1.5; padding:12px; background:#f5f3f0; border-radius:8px;">
+        Warm neutrals ground the navy — the cream softens without competing. Brown leather ties the earth tones together.
+      </div>
+
+      <!-- Actions -->
+      <div style="display:flex; justify-content:center; gap:24px; margin-top:16px;">
+        <span style="font-size:18px; opacity:0.4;">&#x1F44E;</span>
+        <span style="font-size:18px; opacity:0.4;">&#x1F44D;</span>
+      </div>
+      <div style="text-align:center; margin-top:12px;">
+        <span style="font-size:11px; color:#aaa; border:1px solid #ddd; padding:4px 12px; border-radius:16px;">Try another</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:20px;">Left: Functional grid for managing pieces. Right: Artful composition for the suggestion moment.</p>
