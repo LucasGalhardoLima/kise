@@ -96,6 +96,7 @@ Everything else (wardrobe management, repetition tracking, Vision recognition) i
 - Catalog images are bundled assets — no network calls for images.
 - WeatherKit is Apple-managed — the framework handles weather API calls transparently, but does require network connectivity. Free tier: 500K calls/month per Apple Developer account.
 - Two network dependencies: WeatherKit (Apple-managed) and Claude API via proxy. Both mitigated by background prefetch and caching.
+- **iOS 26 progressive enhancement:** On devices running iOS 26+, the app uses Apple's Foundation Models framework as an on-device fallback for suggestions when offline, and applies Liquid Glass effects to custom views. On iOS 17-25, the app works fully via the Claude API path with standard UI styling.
 
 ---
 
@@ -559,6 +560,13 @@ Tab bar with two tabs: **Home** (suggestion) and **Wardrobe**. Settings accessib
 - Cards with subtle shadows, generous spacing
 - No gradients, no neon, no badges, no gamification
 
+**Liquid Glass (iOS 26+):**
+- Standard controls (tab bar, navigation bar, toolbars) automatically adopt Liquid Glass when compiled with Xcode 26. No code changes needed — this happens for free.
+- Custom views (outfit cards, archetype selection cards, registration step cards) use `.glassEffect(.regular, in: .rect(cornerRadius:))` conditionally via `#available(iOS 26, *)`. Falls back to the current `.vestiCard()` shadow style on older iOS.
+- `GlassEffectContainer` wraps the outfit suggestion layout so multiple outfit cards morph into a unified glass surface.
+- The off-white background works well with Liquid Glass — the translucent material picks up the warm neutral tone and creates depth.
+- VESTI's minimalist positioning aligns naturally with Liquid Glass's clean, translucent aesthetic. No additional adaptation needed for the design language.
+
 ---
 
 ## Combination Engine Logic
@@ -592,11 +600,58 @@ The LLM approach is essential here because style rules are full of "it depends."
 
 - **Platform:** iOS native (Swift / SwiftUI)
 - **Data persistence:** SwiftData (on-device)
-- **Weather:** WeatherKit
-- **Suggestion engine:** Claude API (Anthropic) via thin proxy server
+- **Weather:** WeatherKit (v1 for iOS 17+, v2 features on iOS 26+ via availability checks)
+- **Suggestion engine:** Claude API (Anthropic) via thin proxy server (primary); Apple Foundation Models on-device (iOS 26+ offline fallback)
 - **Proxy:** Cloudflare Worker or Railway/Fly.io
 - **Catalog images:** Pre-generated, bundled as app assets
+- **UI framework:** SwiftUI with Liquid Glass progressive enhancement (iOS 26+)
+- **Build toolchain:** Xcode 26 (standard controls get Liquid Glass automatically)
 - **Minimum iOS version:** iOS 17+ (required for SwiftData)
+
+---
+
+## iOS 26 Progressive Enhancement
+
+The app targets iOS 17+ as the minimum but progressively adopts iOS 26 features using `#available(iOS 26, *)` checks. This is not a separate code path — it's conditional enhancement layered on top of the core experience.
+
+### Liquid Glass (UI)
+
+All standard SwiftUI controls (tab bar, navigation bar, buttons in toolbars) adopt Liquid Glass automatically when compiled with Xcode 26. No code changes needed.
+
+For custom views, apply glass effects conditionally:
+```swift
+.modifier(GlassCardModifier()) // internally checks #available(iOS 26, *)
+```
+
+Where `GlassCardModifier` applies `.glassEffect(.regular, in: .rect(cornerRadius: 12))` on iOS 26+ and falls back to the existing shadow-based card style on older versions.
+
+### Foundation Models (On-Device Suggestion Fallback)
+
+On iOS 26+ devices, Apple's Foundation Models framework provides a 3B parameter on-device LLM via `LanguageModelSession()`. VESTI uses this as an **offline fallback**, not a replacement for Claude:
+
+**When it activates:**
+- No network connectivity AND no cached suggestion available
+- User explicitly requests a suggestion while offline
+
+**What it provides:**
+- Basic outfit suggestions using the same wardrobe context and style archetypes
+- Structured output via guided generation (same JSON schema as the Claude response)
+- Runs entirely on-device — zero cost, zero latency, full privacy
+
+**What it doesn't replace:**
+- Claude remains the primary engine for online suggestions. The nuanced style reasoning, archetype blending, and feedback learning is more sophisticated with Claude.
+- Foundation Models is the "good enough" offline experience, not the premium path.
+
+**Architecture impact:** The `SuggestionService` gains a second method `fetchOnDeviceSuggestion()` gated behind `#available(iOS 26, *)`. The `SuggestionViewModel` tries Claude first, falls back to Foundation Models if available, then falls back to cached suggestion.
+
+### WeatherKit v2 (Enhanced Weather Context)
+
+On iOS 26+, WeatherKit v2 provides:
+- **Significant change alerts** — "Tomorrow will be 12°C colder." Enables proactive suggestions: "You might want to plan a warmer outfit for tomorrow."
+- **Historical comparisons** — Context for "This is unusually warm for March."
+- **Cloud cover by altitude** — More nuanced weather context for Claude.
+
+These enhancements feed richer context into the suggestion prompt on iOS 26+ devices without changing the core weather flow.
 
 ---
 

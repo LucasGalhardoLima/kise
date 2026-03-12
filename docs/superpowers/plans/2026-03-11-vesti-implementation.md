@@ -4,9 +4,9 @@
 
 **Goal:** Build VESTI MVP — an iOS wardrobe consultant app that suggests daily outfits using Claude API, based on the user's style archetypes, registered pieces, weather, and occasion.
 
-**Architecture:** Native iOS app (SwiftUI + SwiftData) communicates with a stateless Cloudflare Worker proxy that forwards suggestion requests to Claude API. All user data lives on-device. Catalog images are pre-generated and bundled as app assets. WeatherKit provides weather context.
+**Architecture:** Native iOS app (SwiftUI + SwiftData) communicates with a stateless Cloudflare Worker proxy that forwards suggestion requests to Claude API. All user data lives on-device. Catalog images are pre-generated and bundled as app assets. WeatherKit provides weather context. iOS 26+ features (Liquid Glass, Foundation Models, WeatherKit v2) are progressively enhanced via `#available` checks.
 
-**Tech Stack:** Swift/SwiftUI, SwiftData, WeatherKit, XCTest, xcodegen (project generation), Cloudflare Workers (TypeScript), Claude API (Anthropic)
+**Tech Stack:** Swift/SwiftUI, SwiftData, WeatherKit, XCTest, xcodegen (project generation), Cloudflare Workers (TypeScript), Claude API (Anthropic), Apple Foundation Models (iOS 26+ offline fallback), Liquid Glass (iOS 26+ UI enhancement)
 
 **Spec:** `docs/superpowers/specs/2026-03-11-vesti-design.md`
 
@@ -71,8 +71,13 @@ VESTI/
 │   │       ├── DesignSystem.swift          # Colors, fonts, spacing, shadows
 │   │       └── EmptyStateView.swift        # Reusable empty/minimum pieces state
 │   │
-│   └── Utilities/
-│       └── MaterialDefaults.swift          # Auto-suggest weight/formality from category+material
+│   ├── Utilities/
+│   │   └── MaterialDefaults.swift          # Auto-suggest weight/formality from category+material
+│   │
+│   └── iOS26/
+│       ├── GlassCardModifier.swift         # Liquid Glass conditional modifier (#available iOS 26)
+│       ├── OnDeviceSuggestionService.swift  # Foundation Models fallback for offline suggestions
+│       └── WeatherServiceV2.swift          # WeatherKit v2 enhancements (significant changes, etc.)
 │
 ├── Tests/
 │   ├── Models/
@@ -83,11 +88,13 @@ VESTI/
 │   │   ├── CatalogImageServiceTests.swift
 │   │   ├── WeatherServiceTests.swift
 │   │   └── SuggestionServiceTests.swift
-│   └── ViewModels/
-│       ├── OnboardingViewModelTests.swift
-│       ├── RegistrationViewModelTests.swift
-│       ├── WardrobeViewModelTests.swift
-│       └── SuggestionViewModelTests.swift
+│   ├── ViewModels/
+│   │   ├── OnboardingViewModelTests.swift
+│   │   ├── RegistrationViewModelTests.swift
+│   │   ├── WardrobeViewModelTests.swift
+│   │   └── SuggestionViewModelTests.swift
+│   └── iOS26/
+│       └── OnDeviceSuggestionServiceTests.swift
 │
 ├── Assets.xcassets/
 │   ├── Colors/                             # Design system colors
@@ -4761,4 +4768,366 @@ Add `BGTaskSchedulerPermittedIdentifiers` to `Info.plist`:
 ```bash
 git add VESTI/Sources/Services/SuggestionPrefetchService.swift VESTI/Sources/App/VESTIApp.swift VESTI/Info.plist
 git commit -m "feat: add background prefetch service scaffold for suggestion caching"
+```
+
+---
+
+## Chunk 8: iOS 26 Progressive Enhancement
+
+### Task 27: Liquid Glass Card Modifier
+
+**Files:**
+- Create: `VESTI/Sources/iOS26/GlassCardModifier.swift`
+- Modify: `VESTI/Sources/Views/Shared/DesignSystem.swift`
+
+- [ ] **Step 1: Implement GlassCardModifier**
+
+```swift
+// VESTI/Sources/iOS26/GlassCardModifier.swift
+import SwiftUI
+
+/// Applies Liquid Glass on iOS 26+, falls back to shadow card on older versions.
+struct GlassCardModifier: ViewModifier {
+    var cornerRadius: CGFloat = VESTIDesign.Radius.md
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            content
+                .glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
+        } else {
+            content
+                .background(VESTIDesign.Colors.surface)
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                .shadow(color: VESTIDesign.Colors.cardShadow, radius: 8, x: 0, y: 2)
+        }
+    }
+}
+
+extension View {
+    /// Preferred card style — uses Liquid Glass on iOS 26+, shadow card on older versions.
+    func vestiGlassCard(cornerRadius: CGFloat = VESTIDesign.Radius.md) -> some View {
+        modifier(GlassCardModifier(cornerRadius: cornerRadius))
+    }
+}
+```
+
+- [ ] **Step 2: Update DesignSystem.swift — add vestiCard to use glass when available**
+
+Update the existing `VESTICardStyle` modifier to delegate:
+
+```swift
+struct VESTICardStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            content
+                .glassEffect(.regular, in: .rect(cornerRadius: VESTIDesign.Radius.md))
+        } else {
+            content
+                .background(VESTIDesign.Colors.surface)
+                .clipShape(RoundedRectangle(cornerRadius: VESTIDesign.Radius.md))
+                .shadow(color: VESTIDesign.Colors.cardShadow, radius: 8, x: 0, y: 2)
+        }
+    }
+}
+```
+
+This means every existing `.vestiCard()` call in the app automatically gets Liquid Glass on iOS 26+ with zero changes to the view layer.
+
+- [ ] **Step 3: Build and verify on both iOS 17 and iOS 26 simulators**
+
+Run:
+```bash
+xcodebuild build -project VESTI.xcodeproj -scheme VESTI -destination 'platform=iOS Simulator,name=iPhone 16' 2>&1 | tail -3
+```
+
+Expected: Build succeeds (Xcode 26 handles the `#available` checks at compile time).
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add VESTI/Sources/iOS26/GlassCardModifier.swift VESTI/Sources/Views/Shared/DesignSystem.swift
+git commit -m "feat: add Liquid Glass progressive enhancement for cards (iOS 26+)"
+```
+
+---
+
+### Task 28: Foundation Models On-Device Suggestion Fallback
+
+**Files:**
+- Create: `VESTI/Sources/iOS26/OnDeviceSuggestionService.swift`
+- Test: `VESTI/Tests/iOS26/OnDeviceSuggestionServiceTests.swift`
+- Modify: `VESTI/Sources/ViewModels/SuggestionViewModel.swift`
+
+- [ ] **Step 1: Write tests**
+
+```swift
+// VESTI/Tests/iOS26/OnDeviceSuggestionServiceTests.swift
+import XCTest
+@testable import VESTI
+
+final class OnDeviceSuggestionServiceTests: XCTestCase {
+
+    func testBuildOnDevicePrompt() {
+        let pieces = [
+            GarmentPiece(category: .tShirt, color: "white", colorHex: "#FFF", fit: .slim, material: "cotton", weight: .light, formality: .casual),
+            GarmentPiece(category: .jeans, color: "indigo", colorHex: "#3F5277", fit: .straight, material: "denim", weight: .mid, formality: .casual),
+        ]
+
+        if #available(iOS 26, *) {
+            let prompt = OnDeviceSuggestionService.buildPrompt(
+                archetypes: [.oldMoney, .minimalist],
+                boldness: 0.3,
+                occasion: .everyday,
+                wardrobe: pieces
+            )
+            XCTAssertTrue(prompt.contains("old-money"))
+            XCTAssertTrue(prompt.contains("white tShirt"))
+            XCTAssertTrue(prompt.contains("indigo jeans"))
+        }
+        // Test is skipped on older iOS — that's expected
+    }
+
+    func testParseOnDeviceResponse() {
+        if #available(iOS 26, *) {
+            // Test that valid JSON output parses correctly
+            let json = """
+            {"pieces": ["uuid1", "uuid2"], "reasoning": "Clean minimal look"}
+            """
+            let result = OnDeviceSuggestionService.parseResponse(json)
+            XCTAssertNotNil(result)
+            XCTAssertEqual(result?.pieceIDs.count, 2)
+            XCTAssertEqual(result?.reasoning, "Clean minimal look")
+        }
+    }
+}
+```
+
+- [ ] **Step 2: Run tests to verify they fail**
+
+Expected: Compilation errors — `OnDeviceSuggestionService` doesn't exist.
+
+- [ ] **Step 3: Implement OnDeviceSuggestionService**
+
+```swift
+// VESTI/Sources/iOS26/OnDeviceSuggestionService.swift
+import Foundation
+
+#if canImport(FoundationModels)
+import FoundationModels
+#endif
+
+/// On-device suggestion engine using Apple Foundation Models (iOS 26+).
+/// Used as an offline fallback when Claude API is unreachable.
+enum OnDeviceSuggestionService {
+
+    /// Checks if on-device suggestions are available on this device.
+    static var isAvailable: Bool {
+        if #available(iOS 26, *) {
+            return true
+        }
+        return false
+    }
+
+    /// Builds a prompt for the on-device model.
+    @available(iOS 26, *)
+    static func buildPrompt(
+        archetypes: [StyleArchetype],
+        boldness: Double,
+        occasion: Occasion,
+        wardrobe: [GarmentPiece]
+    ) -> String {
+        var prompt = "You are a wardrobe consultant. Suggest an outfit from these pieces.\n\n"
+        prompt += "Style: \(archetypes.map(\.assetKey).joined(separator: ", "))\n"
+        prompt += "Boldness: \(boldness) (0=safe, 1=creative)\n"
+        prompt += "Occasion: \(occasion.rawValue)\n\n"
+        prompt += "Available pieces:\n"
+
+        for piece in wardrobe where piece.isActive {
+            prompt += "- [\(piece.id.uuidString)] \(piece.color) \(piece.category.rawValue) "
+            prompt += "(\(piece.fit.rawValue), \(piece.material), \(piece.weight.rawValue))\n"
+        }
+
+        prompt += "\nRespond with JSON only: {\"pieces\": [\"uuid1\", \"uuid2\"], \"reasoning\": \"why this works\"}"
+        return prompt
+    }
+
+    /// Fetches a suggestion using the on-device Foundation Models framework.
+    @available(iOS 26, *)
+    static func fetchSuggestion(
+        archetypes: [StyleArchetype],
+        boldness: Double,
+        occasion: Occasion,
+        wardrobe: [GarmentPiece]
+    ) async -> SuggestionAPIResponse? {
+        let prompt = buildPrompt(
+            archetypes: archetypes,
+            boldness: boldness,
+            occasion: occasion,
+            wardrobe: wardrobe
+        )
+
+        do {
+            let session = LanguageModelSession()
+            let response = try await session.respond(to: prompt)
+            return parseResponse(response.content)
+        } catch {
+            return nil
+        }
+    }
+
+    /// Parses JSON response from the on-device model.
+    static func parseResponse(_ text: String) -> SuggestionAPIResponse? {
+        // Extract JSON from response (model may include extra text)
+        guard let jsonStart = text.firstIndex(of: "{"),
+              let jsonEnd = text.lastIndex(of: "}") else { return nil }
+
+        let jsonString = String(text[jsonStart...jsonEnd])
+        guard let data = jsonString.data(using: .utf8),
+              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let pieces = json["pieces"] as? [String],
+              let reasoning = json["reasoning"] as? String else { return nil }
+
+        return SuggestionAPIResponse(
+            pieceIDs: pieces,
+            reasoning: reasoning,
+            layeringNote: nil,
+            alternativeSwap: nil
+        )
+    }
+}
+```
+
+- [ ] **Step 4: Update SuggestionViewModel to use on-device fallback**
+
+In `SuggestionViewModel.fetchSuggestion()`, update the error handling to try Foundation Models before falling back to cached:
+
+```swift
+// In the catch block of fetchSuggestion(), replace the existing fallback with:
+} catch {
+    // Try on-device fallback (iOS 26+)
+    if #available(iOS 26, *), OnDeviceSuggestionService.isAvailable {
+        let activePieces = wardrobe.filter(\.isActive)
+        if let onDeviceResponse = await OnDeviceSuggestionService.fetchSuggestion(
+            archetypes: archetypes,
+            boldness: boldness,
+            occasion: occasion,
+            wardrobe: activePieces
+        ) {
+            let resolvedPieces = onDeviceResponse.pieceIDs.compactMap { idString in
+                activePieces.first { $0.id.uuidString == idString }
+            }
+            if !resolvedPieces.isEmpty {
+                let suggestion = OutfitSuggestion(
+                    pieceIDs: resolvedPieces.map(\.id),
+                    occasion: occasion,
+                    weather: nil,
+                    reasoning: onDeviceResponse.reasoning + " (offline suggestion)"
+                )
+                currentSuggestion = suggestion
+                suggestedPieces = resolvedPieces
+                state = .loaded
+                return
+            }
+        }
+    }
+
+    // Final fallback: cached suggestion
+    if let cached = recentSuggestions.first {
+        currentSuggestion = cached
+        suggestedPieces = cached.pieceIDs.compactMap { id in
+            activePieces.first { $0.id == id }
+        }
+        state = .loaded
+    } else {
+        state = .error(error.localizedDescription)
+    }
+}
+```
+
+- [ ] **Step 5: Run tests**
+
+Expected: Tests pass (on-device tests are gated behind `#available`).
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add VESTI/Sources/iOS26/OnDeviceSuggestionService.swift VESTI/Tests/iOS26/OnDeviceSuggestionServiceTests.swift VESTI/Sources/ViewModels/SuggestionViewModel.swift
+git commit -m "feat: add Foundation Models on-device suggestion fallback (iOS 26+)"
+```
+
+---
+
+### Task 29: WeatherKit v2 Enhancements
+
+**Files:**
+- Create: `VESTI/Sources/iOS26/WeatherServiceV2.swift`
+- Modify: `VESTI/Sources/Services/WeatherService.swift`
+
+- [ ] **Step 1: Implement WeatherServiceV2 extensions**
+
+```swift
+// VESTI/Sources/iOS26/WeatherServiceV2.swift
+import Foundation
+import WeatherKit
+import CoreLocation
+
+/// iOS 26+ WeatherKit v2 enhancements.
+/// Provides significant change alerts and richer context for suggestions.
+@available(iOS 26, *)
+enum WeatherServiceV2 {
+
+    /// Fetches significant weather change information for tomorrow.
+    /// Returns a human-readable note if a significant change is detected.
+    static func fetchSignificantChangeNote(for location: CLLocation) async -> String? {
+        do {
+            let weather = try await WeatherKit.WeatherService.shared.weather(for: location)
+
+            // Check daily forecasts for significant temperature changes
+            let forecasts = Array(weather.dailyForecast.prefix(2))
+            guard forecasts.count == 2 else { return nil }
+
+            let today = forecasts[0]
+            let tomorrow = forecasts[1]
+
+            let tempDrop = today.highTemperature.value - tomorrow.highTemperature.value
+            let tempRise = tomorrow.highTemperature.value - today.highTemperature.value
+
+            if tempDrop > 8 {
+                return "Tomorrow will be about \(Int(tempDrop))°C colder. Plan a warmer outfit."
+            } else if tempRise > 8 {
+                return "Tomorrow will be about \(Int(tempRise))°C warmer. You can go lighter."
+            }
+
+            // Check for precipitation change
+            if tomorrow.precipitation != .none && today.precipitation == .none {
+                return "Rain expected tomorrow. Keep that in mind for your outfit."
+            }
+
+            return nil
+        } catch {
+            return nil
+        }
+    }
+}
+```
+
+- [ ] **Step 2: Integrate into WeatherService**
+
+Add a method to `WeatherService`:
+
+```swift
+// Add to WeatherService class:
+func fetchTomorrowNote(for location: CLLocation) async -> String? {
+    if #available(iOS 26, *) {
+        return await WeatherServiceV2.fetchSignificantChangeNote(for: location)
+    }
+    return nil
+}
+```
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add VESTI/Sources/iOS26/WeatherServiceV2.swift VESTI/Sources/Services/WeatherService.swift
+git commit -m "feat: add WeatherKit v2 significant change alerts (iOS 26+)"
 ```
