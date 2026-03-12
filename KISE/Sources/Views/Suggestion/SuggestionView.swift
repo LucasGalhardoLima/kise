@@ -216,17 +216,13 @@ struct SuggestionView: View {
     // MARK: - Outfit Cards
 
     private var outfitCards: some View {
-        VStack(spacing: KISEDesign.Spacing.sm) {
-            ForEach(viewModel.suggestedPieces) { piece in
-                OutfitPieceCard(
-                    piece: piece,
-                    isSwappable: viewModel.alternativeSwap?.swapPieceID == piece.id.uuidString,
-                    onSwap: {
-                        withAnimation { viewModel.applyAlternative() }
-                    }
-                )
+        ColorCompositionView(
+            pieces: viewModel.suggestedPieces,
+            swappablePieceID: viewModel.alternativeSwap?.swapPieceID,
+            onSwap: {
+                withAnimation { viewModel.applyAlternative() }
             }
-        }
+        )
     }
 
     // MARK: - Reasoning
