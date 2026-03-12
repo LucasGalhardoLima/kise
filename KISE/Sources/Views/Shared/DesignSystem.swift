@@ -85,10 +85,15 @@ enum KISEDesign {
 
 struct KISECardStyle: ViewModifier {
     func body(content: Content) -> some View {
-        content
-            .background(KISEDesign.Colors.surface)
-            .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
-            .shadow(color: KISEDesign.Colors.cardShadow, radius: 8, x: 0, y: 2)
+        if #available(iOS 26, *) {
+            content
+                .glassEffect(.regular.interactive(), in: .rect(cornerRadius: KISEDesign.Radius.md))
+        } else {
+            content
+                .background(KISEDesign.Colors.surface)
+                .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
+                .shadow(color: KISEDesign.Colors.cardShadow, radius: 8, x: 0, y: 2)
+        }
     }
 }
 
