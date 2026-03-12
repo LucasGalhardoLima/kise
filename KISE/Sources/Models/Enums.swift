@@ -171,4 +171,16 @@ enum StyleArchetype: String, Codable, CaseIterable, Identifiable {
         case .scandinavian: "scandinavian"
         }
     }
+
+    /// SF Symbol for placeholder cards (until moodboard images are added)
+    var placeholderIcon: String {
+        switch self {
+        case .oldMoney: "crown"
+        case .minimalist: "circle.grid.2x1"
+        case .smartCasual: "briefcase"
+        case .streetwear: "shoe.2"
+        case .classic: "shield.checkered"
+        case .scandinavian: "leaf"
+        }
+    }
 }

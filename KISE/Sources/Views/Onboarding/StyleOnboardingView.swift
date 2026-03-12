@@ -76,18 +76,27 @@ private struct ArchetypeCard: View {
 
     var body: some View {
         VStack(spacing: KISEDesign.Spacing.sm) {
-            // Placeholder for moodboard image — replace with actual asset
-            RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
-                .fill(KISEDesign.Colors.border)
-                .aspectRatio(3 / 4, contentMode: .fit)
-                .overlay {
-                    // Attempt to load the archetype image, fall back to text
-                    Image(archetype.assetKey)
+            // Moodboard image — loads from asset catalog, falls back to styled placeholder
+            ZStack {
+                RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
+                    .fill(KISEDesign.Colors.border.opacity(0.5))
+
+                if let uiImage = UIImage(named: archetype.assetKey) {
+                    Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFill()
                         .clipped()
-                        .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.sm))
+                } else {
+                    // Styled placeholder until real moodboard images are added
+                    VStack(spacing: KISEDesign.Spacing.xs) {
+                        Image(systemName: archetype.placeholderIcon)
+                            .font(.system(size: 28, weight: .light))
+                            .foregroundStyle(KISEDesign.Colors.textSecondary)
+                    }
                 }
+            }
+            .aspectRatio(3 / 4, contentMode: .fit)
+            .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.sm))
 
             Text(archetype.displayName)
                 .font(KISEDesign.Typography.caption)
