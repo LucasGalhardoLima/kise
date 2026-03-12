@@ -19,8 +19,7 @@ struct SuggestionAPIError: Codable {
 }
 
 final class SuggestionService {
-    // TODO: Replace with deployed proxy URL
-    static let proxyBaseURL = "https://kise-proxy.your-worker.workers.dev"
+    static let proxyBaseURL = "https://kise-proxy.lima-galhardo.workers.dev"
 
     func fetchSuggestion(
         archetypes: [StyleArchetype],
