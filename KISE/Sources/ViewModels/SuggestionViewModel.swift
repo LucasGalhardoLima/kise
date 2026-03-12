@@ -58,14 +58,23 @@ final class SuggestionViewModel {
         await weatherService.fetchWeather()
 
         do {
-            let response = try await suggestionService.fetchSuggestion(
-                archetypes: profile.archetypes,
-                boldness: boldness,
-                occasion: occasion,
-                weather: weatherService.currentWeather,
-                wardrobe: wardrobe,
-                recentSuggestions: recent
-            )
+            let response: SuggestionAPIResponse
+            do {
+                response = try await suggestionService.fetchSuggestion(
+                    archetypes: profile.archetypes,
+                    boldness: boldness,
+                    occasion: occasion,
+                    weather: weatherService.currentWeather,
+                    wardrobe: wardrobe,
+                    recentSuggestions: recent
+                )
+            } catch {
+                // Try on-device fallback on iOS 26+
+                response = try await fetchOnDeviceFallback(
+                    archetypes: profile.archetypes,
+                    wardrobe: wardrobe
+                )
+            }
 
             // Map response piece UUIDs to actual GarmentPiece objects
             let pieceMap = Dictionary(uniqueKeysWithValues: wardrobe.map { ($0.id.uuidString, $0) })
@@ -117,6 +126,25 @@ final class SuggestionViewModel {
 
     func regenerate(context: ModelContext) async {
         await fetchSuggestion(context: context)
+    }
+
+    private func fetchOnDeviceFallback(
+        archetypes: [StyleArchetype],
+        wardrobe: [GarmentPiece]
+    ) async throws -> SuggestionAPIResponse {
+        #if canImport(FoundationModels)
+        if #available(iOS 26, *) {
+            let onDevice = OnDeviceSuggestionService()
+            return try await onDevice.fetchSuggestion(
+                archetypes: archetypes,
+                boldness: boldness,
+                occasion: occasion,
+                weather: weatherService.currentWeather,
+                wardrobe: wardrobe
+            )
+        }
+        #endif
+        throw SuggestionError.invalidResponse
     }
 
     func applyAlternative() {
