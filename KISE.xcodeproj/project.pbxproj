@@ -14,6 +14,7 @@
 		84E86BF006FD48520DE4056C /* Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71235497E1F72A4E3A56DF79 /* Feedback.swift */; };
 		8A27F0BCA6621405467807E3 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F24ECEE06EA7B6DC1B4DEC6 /* Enums.swift */; };
 		A2230B4110B48BA13287F154 /* StyleProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D1955117A8936E77F1CA86 /* StyleProfile.swift */; };
+		ACCDFCD08D24B976EAB9CBF0 /* MaterialDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6087F7599407960D1AEC7A88 /* MaterialDefaults.swift */; };
 		AFDFE8407E6B2A04CECF20E3 /* GarmentColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE30E75B959E4F6568FB2C6E /* GarmentColor.swift */; };
 		B4CFC33605BD336C3628B227 /* GarmentPieceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D170FD20935D328F6992850 /* GarmentPieceTests.swift */; };
 		CBC8512DD569ECCC6367B9B6 /* KISEApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4F8666D00B7FBAF3B2FAEA /* KISEApp.swift */; };
@@ -37,6 +38,7 @@
 		4CF9EDD7CD8277BFBA85C7E4 /* KISE.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KISE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55DD29EC3E6D6168316EDFAA /* OutfitSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutfitSuggestion.swift; sourceTree = "<group>"; };
 		5F24ECEE06EA7B6DC1B4DEC6 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		6087F7599407960D1AEC7A88 /* MaterialDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialDefaults.swift; sourceTree = "<group>"; };
 		62534F845BFB662A1FFEEF5A /* WeatherSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSnapshot.swift; sourceTree = "<group>"; };
 		68D1955117A8936E77F1CA86 /* StyleProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleProfile.swift; sourceTree = "<group>"; };
 		71235497E1F72A4E3A56DF79 /* Feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feedback.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 		C2B125FFE44016CD98DDDAE7 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				6087F7599407960D1AEC7A88 /* MaterialDefaults.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -358,6 +361,7 @@
 				AFDFE8407E6B2A04CECF20E3 /* GarmentColor.swift in Sources */,
 				475D9F3B4E839A8D8C17F6C8 /* GarmentPiece.swift in Sources */,
 				CBC8512DD569ECCC6367B9B6 /* KISEApp.swift in Sources */,
+				ACCDFCD08D24B976EAB9CBF0 /* MaterialDefaults.swift in Sources */,
 				5DA9DFE649D290A3A1A6BDCB /* OutfitSuggestion.swift in Sources */,
 				A2230B4110B48BA13287F154 /* StyleProfile.swift in Sources */,
 				F272568ECD8B4D0675D8AB6E /* WeatherSnapshot.swift in Sources */,
