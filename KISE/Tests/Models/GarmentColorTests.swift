@@ -11,10 +11,9 @@ final class GarmentColorTests: XCTestCase {
         }
     }
 
-    func testAllColorsHaveAssetKey() {
+    func testCuratedColorsAreNotCustom() {
         for color in GarmentColor.allColors {
-            XCTAssertFalse(color.assetKey.isEmpty, "\(color.name) should have an asset key")
-            XCTAssertFalse(color.assetKey.contains(" "), "\(color.name) asset key should not have spaces")
+            XCTAssertFalse(color.isCustom, "\(color.name) should not be custom")
         }
     }
 
@@ -26,5 +25,33 @@ final class GarmentColorTests: XCTestCase {
 
     func testColorCount() {
         XCTAssertEqual(GarmentColor.allColors.count, 15)
+    }
+
+    func testNearestCuratedForExactMatch() {
+        let nearest = GarmentColor.nearestCurated(hex: "#1B2A4A")
+        XCTAssertEqual(nearest.id, "navy")
+    }
+
+    func testNearestCuratedForCloseMatch() {
+        let nearest = GarmentColor.nearestCurated(hex: "#1C2B4B")
+        XCTAssertEqual(nearest.id, "navy")
+    }
+
+    func testCustomColorInit() {
+        let custom = GarmentColor(customHex: "#FF6B35")
+        XCTAssertTrue(custom.isCustom)
+        XCTAssertEqual(custom.hex, "#FF6B35")
+        XCTAssertTrue(custom.name.hasPrefix("Custom"))
+    }
+
+    func testCustomColorNaming() {
+        let custom = GarmentColor(customHex: "#FF0000")
+        XCTAssertTrue(custom.name.contains("Custom"))
+    }
+
+    func testHueSortValue() {
+        let white = GarmentColor.allColors.first { $0.id == "white" }!
+        let navy = GarmentColor.allColors.first { $0.id == "navy" }!
+        XCTAssertGreaterThan(white.hueSortValue, navy.hueSortValue)
     }
 }
