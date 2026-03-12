@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "filename": "jeans_terracotta_straight.jpg",
+      "idiom": "universal",
+      "scale": "1x"
+    }
+  ],
+  "info": {
+    "version": 1,
+    "author": "xcode"
+  }
+}

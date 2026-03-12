@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "filename": "sweater_cream_slim.jpg",
+      "idiom": "universal",
+      "scale": "1x"
+    }
+  ],
+  "info": {
+    "version": 1,
+    "author": "xcode"
+  }
+}

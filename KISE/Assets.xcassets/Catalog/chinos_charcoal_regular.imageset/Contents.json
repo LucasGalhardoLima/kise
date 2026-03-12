@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "filename": "chinos_charcoal_regular.jpg",
+      "idiom": "universal",
+      "scale": "1x"
+    }
+  ],
+  "info": {
+    "version": 1,
+    "author": "xcode"
+  }
+}
