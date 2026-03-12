@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct GarmentDetailView: View {
+    @Environment(\.dismiss) private var dismiss
     let piece: GarmentPiece
 
     var body: some View {
@@ -45,6 +46,24 @@ struct GarmentDetailView: View {
         .background(KISEDesign.Colors.background)
         .navigationTitle(piece.category.displayName)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                Button(role: piece.isActive ? .destructive : nil) {
+                    if piece.isActive {
+                        WardrobeViewModel.archivePiece(piece)
+                    } else {
+                        WardrobeViewModel.restorePiece(piece)
+                    }
+                    dismiss()
+                } label: {
+                    Label(
+                        piece.isActive ? "Archive" : "Restore",
+                        systemImage: piece.isActive ? "archivebox" : "arrow.uturn.backward"
+                    )
+                    .font(KISEDesign.Typography.bodyText)
+                }
+            }
+        }
     }
 
     private func attributeRow(_ label: String, _ value: String) -> some View {

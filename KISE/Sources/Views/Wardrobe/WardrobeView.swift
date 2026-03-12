@@ -48,6 +48,15 @@ struct WardrobeView: View {
                                 } label: {
                                     garmentCard(piece)
                                 }
+                                .contextMenu {
+                                    Button(role: .destructive) {
+                                        withAnimation {
+                                            WardrobeViewModel.archivePiece(piece)
+                                        }
+                                    } label: {
+                                        Label("Archive", systemImage: "archivebox")
+                                    }
+                                }
                             }
                         }
                         .padding(KISEDesign.Spacing.md)
