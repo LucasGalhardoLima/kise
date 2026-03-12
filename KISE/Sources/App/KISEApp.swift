@@ -6,10 +6,17 @@ import SwiftData
 struct KISEApp: App {
     @State private var appState = AppState()
 
+    init() {
+        BackgroundPrefetchService.register()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(appState)
+                .onAppear {
+                    BackgroundPrefetchService.scheduleNextRefresh()
+                }
         }
         .modelContainer(for: [
             StyleProfile.self,

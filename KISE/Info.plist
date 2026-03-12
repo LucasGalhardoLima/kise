@@ -25,6 +25,14 @@
         <string>DMSans-Medium.ttf</string>
         <string>CormorantGaramond-Light.ttf</string>
     </array>
+    <key>BGTaskSchedulerPermittedIdentifiers</key>
+    <array>
+        <string>com.kise.app.suggestion-prefetch</string>
+    </array>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>fetch</string>
+    </array>
     <key>UILaunchScreen</key>
     <dict/>
 </dict>
