@@ -1,5 +1,6 @@
 // KISE/Sources/App/KISEApp.swift
 import SwiftUI
+import SwiftData
 
 @main
 struct KISEApp: App {
@@ -7,5 +8,11 @@ struct KISEApp: App {
         WindowGroup {
             Text("KISE")
         }
+        .modelContainer(for: [
+            StyleProfile.self,
+            GarmentPiece.self,
+            OutfitSuggestion.self,
+            Feedback.self,
+        ])
     }
 }
