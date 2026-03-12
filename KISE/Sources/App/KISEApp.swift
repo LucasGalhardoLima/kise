@@ -39,17 +39,32 @@ struct ContentView: View {
 }
 
 struct MainTabView: View {
+    @State private var showSettings = false
+
     var body: some View {
         TabView {
-            Text("Suggestions coming soon")
+            SuggestionView()
                 .tabItem {
                     Label("Home", systemImage: "tshirt")
                 }
             WardrobeView()
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            showSettings = true
+                        } label: {
+                            Image(systemName: "gearshape")
+                                .foregroundStyle(KISEDesign.Colors.textSecondary)
+                        }
+                    }
+                }
                 .tabItem {
                     Label("Wardrobe", systemImage: "cabinet")
                 }
         }
         .tint(KISEDesign.Colors.accent)
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
+        }
     }
 }

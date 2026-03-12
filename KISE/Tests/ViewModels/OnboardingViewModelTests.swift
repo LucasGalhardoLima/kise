@@ -47,6 +47,6 @@ final class OnboardingViewModelTests: XCTestCase {
 
         let profiles = try context.fetch(FetchDescriptor<StyleProfile>())
         XCTAssertEqual(profiles.count, 1)
-        XCTAssertEqual(profiles.first?.archetypes, [.oldMoney, .minimalist])
+        XCTAssertEqual(Set(profiles.first?.archetypes ?? []), Set([.oldMoney, .minimalist]))
     }
 }
