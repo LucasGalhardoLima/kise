@@ -5,7 +5,6 @@ struct RegistrationFlowView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var viewModel = RegistrationViewModel()
-    @State private var showCamera = false
 
     var body: some View {
         NavigationStack {

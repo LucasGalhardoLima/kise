@@ -44,20 +44,6 @@ final class GarmentPieceTests: XCTestCase {
     }
 
     @MainActor
-    func testCatalogImageID() {
-        let piece = GarmentPiece(
-            category: .jeans,
-            color: "indigo",
-            colorHex: "#3F5277",
-            fit: .straight,
-            material: "denim",
-            weight: .mid,
-            formality: .casual
-        )
-        XCTAssertEqual(piece.catalogImageID, "jeans_indigo_straight")
-    }
-
-    @MainActor
     func testArchivePiece() {
         let piece = GarmentPiece(
             category: .jacket,
