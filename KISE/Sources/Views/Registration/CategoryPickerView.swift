@@ -16,43 +16,34 @@ struct CategoryPickerView: View {
                 .font(KISEDesign.Typography.title)
                 .foregroundStyle(KISEDesign.Colors.textPrimary)
 
-            LazyVGrid(columns: columns, spacing: KISEDesign.Spacing.md) {
-                ForEach(GarmentCategory.allCases) { category in
-                    Button {
-                        onSelect(category)
-                    } label: {
-                        VStack(spacing: KISEDesign.Spacing.sm) {
-                            Image(systemName: category.systemIcon)
-                                .font(.system(size: 28))
-                                .frame(height: 36)
-                            Text(category.displayName)
-                                .font(KISEDesign.Typography.caption)
+            VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
+                ForEach(TabGroup.allCases, id: \.self) { group in
+                    let categories = GarmentCategory.allCases.filter { $0.tabGroup == group }
+                    VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
+                        Text(group.rawValue.capitalized)
+                            .kiseSectionLabel()
+
+                        LazyVGrid(columns: columns, spacing: KISEDesign.Spacing.md) {
+                            ForEach(categories) { category in
+                                Button {
+                                    onSelect(category)
+                                } label: {
+                                    Text(category.displayName)
+                                        .font(KISEDesign.Typography.caption)
+                                        .foregroundStyle(KISEDesign.Colors.textPrimary)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, KISEDesign.Spacing.md)
+                                        .kiseCard()
+                                        .overlay {
+                                            RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
+                                                .strokeBorder(KISEDesign.Colors.accentMuted, lineWidth: 1)
+                                        }
+                                }
+                            }
                         }
-                        .foregroundStyle(KISEDesign.Colors.textPrimary)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, KISEDesign.Spacing.md)
-                        .kiseCard()
                     }
                 }
             }
-        }
-    }
-}
-
-extension GarmentCategory {
-    var systemIcon: String {
-        switch self {
-        case .tShirt: "tshirt"
-        case .shirt: "tshirt"
-        case .polo: "tshirt"
-        case .sweater: "tshirt"
-        case .hoodie: "tshirt"
-        case .jacket: "cloud.sun"
-        case .coat: "cloud.snow"
-        case .jeans: "figure.stand"
-        case .chinos: "figure.stand"
-        case .shorts: "figure.run"
-        case .shoes: "shoe"
         }
     }
 }
