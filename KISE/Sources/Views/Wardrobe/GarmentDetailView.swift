@@ -43,9 +43,13 @@ struct GarmentDetailView: View {
             .padding(KISEDesign.Spacing.md)
         }
         .background(KISEDesign.Colors.background)
-        .navigationTitle(piece.category.displayName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text(piece.category.displayName)
+                    .font(KISEDesign.Typography.subtitle)
+                    .foregroundStyle(KISEDesign.Colors.textPrimary)
+            }
             ToolbarItem(placement: .bottomBar) {
                 Button(role: piece.isActive ? .destructive : nil) {
                     if piece.isActive {
