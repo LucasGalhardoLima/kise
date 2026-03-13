@@ -8,13 +8,15 @@ enum KISEDesign {
     enum Colors {
         static let background = Color(hex: "#F5F3EF")
         static let surface = Color.white
-        static let textPrimary = Color(hex: "#1A1A1A")
+        static let textPrimary = Color(hex: "#344E41")
         static let textSecondary = Color(hex: "#6B6B6B")
         static let textTertiary = Color(hex: "#9B9B9B")
-        static let accent = Color(hex: "#1A1A1A")
+        static let accent = Color(hex: "#3A5A40")
+        static let accentSecondary = Color(hex: "#588157")
+        static let accentMuted = Color(hex: "#A3B18A")
         static let border = Color(hex: "#E5E1DB")
         static let cardShadow = Color.black.opacity(0.06)
-        static let liked = Color(hex: "#4A7C59")
+        static let liked = Color(hex: "#588157")
         static let disliked = Color(hex: "#8B4B4B")
     }
 
@@ -27,7 +29,7 @@ enum KISEDesign {
         static let interfaceFontLight = "DMSans-Light"
         static let interfaceFontMedium = "DMSans-Medium"
 
-        // Brand font: Cormorant Garamond (splash/wordmark only)
+        // Brand font: Cormorant Garamond (display headings + wordmark)
         static let brandFont = "CormorantGaramond-Light"
 
         static func heading(_ size: CGFloat) -> Font {
@@ -52,12 +54,13 @@ enum KISEDesign {
         }
 
         // Predefined sizes
-        static let largeTitle = heading(32)
-        static let title = heading(24)
+        static let largeTitle = brand(32)
+        static let title = brand(24)
         static let subtitle = bodyMedium(17)
         static let bodyText = body(15)
         static let caption = body(13)
         static let small = body(11)
+        static let sectionLabel = bodyMedium(11)
         static let brandTitle = brand(36)
     }
 
@@ -95,5 +98,23 @@ struct KISECardStyle: ViewModifier {
 extension View {
     func kiseCard() -> some View {
         modifier(KISECardStyle())
+    }
+}
+
+// MARK: - Section Label Style Modifier
+
+struct KISESectionLabelStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(KISEDesign.Typography.sectionLabel)
+            .tracking(3)
+            .textCase(.uppercase)
+            .foregroundStyle(KISEDesign.Colors.textTertiary)
+    }
+}
+
+extension View {
+    func kiseSectionLabel() -> some View {
+        modifier(KISESectionLabelStyle())
     }
 }
