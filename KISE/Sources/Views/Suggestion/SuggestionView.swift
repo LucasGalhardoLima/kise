@@ -30,7 +30,9 @@ struct SuggestionView: View {
                 .padding(.horizontal, KISEDesign.Spacing.md)
                 .padding(.top, KISEDesign.Spacing.md)
             }
-            .background(KISEDesign.Colors.background)
+            .background {
+                KISEDesign.Colors.background.ignoresSafeArea()
+            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {

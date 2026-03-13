@@ -63,7 +63,9 @@ struct WardrobeView: View {
                     }
                 }
             }
-            .background(KISEDesign.Colors.background)
+            .background {
+                KISEDesign.Colors.background.ignoresSafeArea()
+            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
