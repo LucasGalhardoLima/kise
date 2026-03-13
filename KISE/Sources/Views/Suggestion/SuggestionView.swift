@@ -31,8 +31,14 @@ struct SuggestionView: View {
                 .padding(.top, KISEDesign.Spacing.md)
             }
             .background(KISEDesign.Colors.background)
-            .navigationTitle("Today")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Today")
+                        .font(KISEDesign.Typography.largeTitle)
+                        .foregroundStyle(KISEDesign.Colors.textPrimary)
+                }
+            }
         }
     }
 
@@ -120,8 +126,12 @@ struct SuggestionView: View {
             // Controls toggle
             controlsSection
 
-            // Outfit cards
-            outfitCards
+            // Section label + Outfit cards
+            VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
+                Text("Your Look")
+                    .kiseSectionLabel()
+                outfitCards
+            }
 
             // Reasoning
             if let suggestion = viewModel.currentSuggestion {
@@ -181,7 +191,7 @@ struct SuggestionView: View {
                                     .clipShape(Capsule())
                                     .overlay(
                                         Capsule()
-                                            .strokeBorder(KISEDesign.Colors.border, lineWidth: viewModel.occasion == occasion ? 0 : 1)
+                                            .strokeBorder(KISEDesign.Colors.accentMuted, lineWidth: viewModel.occasion == occasion ? 0 : 1)
                                     )
                             }
                         }
@@ -203,7 +213,7 @@ struct SuggestionView: View {
                                 Task { await viewModel.regenerate(context: modelContext) }
                             }
                         }
-                            .tint(KISEDesign.Colors.accent)
+                            .tint(KISEDesign.Colors.accentSecondary)
                     }
                 }
                 .padding(KISEDesign.Spacing.md)
