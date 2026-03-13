@@ -66,7 +66,7 @@ struct WardrobeView: View {
             .background(KISEDesign.Colors.background)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .principal) {
+                ToolbarItem(placement: .topBarLeading) {
                     Text("Wardrobe")
                         .font(KISEDesign.Typography.largeTitle)
                         .foregroundStyle(KISEDesign.Colors.textPrimary)
