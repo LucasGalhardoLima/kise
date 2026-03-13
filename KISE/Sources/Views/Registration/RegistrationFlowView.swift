@@ -15,11 +15,13 @@ struct RegistrationFlowView: View {
                         CategoryPickerView { category in
                             withAnimation { viewModel.selectCategory(category) }
                         }
+                        .transition(.opacity)
 
                     case .color:
                         CuratedColorPicker { color in
                             withAnimation { viewModel.selectColor(color) }
                         }
+                        .transition(.opacity)
 
                     case .fit:
                         OptionPickerStepView(
@@ -30,6 +32,7 @@ struct RegistrationFlowView: View {
                         ) { fit in
                             withAnimation { viewModel.selectFit(fit) }
                         }
+                        .transition(.opacity)
 
                     case .material:
                         MaterialPickerStepView(
@@ -37,6 +40,7 @@ struct RegistrationFlowView: View {
                         ) { material in
                             withAnimation { viewModel.selectMaterial(material) }
                         }
+                        .transition(.opacity)
 
                     case .weight:
                         OptionPickerStepView(
@@ -47,6 +51,7 @@ struct RegistrationFlowView: View {
                         ) { weight in
                             withAnimation { viewModel.selectWeight(weight) }
                         }
+                        .transition(.opacity)
 
                     case .formality:
                         OptionPickerStepView(
@@ -63,8 +68,10 @@ struct RegistrationFlowView: View {
                                 }
                             }
                         }
+                        .transition(.opacity)
                     }
                 }
+                .animation(.easeInOut(duration: 0.2), value: viewModel.currentStep)
                 .padding(KISEDesign.Spacing.md)
             }
             .background(KISEDesign.Colors.background)
