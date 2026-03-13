@@ -64,9 +64,13 @@ struct WardrobeView: View {
                 }
             }
             .background(KISEDesign.Colors.background)
-            .navigationTitle("Wardrobe")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Wardrobe")
+                        .font(KISEDesign.Typography.largeTitle)
+                        .foregroundStyle(KISEDesign.Colors.textPrimary)
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         viewModel.showRegistration = true
@@ -105,6 +109,15 @@ struct WardrobeView: View {
                         : KISEDesign.Colors.surface
                 )
                 .clipShape(Capsule())
+                .overlay(
+                    Capsule()
+                        .strokeBorder(
+                            viewModel.selectedTab == tab
+                                ? Color.clear
+                                : KISEDesign.Colors.accentMuted,
+                            lineWidth: 1
+                        )
+                )
         }
     }
 
