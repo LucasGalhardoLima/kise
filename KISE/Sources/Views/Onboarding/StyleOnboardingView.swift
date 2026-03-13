@@ -108,7 +108,7 @@ private struct ArchetypeCard: View {
         .overlay {
             RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
                 .stroke(
-                    isSelected ? KISEDesign.Colors.accent : Color.clear,
+                    isSelected ? KISEDesign.Colors.accentMuted : Color.clear,
                     lineWidth: 2
                 )
         }
