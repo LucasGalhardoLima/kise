@@ -7,6 +7,13 @@ final class WardrobeViewModel {
     var selectedTab: TabGroup? = nil // nil = "All"
     var showRegistration = false
     var selectedPiece: GarmentPiece?
+    var showDormantPieces = false
+
+    // Stats
+    private(set) var inRotationCount = 0
+    private(set) var rarelyUsedCount = 0
+    private(set) var dormantCount = 0
+    private(set) var lastUsedLookup: [UUID: Date] = [:]
 
     func filterPieces(_ pieces: [GarmentPiece]) -> [GarmentPiece] {
         let active = pieces.filter(\.isActive)
@@ -25,6 +32,58 @@ final class WardrobeViewModel {
 
     func activePieceCount(_ pieces: [GarmentPiece]) -> Int {
         pieces.filter(\.isActive).count
+    }
+
+    func computeStats(pieces: [GarmentPiece], suggestions: [OutfitSuggestion]) {
+        // Build last-used lookup: most recent suggestion date per piece
+        var lookup: [UUID: Date] = [:]
+        for suggestion in suggestions {
+            for pieceID in suggestion.pieceIDs {
+                if let existing = lookup[pieceID] {
+                    if suggestion.suggestedAt > existing {
+                        lookup[pieceID] = suggestion.suggestedAt
+                    }
+                } else {
+                    lookup[pieceID] = suggestion.suggestedAt
+                }
+            }
+        }
+        lastUsedLookup = lookup
+
+        var inRotation = 0
+        var rarelyUsed = 0
+        var dormant = 0
+
+        for piece in pieces where piece.isActive {
+            let days = daysUnused(for: piece)
+            if days < 30 {
+                inRotation += 1
+            } else if days < 60 {
+                rarelyUsed += 1
+            } else {
+                dormant += 1
+            }
+        }
+
+        inRotationCount = inRotation
+        rarelyUsedCount = rarelyUsed
+        dormantCount = dormant
+    }
+
+    func daysUnused(for piece: GarmentPiece) -> Int {
+        let referenceDate = lastUsedLookup[piece.id] ?? piece.createdAt
+        return Calendar.current.dateComponents([.day], from: referenceDate, to: Date()).day ?? 0
+    }
+
+    func lastUsedText(for pieceID: UUID) -> String {
+        guard let lastUsed = lastUsedLookup[pieceID] else {
+            return "New"
+        }
+        let days = Calendar.current.dateComponents([.day], from: lastUsed, to: Date()).day ?? 0
+        if days == 0 { return "Today" }
+        if days < 7 { return "\(days)d ago" }
+        if days < 30 { return "\(days / 7)w ago" }
+        return "\(days / 30)m ago"
     }
 
     static func archivePiece(_ piece: GarmentPiece) {
