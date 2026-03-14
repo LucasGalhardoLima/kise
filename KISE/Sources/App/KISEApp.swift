@@ -46,32 +46,55 @@ struct ContentView: View {
 }
 
 struct MainTabView: View {
-    @State private var showSettings = false
+    @State private var selectedTab = 0
+    @State private var showRegistration = false
 
     var body: some View {
-        TabView {
-            SuggestionView()
-                .tabItem {
-                    Label("Home", systemImage: "tshirt")
-                }
-            WardrobeView()
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            showSettings = true
-                        } label: {
-                            Image(systemName: "gearshape")
-                                .foregroundStyle(KISEDesign.Colors.textSecondary)
-                        }
+        ZStack(alignment: .bottomTrailing) {
+            TabView(selection: $selectedTab) {
+                SuggestionView()
+                    .tag(0)
+                    .tabItem {
+                        Label("Home", systemImage: "tshirt")
                     }
-                }
-                .tabItem {
-                    Label("Wardrobe", systemImage: "cabinet")
-                }
+                WardrobeView()
+                    .tag(1)
+                    .tabItem {
+                        Label("Wardrobe", systemImage: "cabinet")
+                    }
+            }
+            .tint(KISEDesign.Colors.accent)
+
+            if selectedTab == 1 {
+                addPieceButton
+                    .padding(.trailing, KISEDesign.Spacing.lg)
+                    .offset(y: 6)
+                    .transition(.scale.combined(with: .opacity))
+            }
         }
-        .tint(KISEDesign.Colors.accent)
-        .sheet(isPresented: $showSettings) {
-            SettingsView()
+        .animation(.easeInOut(duration: 0.2), value: selectedTab)
+        .sheet(isPresented: $showRegistration) {
+            RegistrationFlowView()
+        }
+    }
+
+    @ViewBuilder
+    private var addPieceButton: some View {
+        let button = Button {
+            showRegistration = true
+        } label: {
+            Image(systemName: "plus")
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundStyle(KISEDesign.Colors.accent)
+                .frame(width: 50, height: 50)
+        }
+        .buttonStyle(.plain)
+        if #available(iOS 26, *) {
+            button.glassEffect(.regular.interactive(), in: .circle)
+        } else {
+            button
+                .background(KISEDesign.Colors.accent, in: Circle())
         }
     }
 }

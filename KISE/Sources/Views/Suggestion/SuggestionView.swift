@@ -12,28 +12,30 @@ struct SuggestionView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: KISEDesign.Spacing.lg) {
-                    if activePieces.count < 2 {
-                        emptyState
-                    } else if viewModel.isLoading && viewModel.currentSuggestion == nil {
-                        loadingState
-                    } else if viewModel.currentSuggestion != nil {
-                        suggestionContent
-                            .opacity(viewModel.isRegenerating ? 0.5 : 1.0)
-                            .allowsHitTesting(!viewModel.isRegenerating)
-                            .animation(.easeInOut(duration: 0.2), value: viewModel.isRegenerating)
-                    } else {
-                        readyState
-                    }
-                }
-                .padding(.horizontal, KISEDesign.Spacing.md)
-                .padding(.top, KISEDesign.Spacing.md)
-            }
-            .background {
+            ZStack {
                 KISEDesign.Colors.background.ignoresSafeArea()
+
+                ScrollView {
+                    VStack(spacing: KISEDesign.Spacing.lg) {
+                        if activePieces.count < 2 {
+                            emptyState
+                        } else if viewModel.isLoading && viewModel.currentSuggestion == nil {
+                            loadingState
+                        } else if viewModel.currentSuggestion != nil {
+                            suggestionContent
+                                .opacity(viewModel.isRegenerating ? 0.5 : 1.0)
+                                .allowsHitTesting(!viewModel.isRegenerating)
+                                .animation(.easeInOut(duration: 0.2), value: viewModel.isRegenerating)
+                        } else {
+                            readyState
+                        }
+                    }
+                    .padding(.horizontal, KISEDesign.Spacing.md)
+                    .padding(.top, KISEDesign.Spacing.md)
+                }
             }
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("Today")
@@ -51,8 +53,8 @@ struct SuggestionView: View {
             title: "Build your wardrobe",
             message: "Add at least 2 pieces and I'll start suggesting outfits."
         )
-        .frame(maxHeight: .infinity)
-        .padding(.top, KISEDesign.Spacing.xxl)
+        .containerRelativeFrame(.vertical) { length, _ in length }
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Loading State

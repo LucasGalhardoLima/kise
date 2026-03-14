@@ -67,18 +67,12 @@ struct WardrobeView: View {
                 KISEDesign.Colors.background.ignoresSafeArea()
             }
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .principal) {
                     Text("Wardrobe")
                         .font(KISEDesign.Typography.largeTitle)
                         .foregroundStyle(KISEDesign.Colors.textPrimary)
-                }
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        viewModel.showRegistration = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
                 }
             }
             .sheet(isPresented: $viewModel.showRegistration) {
