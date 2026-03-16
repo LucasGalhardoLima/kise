@@ -40,13 +40,16 @@ final class WeatherService {
                 )
             }
 
+            let cityName = await resolveCity(from: location)
+
             currentWeather = WeatherSnapshot(
                 temperature: current.temperature.converted(to: .celsius).value,
                 feelsLike: current.apparentTemperature.converted(to: .celsius).value,
                 humidity: current.humidity * 100,
                 windSpeed: current.wind.speed.converted(to: .kilometersPerHour).value,
                 condition: current.condition.rawValue,
-                hourlyForecast: Array(hourlyEntries)
+                hourlyForecast: Array(hourlyEntries),
+                cityName: cityName
             )
 
             // iOS 26+: Check for significant temperature changes tomorrow
@@ -57,6 +60,12 @@ final class WeatherService {
         }
 
         isLoading = false
+    }
+
+    private func resolveCity(from location: CLLocation) async -> String? {
+        let geocoder = CLGeocoder()
+        let placemarks = try? await geocoder.reverseGeocodeLocation(location)
+        return placemarks?.first?.locality
     }
 
     private func fetchSignificantChanges(location: CLLocation) async {

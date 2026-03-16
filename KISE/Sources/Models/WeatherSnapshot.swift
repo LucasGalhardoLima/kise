@@ -14,6 +14,7 @@ struct WeatherSnapshot: Codable, Equatable {
     let windSpeed: Double
     let condition: String
     let hourlyForecast: [HourlyEntry]
+    let cityName: String?
 
     var hasSignificantTransition: Bool {
         guard let minTemp = hourlyForecast.map(\.temperature).min(),
