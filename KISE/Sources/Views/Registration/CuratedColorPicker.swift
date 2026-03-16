@@ -87,7 +87,14 @@ struct CuratedColorPicker: View {
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Done") {
                             let hex = customColor.toHex()
-                            let garmentColor = GarmentColor(customHex: hex)
+                            let dictionaryName = ColorDictionary.nearestName(for: hex)
+                            let hexClean = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
+                            let garmentColor = GarmentColor(
+                                id: "custom-\(hexClean)",
+                                name: dictionaryName,
+                                hex: hex,
+                                isCustom: true
+                            )
                             showCustomPicker = false
                             onSelect(garmentColor)
                         }
