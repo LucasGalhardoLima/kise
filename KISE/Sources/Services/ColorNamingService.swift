@@ -1,6 +1,10 @@
 // KISE/Sources/Services/ColorNamingService.swift
 import Foundation
 
+#if canImport(FoundationModels)
+import FoundationModels
+#endif
+
 enum ColorNamingService {
     /// Generate a creative name for a hex color.
     /// iOS 26+: uses on-device FoundationModels.
@@ -24,8 +28,8 @@ enum ColorNamingService {
             let prompt = "Give this color a short, evocative name (2-3 words max, no hex values, no quotes): \(hex)"
             let response = try await session.respond(to: prompt)
             let name = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
-            // Validate: should be short (< 30 chars) and not contain the hex
-            guard name.count < 30, !name.contains("#") else {
+            // Validate: non-empty, short (< 30 chars), and not contain the hex
+            guard !name.isEmpty, name.count < 30, !name.contains("#") else {
                 return nil
             }
             return name
