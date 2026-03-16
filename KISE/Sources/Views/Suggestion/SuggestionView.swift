@@ -5,8 +5,6 @@ import SwiftData
 struct SuggestionView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var viewModel = SuggestionViewModel()
-    @State private var showControls = false
-
     @Query(filter: #Predicate<GarmentPiece> { $0.isActive })
     private var activePieces: [GarmentPiece]
 
@@ -55,6 +53,30 @@ struct SuggestionView: View {
         )
         .containerRelativeFrame(.vertical) { length, _ in length }
         .frame(maxWidth: .infinity)
+    }
+
+    // MARK: - Weather
+
+    @ViewBuilder
+    private var weatherSection: some View {
+        if let weather = viewModel.weather {
+            VStack(alignment: .leading, spacing: KISEDesign.Spacing.xs) {
+                if let city = viewModel.cityName {
+                    Text(city)
+                        .font(KISEDesign.Typography.bodyText)
+                        .foregroundStyle(KISEDesign.Colors.textSecondary)
+                }
+                Text("\(Int(weather.temperature))°")
+                    .font(KISEDesign.Typography.largeTitle)
+                    .foregroundStyle(KISEDesign.Colors.textPrimary)
+                Text("Feels like \(Int(weather.feelsLike))° · Humidity \(Int(weather.humidity))% · Wind \(Int(weather.windSpeed))km/h · \(weather.condition)")
+                    .font(KISEDesign.Typography.caption)
+                    .foregroundStyle(KISEDesign.Colors.textTertiary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 
     // MARK: - Loading State
@@ -127,103 +149,90 @@ struct SuggestionView: View {
 
     private var suggestionContent: some View {
         VStack(spacing: KISEDesign.Spacing.lg) {
-            // Controls toggle
-            controlsSection
+            // 1. Weather
+            weatherSection
 
-            // Section label + Outfit cards
+            // 2. Your Look + Composition
             VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
                 Text("Your Look")
                     .kiseSectionLabel()
                 outfitCards
             }
 
-            // Reasoning
+            // 3. Reasoning
             if let suggestion = viewModel.currentSuggestion {
                 reasoningSection(suggestion)
             }
 
-            // Feedback buttons
+            // 4. Feedback
             feedbackButtons
 
-            // Regenerate
+            // 5. Occasion pills (always visible)
+            occasionPills
+
+            // 6. Boldness slider (always visible, gradient)
+            gradientBoldnessSlider
+
+            // 7. Try another
             regenerateButton
         }
     }
 
-    // MARK: - Controls (Occasion + Boldness)
+    // MARK: - Occasion Pills
 
-    private var controlsSection: some View {
-        VStack(spacing: KISEDesign.Spacing.sm) {
-            Button {
-                withAnimation(.easeInOut(duration: 0.25)) {
-                    showControls.toggle()
-                }
-            } label: {
-                HStack {
-                    Text(viewModel.occasion.displayName)
+    private var occasionPills: some View {
+        HStack(spacing: KISEDesign.Spacing.sm) {
+            ForEach(Occasion.allCases) { occasion in
+                Button {
+                    viewModel.occasion = occasion
+                    Task { await viewModel.regenerate(context: modelContext) }
+                } label: {
+                    Text(occasion.displayName)
                         .font(KISEDesign.Typography.caption)
-                        .foregroundStyle(KISEDesign.Colors.textSecondary)
-                    Image(systemName: showControls ? "chevron.up" : "chevron.down")
-                        .font(.caption2)
-                        .foregroundStyle(KISEDesign.Colors.textTertiary)
+                        .foregroundStyle(
+                            viewModel.occasion == occasion
+                                ? KISEDesign.Colors.background
+                                : KISEDesign.Colors.textPrimary
+                        )
+                        .padding(.horizontal, KISEDesign.Spacing.sm)
+                        .padding(.vertical, KISEDesign.Spacing.xs)
+                        .background(
+                            viewModel.occasion == occasion
+                                ? KISEDesign.Colors.accent
+                                : KISEDesign.Colors.surface
+                        )
+                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .strokeBorder(KISEDesign.Colors.accentMuted, lineWidth: viewModel.occasion == occasion ? 0 : 1)
+                        )
                 }
             }
+        }
+    }
 
-            if showControls {
-                VStack(spacing: KISEDesign.Spacing.md) {
-                    // Occasion picker
-                    HStack(spacing: KISEDesign.Spacing.sm) {
-                        ForEach(Occasion.allCases) { occasion in
-                            Button {
-                                viewModel.occasion = occasion
-                                Task { await viewModel.regenerate(context: modelContext) }
-                            } label: {
-                                Text(occasion.displayName)
-                                    .font(KISEDesign.Typography.caption)
-                                    .foregroundStyle(
-                                        viewModel.occasion == occasion
-                                            ? KISEDesign.Colors.background
-                                            : KISEDesign.Colors.textPrimary
-                                    )
-                                    .padding(.horizontal, KISEDesign.Spacing.sm)
-                                    .padding(.vertical, KISEDesign.Spacing.xs)
-                                    .background(
-                                        viewModel.occasion == occasion
-                                            ? KISEDesign.Colors.accent
-                                            : KISEDesign.Colors.surface
-                                    )
-                                    .clipShape(Capsule())
-                                    .overlay(
-                                        Capsule()
-                                            .strokeBorder(KISEDesign.Colors.accentMuted, lineWidth: viewModel.occasion == occasion ? 0 : 1)
-                                    )
-                            }
-                        }
-                    }
+    // MARK: - Gradient Boldness Slider
 
-                    // Boldness slider
-                    VStack(spacing: KISEDesign.Spacing.xs) {
-                        HStack {
-                            Text("Safe")
-                                .font(KISEDesign.Typography.small)
-                                .foregroundStyle(KISEDesign.Colors.textTertiary)
-                            Spacer()
-                            Text("Bold")
-                                .font(KISEDesign.Typography.small)
-                                .foregroundStyle(KISEDesign.Colors.textTertiary)
-                        }
-                        Slider(value: $viewModel.boldness, in: 0...1, step: 0.1) { editing in
-                            if !editing {
-                                Task { await viewModel.regenerate(context: modelContext) }
-                            }
-                        }
-                            .tint(KISEDesign.Colors.accentSecondary)
+    private var gradientBoldnessSlider: some View {
+        VStack(spacing: KISEDesign.Spacing.xs) {
+            HStack {
+                Text("Safe")
+                    .font(KISEDesign.Typography.small)
+                    .foregroundStyle(KISEDesign.Colors.textTertiary)
+                Spacer()
+                Text("Bold")
+                    .font(KISEDesign.Typography.small)
+                    .foregroundStyle(KISEDesign.Colors.textTertiary)
+            }
+
+            GradientTrackSlider(
+                value: $viewModel.boldness,
+                onEditingChanged: { editing in
+                    if !editing {
+                        Task { await viewModel.regenerate(context: modelContext) }
                     }
                 }
-                .padding(KISEDesign.Spacing.md)
-                .kiseCard()
-                .transition(.opacity.combined(with: .move(edge: .top)))
-            }
+            )
         }
     }
 
@@ -326,5 +335,69 @@ struct SuggestionView: View {
             )
         }
         .padding(.bottom, KISEDesign.Spacing.lg)
+    }
+}
+
+// MARK: - Gradient Track Slider
+
+private struct GradientTrackSlider: View {
+    @Binding var value: Double
+    var onEditingChanged: (Bool) -> Void = { _ in }
+    @State private var isEditing = false
+
+    var body: some View {
+        GeometryReader { geo in
+            let thumbSize: CGFloat = 24
+            let trackHeight: CGFloat = 4
+            let usableWidth = geo.size.width - thumbSize
+            let thumbX = thumbSize / 2 + usableWidth * value
+
+            ZStack {
+                // Background track
+                Capsule()
+                    .fill(KISEDesign.Colors.border)
+                    .frame(height: trackHeight)
+
+                // Gradient fill
+                Capsule()
+                    .fill(
+                        LinearGradient(
+                            colors: [KISEDesign.Colors.accentMuted, KISEDesign.Colors.accent],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .frame(width: max(trackHeight, thumbX), height: trackHeight)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                // Thumb
+                Circle()
+                    .fill(.white)
+                    .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
+                    .frame(width: thumbSize, height: thumbSize)
+                    .position(x: thumbX, y: geo.size.height / 2)
+            }
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { drag in
+                        if !isEditing {
+                            isEditing = true
+                            onEditingChanged(true)
+                        }
+                        let raw = (drag.location.x - thumbSize / 2) / usableWidth
+                        let clamped = min(max(raw, 0), 1)
+                        let stepped = (clamped * 10).rounded() / 10
+                        if stepped != value {
+                            value = stepped
+                        }
+                    }
+                    .onEnded { _ in
+                        isEditing = false
+                        onEditingChanged(false)
+                    }
+            )
+        }
+        .frame(height: 24)
     }
 }
