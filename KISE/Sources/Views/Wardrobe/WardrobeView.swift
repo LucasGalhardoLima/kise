@@ -24,10 +24,10 @@ struct WardrobeView: View {
                 // Stats row
                 if !pieces.isEmpty {
                     StatsRowView(items: [
-                        StatItem(count: viewModel.inRotationCount, label: "In Rotation"),
-                        StatItem(count: viewModel.rarelyUsedCount, label: "Rarely Used",
+                        StatItem(count: viewModel.inRotationCount, label: String(localized: "stats.inRotation")),
+                        StatItem(count: viewModel.rarelyUsedCount, label: String(localized: "stats.rarelyUsed"),
                                  action: { viewModel.showDormantPieces = true }),
-                        StatItem(count: viewModel.dormantCount, label: "Dormant",
+                        StatItem(count: viewModel.dormantCount, label: String(localized: "stats.dormant"),
                                  action: { viewModel.showDormantPieces = true }),
                     ])
                     .padding(.horizontal, KISEDesign.Spacing.md)
@@ -36,10 +36,10 @@ struct WardrobeView: View {
                 // Tab filter
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: KISEDesign.Spacing.sm) {
-                        tabButton("All \(pieces.count)", tab: nil)
+                        tabButton(String(localized: "wardrobe.tabAll") + " \(pieces.count)", tab: nil)
                         ForEach(TabGroup.allCases, id: \.self) { tab in
                             let count = pieces.filter { $0.category.tabGroup == tab }.count
-                            tabButton("\(tab.rawValue.capitalized) \(count)", tab: tab)
+                            tabButton("\(tab.displayName) \(count)", tab: tab)
                         }
                     }
                     .padding(.horizontal, KISEDesign.Spacing.md)
@@ -50,9 +50,9 @@ struct WardrobeView: View {
                 if pieces.isEmpty {
                     Spacer()
                     EmptyStateView(
-                        title: "Your wardrobe is empty",
-                        message: "Add your first pieces to get started",
-                        actionLabel: "Add Piece",
+                        title: String(localized: "wardrobe.emptyTitle"),
+                        message: String(localized: "wardrobe.emptyMessage"),
+                        actionLabel: String(localized: "wardrobe.addPiece"),
                         action: { viewModel.showRegistration = true }
                     )
                     Spacer()
@@ -71,7 +71,7 @@ struct WardrobeView: View {
                                             WardrobeViewModel.archivePiece(piece)
                                         }
                                     } label: {
-                                        Label("Archive", systemImage: "archivebox")
+                                        Label(String(localized: "action.archive"), systemImage: "archivebox")
                                     }
                                 }
                             }
@@ -90,7 +90,7 @@ struct WardrobeView: View {
             .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("Wardrobe")
+                    Text("wardrobe.title")
                         .font(KISEDesign.Typography.largeTitle)
                         .foregroundStyle(theme.colors.textPrimary)
                 }

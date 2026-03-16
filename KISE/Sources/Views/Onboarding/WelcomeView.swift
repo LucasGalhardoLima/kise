@@ -14,12 +14,12 @@ struct WelcomeView: View {
                     .font(KISEDesign.Typography.brand(48))
                     .foregroundStyle(theme.colors.textPrimary)
 
-                Text("Dress with intention")
+                Text("onboarding.tagline")
                     .font(KISEDesign.Typography.title)
                     .foregroundStyle(theme.colors.textSecondary)
             }
 
-            Text("KISE learns your wardrobe and suggests outfits based on your style, the weather, and where you're headed.")
+            Text("onboarding.welcomeDescription")
                 .font(KISEDesign.Typography.bodyText)
                 .foregroundStyle(theme.colors.textSecondary)
                 .multilineTextAlignment(.center)
@@ -30,7 +30,7 @@ struct WelcomeView: View {
             Button {
                 onContinue()
             } label: {
-                Text("Get Started")
+                Text("onboarding.getStarted")
                     .font(KISEDesign.Typography.subtitle)
                     .foregroundStyle(theme.colors.background)
                     .frame(maxWidth: .infinity)

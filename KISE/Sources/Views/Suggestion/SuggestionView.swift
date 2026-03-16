@@ -40,7 +40,7 @@ struct SuggestionView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("Today")
+                    Text("suggestion.title")
                         .font(KISEDesign.Typography.largeTitle)
                         .foregroundStyle(theme.colors.textPrimary)
                 }
@@ -52,8 +52,8 @@ struct SuggestionView: View {
 
     private var emptyState: some View {
         EmptyStateView(
-            title: "Build your wardrobe",
-            message: "Add at least 2 pieces and I'll start suggesting outfits."
+            title: String(localized: "suggestion.emptyTitle"),
+            message: String(localized: "suggestion.emptyMessage")
         )
         .containerRelativeFrame(.vertical) { length, _ in length }
         .frame(maxWidth: .infinity)
@@ -125,11 +125,11 @@ struct SuggestionView: View {
         VStack(spacing: KISEDesign.Spacing.lg) {
             Spacer().frame(height: KISEDesign.Spacing.xxl)
 
-            Text("Ready when you are")
+            Text("suggestion.readyTitle")
                 .font(KISEDesign.Typography.title)
                 .foregroundStyle(theme.colors.textPrimary)
 
-            Text("\(activePieces.count) pieces in your wardrobe")
+            Text("suggestion.readyPieceCount \(activePieces.count)")
                 .font(KISEDesign.Typography.bodyText)
                 .foregroundStyle(theme.colors.textSecondary)
 
@@ -138,7 +138,7 @@ struct SuggestionView: View {
                     await viewModel.fetchSuggestion(context: modelContext)
                 }
             } label: {
-                Text("Get a suggestion")
+                Text("suggestion.getSuggestion")
                     .font(KISEDesign.Typography.subtitle)
                     .foregroundStyle(theme.colors.background)
                     .padding(.horizontal, KISEDesign.Spacing.xl)
@@ -161,7 +161,7 @@ struct SuggestionView: View {
 
             // 3. YOUR LOOK + Composition + Piece names
             VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
-                Text("Your Look")
+                Text("suggestion.yourLook")
                     .kiseSectionLabel()
                 outfitCards
             }
@@ -216,7 +216,7 @@ struct SuggestionView: View {
 
     private var thinBoldnessSlider: some View {
         HStack(spacing: KISEDesign.Spacing.sm) {
-            Text("Safe")
+            Text("slider.safe")
                 .font(KISEDesign.Typography.small)
                 .tracking(1)
                 .textCase(.uppercase)
@@ -233,7 +233,7 @@ struct SuggestionView: View {
                 }
             )
 
-            Text("Bold")
+            Text("slider.bold")
                 .font(KISEDesign.Typography.small)
                 .tracking(1)
                 .textCase(.uppercase)
@@ -308,7 +308,7 @@ struct SuggestionView: View {
             } label: {
                 HStack(spacing: KISEDesign.Spacing.xs) {
                     Image(systemName: "arrow.clockwise")
-                    Text("Try another")
+                    Text("suggestion.tryAnother")
                 }
                 .font(KISEDesign.Typography.caption)
                 .foregroundStyle(theme.colors.textTertiary)

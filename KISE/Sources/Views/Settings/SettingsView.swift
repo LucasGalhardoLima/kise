@@ -25,7 +25,7 @@ struct SettingsView: View {
                         archetypeEditor
                     } label: {
                         HStack {
-                            Text("Style archetypes")
+                            Text("settings.styleArchetypes")
                                 .font(KISEDesign.Typography.bodyText)
                             Spacer()
                             Text(currentArchetypesSummary)
@@ -35,7 +35,7 @@ struct SettingsView: View {
                         }
                     }
                 } header: {
-                    Text("Profile")
+                    Text("settings.profile")
                         .font(KISEDesign.Typography.caption)
                 }
 
@@ -43,7 +43,7 @@ struct SettingsView: View {
                 Section {
                     // Temperature unit
                     HStack {
-                        Text("Temperature")
+                        Text("settings.temperature")
                             .font(KISEDesign.Typography.bodyText)
                         Spacer()
                         Picker("", selection: $temperatureUnit) {
@@ -60,13 +60,13 @@ struct SettingsView: View {
                             Text(occasion.displayName).tag(occasion.rawValue)
                         }
                     } label: {
-                        Text("Default occasion")
+                        Text("settings.defaultOccasion")
                             .font(KISEDesign.Typography.bodyText)
                     }
 
                     // Morning notification
                     Toggle(isOn: $morningNotification) {
-                        Text("Morning reminder")
+                        Text("settings.morningReminder")
                             .font(KISEDesign.Typography.bodyText)
                     }
                     .tint(theme.colors.accent)
@@ -79,7 +79,7 @@ struct SettingsView: View {
 
                     if morningNotification {
                         DatePicker(
-                            "Reminder time",
+                            String(localized: "settings.reminderTime"),
                             selection: notificationTimeBinding,
                             displayedComponents: .hourAndMinute
                         )
@@ -88,45 +88,45 @@ struct SettingsView: View {
                         .onChange(of: notificationMinute) { _, _ in scheduleNotification() }
                     }
                 } header: {
-                    Text("Preferences")
+                    Text("settings.preferences")
                         .font(KISEDesign.Typography.caption)
                 }
 
                 // Appearance
                 Section {
                     HStack {
-                        Text("Theme")
+                        Text("settings.theme")
                             .font(KISEDesign.Typography.bodyText)
                         Spacer()
-                        Text("Default")
+                        Text("settings.themeDefault")
                             .font(KISEDesign.Typography.caption)
                             .foregroundStyle(theme.colors.textSecondary)
                     }
-                    Text("More themes coming soon")
+                    Text("settings.themesSoon")
                         .font(KISEDesign.Typography.small)
                         .foregroundStyle(theme.colors.textTertiary)
                 } header: {
-                    Text("Appearance")
+                    Text("settings.appearance")
                         .font(KISEDesign.Typography.caption)
                 }
 
                 // About
                 Section {
                     HStack {
-                        Text("Version")
+                        Text("settings.version")
                             .font(KISEDesign.Typography.bodyText)
                         Spacer()
                         Text("1.0.0")
                             .font(KISEDesign.Typography.caption)
                             .foregroundStyle(theme.colors.textSecondary)
                     }
-                    Text("Made with intention")
+                    Text("settings.madeWith")
                         .font(KISEDesign.Typography.small)
                         .foregroundStyle(theme.colors.textTertiary)
                         .frame(maxWidth: .infinity)
                         .listRowBackground(Color.clear)
                 } header: {
-                    Text("About")
+                    Text("settings.about")
                         .font(KISEDesign.Typography.caption)
                 }
             }
@@ -134,7 +134,7 @@ struct SettingsView: View {
             .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("Settings")
+                    Text("settings.title")
                         .font(KISEDesign.Typography.largeTitle)
                         .foregroundStyle(theme.colors.textPrimary)
                 }
@@ -179,7 +179,7 @@ struct SettingsView: View {
 
         let content = UNMutableNotificationContent()
         content.title = "KISE"
-        content.body = "Your outfit is ready"
+        content.body = String(localized: "notification.outfitReady")
         content.sound = .default
 
         var dateComponents = DateComponents()
@@ -194,7 +194,7 @@ struct SettingsView: View {
     // MARK: - Archetypes
 
     private var currentArchetypesSummary: String {
-        guard let profile = profiles.first else { return "None" }
+        guard let profile = profiles.first else { return String(localized: "settings.none") }
         return profile.archetypes.map(\.displayName).joined(separator: ", ")
     }
 
@@ -228,7 +228,7 @@ struct SettingsView: View {
             }
             .padding(KISEDesign.Spacing.md)
         }
-        .navigationTitle("Style Archetypes")
+        .navigationTitle(String(localized: "settings.styleArchetypesTitle"))
         .background(theme.colors.background)
     }
 

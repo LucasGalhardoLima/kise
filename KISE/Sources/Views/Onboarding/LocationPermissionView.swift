@@ -16,11 +16,11 @@ struct LocationPermissionView: View {
                     .font(.system(size: 48, weight: .light))
                     .foregroundStyle(theme.colors.accent)
 
-                Text("Weather-aware outfits")
+                Text("onboarding.locationTitle")
                     .font(KISEDesign.Typography.title)
                     .foregroundStyle(theme.colors.textPrimary)
 
-                Text("KISE uses your location to check the weather and suggest outfits that match your day. Your location is never stored or shared.")
+                Text("onboarding.locationDescription")
                     .font(KISEDesign.Typography.bodyText)
                     .foregroundStyle(theme.colors.textSecondary)
                     .multilineTextAlignment(.center)
@@ -36,7 +36,7 @@ struct LocationPermissionView: View {
                         onContinue()
                     }
                 } label: {
-                    Text("Allow Location")
+                    Text("onboarding.allowLocation")
                         .font(KISEDesign.Typography.subtitle)
                         .foregroundStyle(theme.colors.background)
                         .frame(maxWidth: .infinity)
@@ -48,7 +48,7 @@ struct LocationPermissionView: View {
                 Button {
                     onContinue()
                 } label: {
-                    Text("Skip")
+                    Text("action.skip")
                         .font(KISEDesign.Typography.caption)
                         .foregroundStyle(theme.colors.textTertiary)
                 }

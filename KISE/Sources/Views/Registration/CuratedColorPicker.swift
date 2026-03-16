@@ -14,7 +14,7 @@ struct CuratedColorPicker: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
-            Text("What color?")
+            Text("registration.whatColor")
                 .font(KISEDesign.Typography.title)
                 .foregroundStyle(theme.colors.textPrimary)
 
@@ -55,7 +55,7 @@ struct CuratedColorPicker: View {
                                     .font(.title3)
                                     .foregroundStyle(theme.colors.textTertiary)
                             }
-                        Text("Custom")
+                        Text("color.custom")
                             .font(KISEDesign.Typography.small)
                             .foregroundStyle(theme.colors.textTertiary)
                             .frame(width: 68)
@@ -79,14 +79,14 @@ struct CuratedColorPicker: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(theme.colors.background)
-                .navigationTitle("Custom Color")
+                .navigationTitle(String(localized: "registration.customColor"))
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") { showCustomPicker = false }
+                        Button(String(localized: "action.cancel")) { showCustomPicker = false }
                     }
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("Done") {
+                        Button(String(localized: "action.done")) {
                             let hex = customColor.toHex()
                             let dictionaryName = ColorDictionary.nearestName(for: hex)
                             let hexClean = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))

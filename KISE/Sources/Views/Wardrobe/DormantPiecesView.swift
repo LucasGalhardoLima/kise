@@ -19,11 +19,11 @@ struct DormantPiecesView: View {
             VStack(alignment: .leading, spacing: KISEDesign.Spacing.md) {
                 // Header
                 HStack(alignment: .firstTextBaseline) {
-                    Text("Unused Recently")
+                    Text("dormant.title")
                         .font(KISEDesign.Typography.largeTitle)
                         .foregroundStyle(theme.colors.textPrimary)
                     Spacer()
-                    Text("\(unusedPieces.count) pieces")
+                    Text("dormant.pieceCount \(unusedPieces.count)")
                         .font(KISEDesign.Typography.caption)
                         .foregroundStyle(theme.colors.textSecondary)
                         .padding(.horizontal, KISEDesign.Spacing.sm)
@@ -32,7 +32,7 @@ struct DormantPiecesView: View {
                         .clipShape(Capsule())
                 }
 
-                Text("These pieces haven't been used in over 30 days. Do they still belong in your wardrobe?")
+                Text("dormant.description")
                     .font(KISEDesign.Typography.bodyText)
                     .foregroundStyle(theme.colors.textSecondary)
 
@@ -53,7 +53,7 @@ struct DormantPiecesView: View {
                             viewModel.archiveAll(unusedPieces)
                         }
                     } label: {
-                        Text("Archive all dormant")
+                        Text("dormant.archiveAll")
                             .font(KISEDesign.Typography.bodyText)
                             .foregroundStyle(theme.colors.textSecondary)
                             .frame(maxWidth: .infinity)
@@ -93,10 +93,10 @@ struct DormantPiecesView: View {
                 Text("\(garmentColor.name) \(info.piece.category.displayName)")
                     .font(KISEDesign.Typography.subtitle)
                     .foregroundStyle(theme.colors.textPrimary)
-                Text("Unused for \(info.daysUnused) days")
+                Text("dormant.unusedDays \(info.daysUnused)")
                     .font(KISEDesign.Typography.caption)
                     .foregroundStyle(theme.colors.disliked)
-                Text("\(info.piece.material.capitalized) · \(garmentColor.name)")
+                Text("\(materialDisplayName(info.piece.material)) · \(garmentColor.name)")
                     .font(KISEDesign.Typography.caption)
                     .foregroundStyle(theme.colors.textTertiary)
             }
@@ -108,7 +108,7 @@ struct DormantPiecesView: View {
                 Button {
                     withAnimation { viewModel.keep(info.piece) }
                 } label: {
-                    Text("Keep")
+                    Text("action.keep")
                         .font(KISEDesign.Typography.caption)
                         .foregroundStyle(theme.colors.accent)
                 }
@@ -116,7 +116,7 @@ struct DormantPiecesView: View {
                 Button {
                     withAnimation { viewModel.archive(info.piece) }
                 } label: {
-                    Text("Remove")
+                    Text("action.remove")
                         .font(KISEDesign.Typography.caption)
                         .foregroundStyle(theme.colors.disliked)
                 }

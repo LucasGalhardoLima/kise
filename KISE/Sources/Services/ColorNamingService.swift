@@ -25,7 +25,8 @@ enum ColorNamingService {
     private static func generateOnDeviceName(for hex: String) async -> String? {
         do {
             let session = LanguageModelSession()
-            let prompt = "Give this color a short, evocative name (2-3 words max, no hex values, no quotes): \(hex)"
+            let lang = Locale.current.language.languageCode?.identifier ?? "en"
+            let prompt = "Give this color a short, evocative name in \(lang) (2-3 words max, no hex values, no quotes): \(hex)"
             let response = try await session.respond(to: prompt)
             let name = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
             // Validate: non-empty, short (< 30 chars), and not contain the hex

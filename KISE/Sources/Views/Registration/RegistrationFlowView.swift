@@ -26,7 +26,7 @@ struct RegistrationFlowView: View {
 
                     case .fit:
                         OptionPickerStepView(
-                            title: "What fit?",
+                            title: String(localized: "registration.whatFit"),
                             options: viewModel.availableFits,
                             labelFor: { $0.displayName },
                             suggested: nil
@@ -37,7 +37,7 @@ struct RegistrationFlowView: View {
 
                     case .shoeType:
                         OptionPickerStepView(
-                            title: "What type?",
+                            title: String(localized: "registration.whatType"),
                             options: ShoeType.allCases,
                             labelFor: { $0.displayName },
                             suggested: nil
@@ -56,7 +56,7 @@ struct RegistrationFlowView: View {
 
                     case .weight:
                         OptionPickerStepView(
-                            title: "Fabric weight?",
+                            title: String(localized: "registration.fabricWeight"),
                             options: FabricWeight.allCases,
                             labelFor: { $0.displayName },
                             suggested: viewModel.selectedWeight
@@ -67,7 +67,7 @@ struct RegistrationFlowView: View {
 
                     case .formality:
                         OptionPickerStepView(
-                            title: "Formality level?",
+                            title: String(localized: "registration.formalityLevel"),
                             options: Formality.allCases,
                             labelFor: { $0.displayName },
                             suggested: viewModel.suggestedFormality
@@ -91,20 +91,20 @@ struct RegistrationFlowView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     if viewModel.currentStep > .category {
-                        Button("Back") {
+                        Button(String(localized: "action.back")) {
                             withAnimation { viewModel.goBack() }
                         }
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(String(localized: "action.cancel")) { dismiss() }
                 }
             }
             .overlay {
                 if viewModel.showAddedConfirmation {
                     VStack {
                         Spacer()
-                        Text("Added!")
+                        Text("registration.added")
                             .font(KISEDesign.Typography.subtitle)
                             .foregroundStyle(theme.colors.background)
                             .padding(.horizontal, KISEDesign.Spacing.xl)

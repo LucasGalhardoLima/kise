@@ -58,17 +58,17 @@ struct MainTabView: View {
                 SuggestionView()
                     .tag(0)
                     .tabItem {
-                        Label("Home", systemImage: "tshirt")
+                        Label(String(localized: "tab.home"), systemImage: "tshirt")
                     }
                 WardrobeView()
                     .tag(1)
                     .tabItem {
-                        Label("Wardrobe", systemImage: "cabinet")
+                        Label(String(localized: "tab.wardrobe"), systemImage: "cabinet")
                     }
                 SettingsView()
                     .tag(2)
                     .tabItem {
-                        Label("Settings", systemImage: "gearshape")
+                        Label(String(localized: "tab.settings"), systemImage: "gearshape")
                     }
             }
             .tint(theme.colors.accent)

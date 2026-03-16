@@ -21,11 +21,11 @@ struct CompositionDemoView: View {
             Spacer()
 
             VStack(spacing: KISEDesign.Spacing.md) {
-                Text("Your outfit, as color")
+                Text("onboarding.demoTitle")
                     .font(KISEDesign.Typography.title)
                     .foregroundStyle(theme.colors.textPrimary)
 
-                Text("KISE shows your outfit as a color composition — tap to explore how pieces work together.")
+                Text("onboarding.demoDescription")
                     .font(KISEDesign.Typography.bodyText)
                     .foregroundStyle(theme.colors.textSecondary)
                     .multilineTextAlignment(.center)
@@ -41,7 +41,7 @@ struct CompositionDemoView: View {
             Button {
                 onContinue()
             } label: {
-                Text("Continue")
+                Text("action.continue")
                     .font(KISEDesign.Typography.subtitle)
                     .foregroundStyle(theme.colors.background)
                     .frame(maxWidth: .infinity)

@@ -75,9 +75,9 @@ struct ColorCompositionView: View {
                             .font(KISEDesign.Typography.subtitle)
                             .foregroundStyle(theme.colors.textPrimary)
                         HStack(spacing: KISEDesign.Spacing.md) {
-                            detailLabel("Fit", piece.fit.displayName)
-                            detailLabel("Material", piece.material.capitalized)
-                            detailLabel("Formality", piece.formality.displayName)
+                            detailLabel(String(localized: "detail.fit"), piece.fit.displayName)
+                            detailLabel(String(localized: "detail.material"), materialDisplayName(piece.material))
+                            detailLabel(String(localized: "detail.formality"), piece.formality.displayName)
                         }
                     }
 

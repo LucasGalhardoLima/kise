@@ -30,7 +30,7 @@ struct OptionPickerStepView<T: Identifiable>: View where T: Equatable {
                             Spacer()
 
                             if let suggested, suggested.id as AnyHashable == option.id as AnyHashable {
-                                Text("Suggested")
+                                Text("registration.suggested")
                                     .font(KISEDesign.Typography.small)
                                     .foregroundStyle(theme.colors.textTertiary)
                             }
@@ -53,7 +53,7 @@ struct MaterialPickerStepView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
-            Text("What material?")
+            Text("registration.whatMaterial")
                 .font(KISEDesign.Typography.title)
                 .foregroundStyle(theme.colors.textPrimary)
 
@@ -62,7 +62,7 @@ struct MaterialPickerStepView: View {
                     Button {
                         onSelect(material)
                     } label: {
-                        Text(material.capitalized)
+                        Text(materialDisplayName(material))
                             .font(KISEDesign.Typography.bodyText)
                             .foregroundStyle(theme.colors.textPrimary)
                             .frame(maxWidth: .infinity, alignment: .leading)

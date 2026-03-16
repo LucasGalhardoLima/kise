@@ -21,12 +21,12 @@ struct GarmentDetailView: View {
     }
 
     private func lastUsedTextFrom(_ suggestions: [OutfitSuggestion]) -> String {
-        guard let mostRecent = suggestions.first else { return "—" }
+        guard let mostRecent = suggestions.first else { return String(localized: "lastUsed.never") }
         let days = Calendar.current.dateComponents([.day], from: mostRecent.suggestedAt, to: Date()).day ?? 0
-        if days == 0 { return "Today" }
-        if days < 7 { return "\(days)d" }
-        if days < 30 { return "\(days / 7)w" }
-        return "\(days / 30)m"
+        if days == 0 { return String(localized: "lastUsed.today") }
+        if days < 7 { return "\(days)" + String(localized: "lastUsed.daysShort") }
+        if days < 30 { return "\(days / 7)" + String(localized: "lastUsed.weeksShort") }
+        return "\(days / 30)" + String(localized: "lastUsed.monthsShort")
     }
 
     var body: some View {
@@ -56,15 +56,15 @@ struct GarmentDetailView: View {
                     .foregroundStyle(theme.colors.textPrimary)
 
                 // Inline subtitle
-                Text("\(piece.material.capitalized) · \(garmentColor.name) · \(piece.fit.displayName)")
+                Text("\(materialDisplayName(piece.material)) · \(garmentColor.name) · \(piece.fit.displayName)")
                     .font(KISEDesign.Typography.bodyText)
                     .foregroundStyle(theme.colors.textSecondary)
 
                 // Usage stats
                 StatsRowView(items: [
-                    StatItem(count: wearCount, label: "Times Worn"),
-                    StatItem(count: combinationsCount, label: "Combinations"),
-                    StatItem(count: 0, label: "Last Used", displayValue: lastUsed),
+                    StatItem(count: wearCount, label: String(localized: "stats.timesWorn")),
+                    StatItem(count: combinationsCount, label: String(localized: "stats.combinations")),
+                    StatItem(count: 0, label: String(localized: "stats.lastUsed"), displayValue: lastUsed),
                 ])
 
                 // Pairs With
@@ -92,7 +92,7 @@ struct GarmentDetailView: View {
                     dismiss()
                 } label: {
                     Label(
-                        piece.isActive ? "Archive" : "Restore",
+                        piece.isActive ? String(localized: "action.archive") : String(localized: "action.restore"),
                         systemImage: piece.isActive ? "archivebox" : "arrow.uturn.backward"
                     )
                     .font(KISEDesign.Typography.bodyText)
@@ -105,7 +105,7 @@ struct GarmentDetailView: View {
 
     private func pairsWithSection(_ pieceSuggestions: [OutfitSuggestion], lookup: [UUID: GarmentPiece]) -> some View {
         VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
-            Text("Pairs With")
+            Text("detail.pairsWith")
                 .kiseSectionLabel()
 
             ScrollView(.horizontal, showsIndicators: false) {

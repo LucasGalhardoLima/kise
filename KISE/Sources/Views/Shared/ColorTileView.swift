@@ -36,7 +36,7 @@ struct ColorTileView: View {
                     .foregroundStyle(theme.colors.textPrimary)
                     .lineLimit(1)
 
-                Text("\(material.capitalized) · \(lastUsedText)")
+                Text("\(materialDisplayName(material)) · \(lastUsedText)")
                     .font(.system(size: 10))
                     .foregroundStyle(theme.colors.textTertiary)
                     .lineLimit(1)

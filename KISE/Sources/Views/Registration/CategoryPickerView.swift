@@ -13,7 +13,7 @@ struct CategoryPickerView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
-            Text("What type of piece?")
+            Text("registration.whatPiece")
                 .font(KISEDesign.Typography.title)
                 .foregroundStyle(theme.colors.textPrimary)
 
@@ -21,7 +21,7 @@ struct CategoryPickerView: View {
                 ForEach(TabGroup.allCases, id: \.self) { group in
                     let categories = GarmentCategory.allCases.filter { $0.tabGroup == group }
                     VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
-                        Text(group.rawValue.capitalized)
+                        Text(group.displayName)
                             .kiseSectionLabel()
 
                         LazyVGrid(columns: columns, spacing: KISEDesign.Spacing.md) {

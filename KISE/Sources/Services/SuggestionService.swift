@@ -117,7 +117,8 @@ final class SuggestionService {
             occasion: occasion.rawValue,
             weather: weatherPayload,
             wardrobe: wardrobeItems,
-            recent_suggestions: recent
+            recent_suggestions: recent,
+            language: Locale.current.language.minimalIdentifier
         )
     }
 }
@@ -131,6 +132,7 @@ struct SuggestionPayload: Encodable {
     let weather: WeatherPayload?
     let wardrobe: [WardrobeItem]
     let recent_suggestions: [RecentSuggestionItem]
+    let language: String
 }
 
 struct WeatherPayload: Encodable {

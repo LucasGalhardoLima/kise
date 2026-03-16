@@ -1,0 +1,1020 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "tabGroup.tops" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Tops" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Tops" } }
+      }
+    },
+    "tabGroup.bottoms" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Bottoms" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Calças" } }
+      }
+    },
+    "tabGroup.outerwear" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Outerwear" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Agasalhos" } }
+      }
+    },
+    "tabGroup.shoes" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Shoes" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Calçados" } }
+      }
+    },
+    "category.tShirt" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "T-Shirt" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Camiseta" } }
+      }
+    },
+    "category.shirt" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Shirt" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Camisa" } }
+      }
+    },
+    "category.polo" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Polo" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Polo" } }
+      }
+    },
+    "category.sweater" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sweater" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Suéter" } }
+      }
+    },
+    "category.hoodie" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Hoodie" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Moletom" } }
+      }
+    },
+    "category.jacket" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Jacket" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Jaqueta" } }
+      }
+    },
+    "category.coat" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Coat" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Casaco" } }
+      }
+    },
+    "category.jeans" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Jeans" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Jeans" } }
+      }
+    },
+    "category.chinos" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Chinos" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Chinos" } }
+      }
+    },
+    "category.shorts" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Shorts" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Bermuda" } }
+      }
+    },
+    "category.shoes" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Shoes" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Calçados" } }
+      }
+    },
+    "fit.slim" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Slim" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Slim" } }
+      }
+    },
+    "fit.regular" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Regular" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Regular" } }
+      }
+    },
+    "fit.relaxed" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Relaxed" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Relaxado" } }
+      }
+    },
+    "fit.straight" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Straight" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Reto" } }
+      }
+    },
+    "fit.oversized" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Oversized" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Oversized" } }
+      }
+    },
+    "shoeType.sneakers" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sneakers" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Tênis" } }
+      }
+    },
+    "shoeType.loafers" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Loafers" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Mocassim" } }
+      }
+    },
+    "shoeType.boots" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Boots" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Botas" } }
+      }
+    },
+    "shoeType.oxfords" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Oxfords" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Oxfords" } }
+      }
+    },
+    "shoeType.sandals" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sandals" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Sandálias" } }
+      }
+    },
+    "shoeType.slides" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Slides" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Slides" } }
+      }
+    },
+    "weight.light" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Light" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Leve" } }
+      }
+    },
+    "weight.mid" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Mid" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Médio" } }
+      }
+    },
+    "weight.heavy" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Heavy" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Pesado" } }
+      }
+    },
+    "formality.casual" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Casual" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Casual" } }
+      }
+    },
+    "formality.smartCasual" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Smart Casual" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Smart Casual" } }
+      }
+    },
+    "formality.formal" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Formal" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Formal" } }
+      }
+    },
+    "occasion.everyday" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Everyday" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Dia a dia" } }
+      }
+    },
+    "occasion.meeting" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Meeting" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Reunião" } }
+      }
+    },
+    "occasion.dateNight" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Date Night" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Encontro" } }
+      }
+    },
+    "occasion.nightOut" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Night Out" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Noite" } }
+      }
+    },
+    "archetype.oldMoney" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Old Money" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Old Money" } }
+      }
+    },
+    "archetype.minimalist" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Minimalist" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Minimalista" } }
+      }
+    },
+    "archetype.smartCasual" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Smart Casual" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Smart Casual" } }
+      }
+    },
+    "archetype.streetwear" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Streetwear" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Streetwear" } }
+      }
+    },
+    "archetype.classic" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Classic" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Clássico" } }
+      }
+    },
+    "archetype.scandinavian" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Scandinavian" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Escandinavo" } }
+      }
+    },
+    "material.cotton" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cotton" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Algodão" } }
+      }
+    },
+    "material.linen" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Linen" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Linho" } }
+      }
+    },
+    "material.synthetic" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Synthetic" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Sintético" } }
+      }
+    },
+    "material.tricot" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Tricot" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Tricô" } }
+      }
+    },
+    "material.jersey" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Jersey" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Malha" } }
+      }
+    },
+    "material.flannel" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Flannel" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Flanela" } }
+      }
+    },
+    "material.silk" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Silk" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Seda" } }
+      }
+    },
+    "material.wool" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Wool" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Lã" } }
+      }
+    },
+    "material.cashmere" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cashmere" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Caxemira" } }
+      }
+    },
+    "material.leather" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Leather" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Couro" } }
+      }
+    },
+    "material.nylon" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Nylon" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Nylon" } }
+      }
+    },
+    "material.fleece" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Fleece" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Fleece" } }
+      }
+    },
+    "material.denim" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Denim" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Jeans" } }
+      }
+    },
+    "material.corduroy" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Corduroy" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Veludo Cotelê" } }
+      }
+    },
+    "material.down" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Down" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Pluma" } }
+      }
+    },
+    "material.jogger" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Jogger" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Moletom" } }
+      }
+    },
+    "material.suede" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Suede" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Camurça" } }
+      }
+    },
+    "material.canvas" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Canvas" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Lona" } }
+      }
+    },
+    "material.mesh" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Mesh" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Tela" } }
+      }
+    },
+    "color.white" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "White" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Branco" } }
+      }
+    },
+    "color.cream" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Ivory Cream" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Creme Marfim" } }
+      }
+    },
+    "color.beige" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sand Dune" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Areia" } }
+      }
+    },
+    "color.tan" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Raw Umber" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Âmbar Cru" } }
+      }
+    },
+    "color.lightGray" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Silver Mist" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Cinza Prata" } }
+      }
+    },
+    "color.charcoal" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Charcoal" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Carvão" } }
+      }
+    },
+    "color.black" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Black" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Preto" } }
+      }
+    },
+    "color.navy" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Midnight Navy" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Azul Marinho" } }
+      }
+    },
+    "color.lightBlue" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sky Blue" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Azul Céu" } }
+      }
+    },
+    "color.indigo" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Dusk Indigo" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Índigo Crepuscular" } }
+      }
+    },
+    "color.teal" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Deep Teal" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Azul Petróleo" } }
+      }
+    },
+    "color.olive" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Moss Olive" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Verde Oliva" } }
+      }
+    },
+    "color.sage" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Dusty Sage" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Sálvia" } }
+      }
+    },
+    "color.camel" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Caramel" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Caramelo" } }
+      }
+    },
+    "color.khaki" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Warm Khaki" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Cáqui" } }
+      }
+    },
+    "color.mustard" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Aged Gold" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Ouro Antigo" } }
+      }
+    },
+    "color.coral" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Dusty Coral" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Coral" } }
+      }
+    },
+    "color.terracotta" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Terracotta" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Terracota" } }
+      }
+    },
+    "color.lavender" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Wisteria" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Glicínia" } }
+      }
+    },
+    "color.brown" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Dark Cocoa" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Cacau Escuro" } }
+      }
+    },
+    "color.burgundy" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Burgundy Wine" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Vinho Bordô" } }
+      }
+    },
+    "color.maroon" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Dark Wine" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Vinho Escuro" } }
+      }
+    },
+    "color.custom" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Custom" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Personalizado" } }
+      }
+    },
+    "lastUsed.new" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "New" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Novo" } }
+      }
+    },
+    "lastUsed.today" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Today" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Hoje" } }
+      }
+    },
+    "lastUsed.never" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "—" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "—" } }
+      }
+    },
+    "lastUsed.daysShort" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "d ago" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "d atrás" } }
+      }
+    },
+    "lastUsed.weeksShort" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "w ago" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "s atrás" } }
+      }
+    },
+    "lastUsed.monthsShort" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "m ago" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "m atrás" } }
+      }
+    },
+    "tab.home" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Home" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Início" } }
+      }
+    },
+    "tab.wardrobe" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Wardrobe" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Guarda-roupa" } }
+      }
+    },
+    "tab.settings" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Configurações" } }
+      }
+    },
+    "suggestion.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Today" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Hoje" } }
+      }
+    },
+    "suggestion.emptyTitle" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Build your wardrobe" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Monte seu guarda-roupa" } }
+      }
+    },
+    "suggestion.emptyMessage" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add at least 2 pieces and I'll start suggesting outfits." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Adicione pelo menos 2 peças e eu começo a sugerir looks." } }
+      }
+    },
+    "suggestion.readyTitle" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Ready when you are" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Pronto quando você quiser" } }
+      }
+    },
+    "suggestion.readyPieceCount %lld" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld pieces in your wardrobe" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "%lld peças no seu guarda-roupa" } }
+      }
+    },
+    "suggestion.getSuggestion" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Get a suggestion" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Pedir uma sugestão" } }
+      }
+    },
+    "suggestion.yourLook" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your Look" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Seu Look" } }
+      }
+    },
+    "suggestion.tryAnother" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Try another" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Tentar outro" } }
+      }
+    },
+    "slider.safe" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Safe" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Seguro" } }
+      }
+    },
+    "slider.bold" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Bold" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Ousado" } }
+      }
+    },
+    "stats.inRotation" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "In Rotation" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Em Rotação" } }
+      }
+    },
+    "stats.rarelyUsed" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Rarely Used" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Pouco Usadas" } }
+      }
+    },
+    "stats.dormant" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Dormant" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Paradas" } }
+      }
+    },
+    "stats.timesWorn" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Times Worn" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Vezes Usada" } }
+      }
+    },
+    "stats.combinations" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Combinations" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Combinações" } }
+      }
+    },
+    "stats.lastUsed" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Last Used" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Último Uso" } }
+      }
+    },
+    "wardrobe.tabAll" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "All" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Todas" } }
+      }
+    },
+    "wardrobe.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Wardrobe" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Guarda-roupa" } }
+      }
+    },
+    "wardrobe.emptyTitle" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your wardrobe is empty" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Seu guarda-roupa está vazio" } }
+      }
+    },
+    "wardrobe.emptyMessage" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add your first pieces to get started" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Adicione suas primeiras peças para começar" } }
+      }
+    },
+    "wardrobe.addPiece" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add Piece" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Adicionar Peça" } }
+      }
+    },
+    "action.archive" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Archive" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Arquivar" } }
+      }
+    },
+    "action.restore" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Restore" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Restaurar" } }
+      }
+    },
+    "action.keep" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Keep" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Manter" } }
+      }
+    },
+    "action.remove" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Remove" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Remover" } }
+      }
+    },
+    "action.back" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Back" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Voltar" } }
+      }
+    },
+    "action.cancel" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cancel" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Cancelar" } }
+      }
+    },
+    "action.done" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Done" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "OK" } }
+      }
+    },
+    "action.continue" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Continue" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Continuar" } }
+      }
+    },
+    "action.skip" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Skip" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Pular" } }
+      }
+    },
+    "detail.pairsWith" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Pairs With" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Combina Com" } }
+      }
+    },
+    "detail.fit" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Fit" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Caimento" } }
+      }
+    },
+    "detail.material" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Material" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Material" } }
+      }
+    },
+    "detail.formality" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Formality" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Formalidade" } }
+      }
+    },
+    "dormant.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Unused Recently" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Sem Uso Recente" } }
+      }
+    },
+    "dormant.pieceCount %lld" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld pieces" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "%lld peças" } }
+      }
+    },
+    "dormant.description" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "These pieces haven't been used in over 30 days. Do they still belong in your wardrobe?" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Essas peças não são usadas há mais de 30 dias. Ainda pertencem ao seu guarda-roupa?" } }
+      }
+    },
+    "dormant.archiveAll" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Archive all dormant" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Arquivar todas paradas" } }
+      }
+    },
+    "dormant.unusedDays %lld" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Unused for %lld days" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Sem uso há %lld dias" } }
+      }
+    },
+    "registration.whatFit" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "What fit?" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Qual caimento?" } }
+      }
+    },
+    "registration.whatType" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "What type?" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Qual tipo?" } }
+      }
+    },
+    "registration.fabricWeight" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Fabric weight?" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Peso do tecido?" } }
+      }
+    },
+    "registration.formalityLevel" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Formality level?" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Nível de formalidade?" } }
+      }
+    },
+    "registration.added" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Added!" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Adicionado!" } }
+      }
+    },
+    "registration.whatColor" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "What color?" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Qual cor?" } }
+      }
+    },
+    "registration.customColor" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Custom Color" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Cor Personalizada" } }
+      }
+    },
+    "registration.whatMaterial" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "What material?" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Qual material?" } }
+      }
+    },
+    "registration.suggested" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Suggested" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Sugerido" } }
+      }
+    },
+    "registration.whatPiece" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "What type of piece?" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Que tipo de peça?" } }
+      }
+    },
+    "onboarding.tagline" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Dress with intention" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Vista-se com intenção" } }
+      }
+    },
+    "onboarding.welcomeDescription" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "KISE learns your wardrobe and suggests outfits based on your style, the weather, and where you're headed." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "O KISE aprende seu guarda-roupa e sugere looks com base no seu estilo, no clima e pra onde você vai." } }
+      }
+    },
+    "onboarding.getStarted" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Get Started" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Começar" } }
+      }
+    },
+    "onboarding.demoTitle" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your outfit, as color" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Seu look, em cores" } }
+      }
+    },
+    "onboarding.demoDescription" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "KISE shows your outfit as a color composition — tap to explore how pieces work together." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "O KISE mostra seu look como uma composição de cores — toque para explorar como as peças combinam." } }
+      }
+    },
+    "onboarding.locationTitle" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Weather-aware outfits" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Looks adaptados ao clima" } }
+      }
+    },
+    "onboarding.locationDescription" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "KISE uses your location to check the weather and suggest outfits that match your day. Your location is never stored or shared." } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "O KISE usa sua localização para verificar o clima e sugerir looks adequados ao seu dia. Sua localização nunca é armazenada ou compartilhada." } }
+      }
+    },
+    "onboarding.allowLocation" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Allow Location" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Permitir Localização" } }
+      }
+    },
+    "onboarding.selectStyles" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Select the styles that inspire you" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Selecione os estilos que te inspiram" } }
+      }
+    },
+    "settings.styleArchetypes" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Style archetypes" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Arquétipos de estilo" } }
+      }
+    },
+    "settings.profile" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Profile" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Perfil" } }
+      }
+    },
+    "settings.temperature" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Temperature" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Temperatura" } }
+      }
+    },
+    "settings.defaultOccasion" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Default occasion" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Ocasião padrão" } }
+      }
+    },
+    "settings.morningReminder" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Morning reminder" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Lembrete matinal" } }
+      }
+    },
+    "settings.reminderTime" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Reminder time" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Horário do lembrete" } }
+      }
+    },
+    "settings.preferences" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Preferences" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Preferências" } }
+      }
+    },
+    "settings.theme" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Theme" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Tema" } }
+      }
+    },
+    "settings.themeDefault" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Default" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Padrão" } }
+      }
+    },
+    "settings.themesSoon" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "More themes coming soon" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Mais temas em breve" } }
+      }
+    },
+    "settings.appearance" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Appearance" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Aparência" } }
+      }
+    },
+    "settings.version" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Version" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Versão" } }
+      }
+    },
+    "settings.madeWith" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Made with intention" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Feito com intenção" } }
+      }
+    },
+    "settings.about" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "About" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Sobre" } }
+      }
+    },
+    "settings.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Configurações" } }
+      }
+    },
+    "settings.none" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "None" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Nenhum" } }
+      }
+    },
+    "settings.styleArchetypesTitle" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Style Archetypes" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Arquétipos de Estilo" } }
+      }
+    },
+    "notification.outfitReady" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your outfit is ready" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Seu look está pronto" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

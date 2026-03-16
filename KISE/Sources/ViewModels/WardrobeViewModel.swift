@@ -83,13 +83,13 @@ final class WardrobeViewModel {
 
     func lastUsedText(for pieceID: UUID) -> String {
         guard let lastUsed = lastUsedLookup[pieceID] else {
-            return "New"
+            return String(localized: "lastUsed.new")
         }
         let days = Calendar.current.dateComponents([.day], from: lastUsed, to: Date()).day ?? 0
-        if days == 0 { return "Today" }
-        if days < 7 { return "\(days)d ago" }
-        if days < 30 { return "\(days / 7)w ago" }
-        return "\(days / 30)m ago"
+        if days == 0 { return String(localized: "lastUsed.today") }
+        if days < 7 { return "\(days)" + String(localized: "lastUsed.daysShort") }
+        if days < 30 { return "\(days / 7)" + String(localized: "lastUsed.weeksShort") }
+        return "\(days / 30)" + String(localized: "lastUsed.monthsShort")
     }
 
     static func archivePiece(_ piece: GarmentPiece) {

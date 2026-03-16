@@ -20,7 +20,7 @@ struct StyleOnboardingView: View {
                     .font(KISEDesign.Typography.largeTitle)
                     .foregroundStyle(theme.colors.textPrimary)
 
-                Text("Select the styles that inspire you")
+                Text("onboarding.selectStyles")
                     .font(KISEDesign.Typography.bodyText)
                     .foregroundStyle(theme.colors.textSecondary)
             }
@@ -50,7 +50,7 @@ struct StyleOnboardingView: View {
                 viewModel.saveProfile(context: modelContext)
                 appState.completeOnboarding()
             } label: {
-                Text("Continue")
+                Text("action.continue")
                     .font(KISEDesign.Typography.subtitle)
                     .foregroundStyle(theme.colors.background)
                     .frame(maxWidth: .infinity)
