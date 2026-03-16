@@ -54,16 +54,16 @@ enum GarmentCategory: String, Codable, CaseIterable, Identifiable {
 
     var availableMaterials: [String] {
         switch self {
-        case .tShirt, .polo: ["cotton", "linen", "synthetic"]
-        case .shirt: ["cotton", "linen", "synthetic"]
-        case .sweater: ["cotton", "wool", "cashmere", "synthetic"]
-        case .hoodie: ["cotton", "synthetic"]
-        case .jacket: ["cotton", "linen", "wool", "leather", "synthetic"]
-        case .coat: ["wool", "cotton", "synthetic"]
+        case .tShirt, .polo: ["cotton", "linen", "synthetic", "tricot", "jersey"]
+        case .shirt: ["cotton", "linen", "synthetic", "flannel", "silk"]
+        case .sweater: ["cotton", "wool", "cashmere", "synthetic", "tricot"]
+        case .hoodie: ["cotton", "synthetic", "jersey"]
+        case .jacket: ["cotton", "linen", "wool", "leather", "synthetic", "nylon", "fleece"]
+        case .coat: ["wool", "cotton", "synthetic", "down", "nylon", "fleece"]
         case .jeans: ["denim"]
-        case .chinos: ["cotton", "linen"]
-        case .shorts: ["cotton", "linen", "denim", "synthetic"]
-        case .shoes: ["leather", "suede", "canvas", "synthetic"]
+        case .chinos: ["cotton", "linen", "corduroy"]
+        case .shorts: ["cotton", "linen", "denim", "synthetic", "jogger"]
+        case .shoes: ["leather", "suede", "canvas", "synthetic", "mesh"]
         }
     }
 
@@ -86,6 +86,25 @@ enum Fit: String, Codable, CaseIterable, Identifiable {
     var displayName: String { rawValue.capitalized }
 }
 
+// MARK: - Shoe Type
+
+enum ShoeType: String, Codable, CaseIterable, Identifiable {
+    case sneakers, loafers, boots, oxfords, sandals, slides
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .sneakers: "Sneakers"
+        case .loafers: "Loafers"
+        case .boots: "Boots"
+        case .oxfords: "Oxfords"
+        case .sandals: "Sandals"
+        case .slides: "Slides"
+        }
+    }
+}
+
 // MARK: - Fabric Weight
 
 enum FabricWeight: String, Codable, CaseIterable, Identifiable {
@@ -97,13 +116,10 @@ enum FabricWeight: String, Codable, CaseIterable, Identifiable {
 
     static func defaultWeight(for material: String) -> FabricWeight {
         switch material.lowercased() {
-        case "linen": .light
-        case "cotton": .mid
-        case "denim": .mid
-        case "wool", "cashmere", "leather": .heavy
-        case "suede": .mid
-        case "canvas": .mid
-        case "synthetic": .light
+        case "linen", "silk", "mesh": .light
+        case "cotton", "denim", "suede", "canvas", "jersey", "nylon": .mid
+        case "wool", "cashmere", "leather", "down", "corduroy", "flannel", "fleece": .heavy
+        case "synthetic", "tricot", "jogger": .light
         default: .mid
         }
     }
