@@ -6,6 +6,9 @@ struct WardrobeView: View {
     @Query(filter: #Predicate<GarmentPiece> { $0.isActive })
     private var pieces: [GarmentPiece]
 
+    @Query(sort: \OutfitSuggestion.suggestedAt, order: .reverse)
+    private var suggestions: [OutfitSuggestion]
+
     @State private var viewModel = WardrobeViewModel()
 
     private let columns = [
@@ -83,6 +86,15 @@ struct WardrobeView: View {
                     GarmentDetailView(piece: piece)
                 }
             }
+            .onAppear {
+                viewModel.computeStats(pieces: pieces, suggestions: suggestions)
+            }
+            .onChange(of: pieces.count) {
+                viewModel.computeStats(pieces: pieces, suggestions: suggestions)
+            }
+            .onChange(of: suggestions.count) {
+                viewModel.computeStats(pieces: pieces, suggestions: suggestions)
+            }
         }
     }
 
@@ -122,7 +134,9 @@ struct WardrobeView: View {
             colorHex: piece.colorHex,
             colorName: piece.color,
             category: piece.category.displayName,
-            fit: piece.fit.displayName
+            material: piece.material,
+            lastUsedText: viewModel.lastUsedText(for: piece.id),
+            daysUnused: viewModel.daysUnused(for: piece)
         )
     }
 }
