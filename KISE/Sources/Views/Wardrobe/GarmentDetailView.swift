@@ -34,6 +34,7 @@ struct GarmentDetailView: View {
         let wearCount = pieceSuggestions.filter { $0.feedback?.liked == true }.count
         let combinationsCount = pieceSuggestions.count
         let lastUsed = lastUsedTextFrom(pieceSuggestions)
+        let lookup = pieceLookup
 
         ScrollView {
             VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
@@ -67,7 +68,7 @@ struct GarmentDetailView: View {
 
                 // Pairs With
                 if !pieceSuggestions.isEmpty {
-                    pairsWithSection(pieceSuggestions)
+                    pairsWithSection(pieceSuggestions, lookup: lookup)
                 }
             }
             .padding(KISEDesign.Spacing.md)
@@ -101,7 +102,7 @@ struct GarmentDetailView: View {
 
     // MARK: - Pairs With
 
-    private func pairsWithSection(_ pieceSuggestions: [OutfitSuggestion]) -> some View {
+    private func pairsWithSection(_ pieceSuggestions: [OutfitSuggestion], lookup: [UUID: GarmentPiece]) -> some View {
         VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
             Text("Pairs With")
                 .kiseSectionLabel()
@@ -109,15 +110,15 @@ struct GarmentDetailView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: KISEDesign.Spacing.sm) {
                     ForEach(Array(pieceSuggestions.prefix(10)), id: \.id) { suggestion in
-                        miniComposition(suggestion)
+                        miniComposition(suggestion, lookup: lookup)
                     }
                 }
             }
         }
     }
 
-    private func miniComposition(_ suggestion: OutfitSuggestion) -> some View {
-        let pieces = suggestion.pieceIDs.compactMap { pieceLookup[$0] }
+    private func miniComposition(_ suggestion: OutfitSuggestion, lookup: [UUID: GarmentPiece]) -> some View {
+        let pieces = suggestion.pieceIDs.compactMap { lookup[$0] }
         let layout = CompositionLayout.pick(for: suggestion.pieceIDs)
         let sorted = pieces.sorted { a, b in
             CompositionLayout.sizePriority(for: a.category) > CompositionLayout.sizePriority(for: b.category)
