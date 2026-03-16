@@ -27,6 +27,10 @@ final class SuggestionViewModel {
     private let suggestionService = SuggestionService()
     private let weatherService = WeatherService()
 
+    func fetchWeather() async {
+        await weatherService.fetchWeather()
+    }
+
     var hasMinimumPieces: Bool {
         !suggestedPieces.isEmpty || currentSuggestion != nil
     }

@@ -34,6 +34,9 @@ struct SuggestionView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.hidden, for: .navigationBar)
+            .task {
+                await viewModel.fetchWeather()
+            }
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("Today")
