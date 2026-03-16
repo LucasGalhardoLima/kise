@@ -36,7 +36,7 @@ struct ContentView: View {
             if appState.hasCompletedOnboarding {
                 MainTabView()
             } else {
-                StyleOnboardingView()
+                OnboardingFlowView()
             }
         }
         .onAppear {
@@ -78,23 +78,20 @@ struct MainTabView: View {
         }
     }
 
-    @ViewBuilder
     private var addPieceButton: some View {
-        let button = Button {
+        Button {
             showRegistration = true
         } label: {
-            Image(systemName: "plus")
-                .font(.title3)
-                .fontWeight(.semibold)
-                .foregroundStyle(KISEDesign.Colors.accent)
-                .frame(width: 50, height: 50)
+            Circle()
+                .fill(KISEDesign.Colors.accent)
+                .frame(width: 56, height: 56)
+                .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
+                .overlay(
+                    Image(systemName: "plus")
+                        .font(.title2.weight(.medium))
+                        .foregroundStyle(.white)
+                )
         }
         .buttonStyle(.plain)
-        if #available(iOS 26, *) {
-            button.glassEffect(.regular.interactive(), in: .circle)
-        } else {
-            button
-                .background(KISEDesign.Colors.accent, in: Circle())
-        }
     }
 }
