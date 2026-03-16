@@ -151,33 +151,30 @@ struct SuggestionView: View {
     // MARK: - Suggestion Content
 
     private var suggestionContent: some View {
-        VStack(spacing: KISEDesign.Spacing.lg) {
+        VStack(spacing: KISEDesign.Spacing.md) {
             // 1. Weather
             weatherSection
 
-            // 2. Your Look + Composition
+            // 2. Occasion pills (context-setter, ABOVE the outfit)
+            occasionPills
+
+            // 3. YOUR LOOK + Composition + Piece names
             VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
                 Text("Your Look")
                     .kiseSectionLabel()
                 outfitCards
             }
 
-            // 3. Reasoning
+            // 4. Reasoning + layering note + alternative swap
             if let suggestion = viewModel.currentSuggestion {
                 reasoningSection(suggestion)
             }
 
-            // 4. Feedback
-            feedbackButtons
+            // 5. Boldness slider (thin, inline)
+            thinBoldnessSlider
 
-            // 5. Occasion pills (always visible)
-            occasionPills
-
-            // 6. Boldness slider (always visible, gradient)
-            gradientBoldnessSlider
-
-            // 7. Try another
-            regenerateButton
+            // 6. Action row (feedback + regenerate, one line)
+            actionRow
         }
     }
 
@@ -202,7 +199,7 @@ struct SuggestionView: View {
                         .background(
                             viewModel.occasion == occasion
                                 ? KISEDesign.Colors.accent
-                                : KISEDesign.Colors.surface
+                                : Color.clear
                         )
                         .clipShape(Capsule())
                         .overlay(
@@ -214,28 +211,32 @@ struct SuggestionView: View {
         }
     }
 
-    // MARK: - Gradient Boldness Slider
+    // MARK: - Thin Boldness Slider
 
-    private var gradientBoldnessSlider: some View {
-        VStack(spacing: KISEDesign.Spacing.xs) {
-            HStack {
-                Text("Safe")
-                    .font(KISEDesign.Typography.small)
-                    .foregroundStyle(KISEDesign.Colors.textTertiary)
-                Spacer()
-                Text("Bold")
-                    .font(KISEDesign.Typography.small)
-                    .foregroundStyle(KISEDesign.Colors.textTertiary)
-            }
+    private var thinBoldnessSlider: some View {
+        HStack(spacing: KISEDesign.Spacing.sm) {
+            Text("Safe")
+                .font(KISEDesign.Typography.small)
+                .tracking(1)
+                .textCase(.uppercase)
+                .foregroundStyle(KISEDesign.Colors.textTertiary)
 
             GradientTrackSlider(
                 value: $viewModel.boldness,
+                trackHeight: 3,
+                thumbSize: 14,
                 onEditingChanged: { editing in
                     if !editing {
                         Task { await viewModel.regenerate(context: modelContext) }
                     }
                 }
             )
+
+            Text("Bold")
+                .font(KISEDesign.Typography.small)
+                .tracking(1)
+                .textCase(.uppercase)
+                .foregroundStyle(KISEDesign.Colors.textTertiary)
         }
     }
 
@@ -285,15 +286,15 @@ struct SuggestionView: View {
         .padding(KISEDesign.Spacing.md)
     }
 
-    // MARK: - Feedback
+    // MARK: - Action Row
 
-    private var feedbackButtons: some View {
-        HStack(spacing: KISEDesign.Spacing.xl) {
+    private var actionRow: some View {
+        HStack(spacing: KISEDesign.Spacing.lg) {
             Button {
                 viewModel.submitFeedback(liked: false, context: modelContext)
             } label: {
                 Image(systemName: viewModel.currentSuggestion?.feedback?.liked == false ? "hand.thumbsdown.fill" : "hand.thumbsdown")
-                    .font(.title2)
+                    .font(.body)
                     .foregroundStyle(
                         viewModel.currentSuggestion?.feedback?.liked == false
                             ? KISEDesign.Colors.disliked
@@ -302,10 +303,27 @@ struct SuggestionView: View {
             }
 
             Button {
+                Task { await viewModel.regenerate(context: modelContext) }
+            } label: {
+                HStack(spacing: KISEDesign.Spacing.xs) {
+                    Image(systemName: "arrow.clockwise")
+                    Text("Try another")
+                }
+                .font(KISEDesign.Typography.caption)
+                .foregroundStyle(KISEDesign.Colors.textTertiary)
+                .padding(.horizontal, KISEDesign.Spacing.md)
+                .padding(.vertical, KISEDesign.Spacing.sm)
+                .overlay(
+                    Capsule()
+                        .strokeBorder(KISEDesign.Colors.border, lineWidth: 1)
+                )
+            }
+
+            Button {
                 viewModel.submitFeedback(liked: true, context: modelContext)
             } label: {
                 Image(systemName: viewModel.currentSuggestion?.feedback?.liked == true ? "hand.thumbsup.fill" : "hand.thumbsup")
-                    .font(.title2)
+                    .font(.body)
                     .foregroundStyle(
                         viewModel.currentSuggestion?.feedback?.liked == true
                             ? KISEDesign.Colors.liked
@@ -313,31 +331,7 @@ struct SuggestionView: View {
                     )
             }
         }
-        .padding(.vertical, KISEDesign.Spacing.sm)
-    }
-
-    // MARK: - Regenerate
-
-    private var regenerateButton: some View {
-        Button {
-            Task {
-                await viewModel.regenerate(context: modelContext)
-            }
-        } label: {
-            HStack(spacing: KISEDesign.Spacing.sm) {
-                Image(systemName: "arrow.clockwise")
-                Text("Try another")
-            }
-            .font(KISEDesign.Typography.caption)
-            .foregroundStyle(KISEDesign.Colors.textSecondary)
-            .padding(.horizontal, KISEDesign.Spacing.md)
-            .padding(.vertical, KISEDesign.Spacing.sm)
-            .overlay(
-                Capsule()
-                    .strokeBorder(KISEDesign.Colors.border, lineWidth: 1)
-            )
-        }
-        .padding(.bottom, KISEDesign.Spacing.lg)
+        .padding(.bottom, KISEDesign.Spacing.md)
     }
 }
 
@@ -345,23 +339,21 @@ struct SuggestionView: View {
 
 private struct GradientTrackSlider: View {
     @Binding var value: Double
+    var trackHeight: CGFloat = 3
+    var thumbSize: CGFloat = 14
     var onEditingChanged: (Bool) -> Void = { _ in }
     @State private var isEditing = false
 
     var body: some View {
         GeometryReader { geo in
-            let thumbSize: CGFloat = 24
-            let trackHeight: CGFloat = 4
             let usableWidth = geo.size.width - thumbSize
             let thumbX = thumbSize / 2 + usableWidth * value
 
             ZStack {
-                // Background track
                 Capsule()
                     .fill(KISEDesign.Colors.border)
                     .frame(height: trackHeight)
 
-                // Gradient fill
                 Capsule()
                     .fill(
                         LinearGradient(
@@ -373,10 +365,9 @@ private struct GradientTrackSlider: View {
                     .frame(width: max(trackHeight, thumbX), height: trackHeight)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                // Thumb
                 Circle()
                     .fill(.white)
-                    .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
+                    .shadow(color: .black.opacity(0.12), radius: 4, y: 2)
                     .frame(width: thumbSize, height: thumbSize)
                     .position(x: thumbX, y: geo.size.height / 2)
             }
@@ -401,6 +392,6 @@ private struct GradientTrackSlider: View {
                     }
             )
         }
-        .frame(height: 24)
+        .frame(height: thumbSize)
     }
 }
