@@ -67,7 +67,7 @@ struct SuggestionView: View {
                         .foregroundStyle(KISEDesign.Colors.textSecondary)
                 }
                 Text("\(Int(weather.temperature))°")
-                    .font(KISEDesign.Typography.largeTitle)
+                    .font(KISEDesign.Typography.title)
                     .foregroundStyle(KISEDesign.Colors.textPrimary)
                 Text("Feels like \(Int(weather.feelsLike))° · Humidity \(Int(weather.humidity))% · Wind \(Int(weather.windSpeed))km/h · \(weather.condition)")
                     .font(KISEDesign.Typography.caption)
