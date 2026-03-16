@@ -4,6 +4,7 @@ import SwiftData
 import UserNotifications
 
 struct SettingsView: View {
+    @Environment(ThemeProvider.self) private var theme
     @Environment(\.modelContext) private var modelContext
     @Query private var profiles: [StyleProfile]
 
@@ -29,7 +30,7 @@ struct SettingsView: View {
                             Spacer()
                             Text(currentArchetypesSummary)
                                 .font(KISEDesign.Typography.caption)
-                                .foregroundStyle(KISEDesign.Colors.textSecondary)
+                                .foregroundStyle(theme.colors.textSecondary)
                                 .lineLimit(1)
                         }
                     }
@@ -68,7 +69,7 @@ struct SettingsView: View {
                         Text("Morning reminder")
                             .font(KISEDesign.Typography.bodyText)
                     }
-                    .tint(KISEDesign.Colors.accent)
+                    .tint(theme.colors.accent)
                     .onChange(of: morningNotification) { _, enabled in
                         if enabled {
                             requestNotificationPermission()
@@ -99,11 +100,11 @@ struct SettingsView: View {
                         Spacer()
                         Text("Default")
                             .font(KISEDesign.Typography.caption)
-                            .foregroundStyle(KISEDesign.Colors.textSecondary)
+                            .foregroundStyle(theme.colors.textSecondary)
                     }
                     Text("More themes coming soon")
                         .font(KISEDesign.Typography.small)
-                        .foregroundStyle(KISEDesign.Colors.textTertiary)
+                        .foregroundStyle(theme.colors.textTertiary)
                 } header: {
                     Text("Appearance")
                         .font(KISEDesign.Typography.caption)
@@ -117,11 +118,11 @@ struct SettingsView: View {
                         Spacer()
                         Text("1.0.0")
                             .font(KISEDesign.Typography.caption)
-                            .foregroundStyle(KISEDesign.Colors.textSecondary)
+                            .foregroundStyle(theme.colors.textSecondary)
                     }
                     Text("Made with intention")
                         .font(KISEDesign.Typography.small)
-                        .foregroundStyle(KISEDesign.Colors.textTertiary)
+                        .foregroundStyle(theme.colors.textTertiary)
                         .frame(maxWidth: .infinity)
                         .listRowBackground(Color.clear)
                 } header: {
@@ -135,7 +136,7 @@ struct SettingsView: View {
                 ToolbarItem(placement: .principal) {
                     Text("Settings")
                         .font(KISEDesign.Typography.largeTitle)
-                        .foregroundStyle(KISEDesign.Colors.textPrimary)
+                        .foregroundStyle(theme.colors.textPrimary)
                 }
             }
         }
@@ -206,17 +207,17 @@ struct SettingsView: View {
                     } label: {
                         VStack(spacing: KISEDesign.Spacing.sm) {
                             RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
-                                .fill(KISEDesign.Colors.surface)
+                                .fill(theme.colors.surface)
                                 .frame(height: 100)
                                 .overlay(
                                     Text(archetype.displayName)
                                         .font(KISEDesign.Typography.subtitle)
-                                        .foregroundStyle(KISEDesign.Colors.textPrimary)
+                                        .foregroundStyle(theme.colors.textPrimary)
                                 )
                                 .overlay(
                                     RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
                                         .strokeBorder(
-                                            selectedArchetypes.contains(archetype) ? KISEDesign.Colors.accent : Color.clear,
+                                            selectedArchetypes.contains(archetype) ? theme.colors.accent : Color.clear,
                                             lineWidth: 2
                                         )
                                 )
@@ -228,7 +229,7 @@ struct SettingsView: View {
             .padding(KISEDesign.Spacing.md)
         }
         .navigationTitle("Style Archetypes")
-        .background(KISEDesign.Colors.background)
+        .background(theme.colors.background)
     }
 
     private func toggleArchetype(_ archetype: StyleArchetype) {

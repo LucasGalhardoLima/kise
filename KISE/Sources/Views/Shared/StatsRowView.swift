@@ -10,6 +10,7 @@ struct StatItem: Identifiable {
 }
 
 struct StatsRowView: View {
+    @Environment(ThemeProvider.self) private var theme
     let items: [StatItem]
 
     var body: some View {
@@ -43,7 +44,7 @@ struct StatsRowView: View {
         VStack(spacing: KISEDesign.Spacing.xs) {
             Text(item.displayValue ?? "\(item.count)")
                 .font(KISEDesign.Typography.title)
-                .foregroundStyle(KISEDesign.Colors.textPrimary)
+                .foregroundStyle(theme.colors.textPrimary)
             Text(item.label)
                 .kiseSectionLabel()
         }

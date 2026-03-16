@@ -3,6 +3,7 @@ import SwiftUI
 import SwiftData
 
 struct DormantPiecesView: View {
+    @Environment(ThemeProvider.self) private var theme
     @Query(filter: #Predicate<GarmentPiece> { $0.isActive })
     private var pieces: [GarmentPiece]
 
@@ -20,20 +21,20 @@ struct DormantPiecesView: View {
                 HStack(alignment: .firstTextBaseline) {
                     Text("Unused Recently")
                         .font(KISEDesign.Typography.largeTitle)
-                        .foregroundStyle(KISEDesign.Colors.textPrimary)
+                        .foregroundStyle(theme.colors.textPrimary)
                     Spacer()
                     Text("\(unusedPieces.count) pieces")
                         .font(KISEDesign.Typography.caption)
-                        .foregroundStyle(KISEDesign.Colors.textSecondary)
+                        .foregroundStyle(theme.colors.textSecondary)
                         .padding(.horizontal, KISEDesign.Spacing.sm)
                         .padding(.vertical, KISEDesign.Spacing.xs)
-                        .background(KISEDesign.Colors.surface)
+                        .background(theme.colors.surface)
                         .clipShape(Capsule())
                 }
 
                 Text("These pieces haven't been used in over 30 days. Do they still belong in your wardrobe?")
                     .font(KISEDesign.Typography.bodyText)
-                    .foregroundStyle(KISEDesign.Colors.textSecondary)
+                    .foregroundStyle(theme.colors.textSecondary)
 
                 // Piece list
                 LazyVStack(spacing: 0) {
@@ -54,12 +55,12 @@ struct DormantPiecesView: View {
                     } label: {
                         Text("Archive all dormant")
                             .font(KISEDesign.Typography.bodyText)
-                            .foregroundStyle(KISEDesign.Colors.textSecondary)
+                            .foregroundStyle(theme.colors.textSecondary)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, KISEDesign.Spacing.md)
                             .overlay(
                                 RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
-                                    .strokeBorder(KISEDesign.Colors.accentMuted, lineWidth: 1)
+                                    .strokeBorder(theme.colors.accentMuted, lineWidth: 1)
                             )
                     }
                     .padding(.top, KISEDesign.Spacing.md)
@@ -67,7 +68,7 @@ struct DormantPiecesView: View {
             }
             .padding(KISEDesign.Spacing.md)
         }
-        .background(KISEDesign.Colors.background)
+        .background(theme.colors.background)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.hidden, for: .navigationBar)
     }
@@ -83,7 +84,7 @@ struct DormantPiecesView: View {
                 .overlay {
                     if garmentColor.needsBorder {
                         RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
-                            .strokeBorder(KISEDesign.Colors.border, lineWidth: 1)
+                            .strokeBorder(theme.colors.border, lineWidth: 1)
                     }
                 }
 
@@ -91,13 +92,13 @@ struct DormantPiecesView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text("\(garmentColor.name) \(info.piece.category.displayName)")
                     .font(KISEDesign.Typography.subtitle)
-                    .foregroundStyle(KISEDesign.Colors.textPrimary)
+                    .foregroundStyle(theme.colors.textPrimary)
                 Text("Unused for \(info.daysUnused) days")
                     .font(KISEDesign.Typography.caption)
-                    .foregroundStyle(KISEDesign.Colors.disliked)
+                    .foregroundStyle(theme.colors.disliked)
                 Text("\(info.piece.material.capitalized) · \(garmentColor.name)")
                     .font(KISEDesign.Typography.caption)
-                    .foregroundStyle(KISEDesign.Colors.textTertiary)
+                    .foregroundStyle(theme.colors.textTertiary)
             }
 
             Spacer()
@@ -109,7 +110,7 @@ struct DormantPiecesView: View {
                 } label: {
                     Text("Keep")
                         .font(KISEDesign.Typography.caption)
-                        .foregroundStyle(KISEDesign.Colors.accent)
+                        .foregroundStyle(theme.colors.accent)
                 }
 
                 Button {
@@ -117,7 +118,7 @@ struct DormantPiecesView: View {
                 } label: {
                     Text("Remove")
                         .font(KISEDesign.Typography.caption)
-                        .foregroundStyle(KISEDesign.Colors.disliked)
+                        .foregroundStyle(theme.colors.disliked)
                 }
             }
         }

@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct WelcomeView: View {
+    @Environment(ThemeProvider.self) private var theme
     let onContinue: () -> Void
 
     var body: some View {
@@ -11,16 +12,16 @@ struct WelcomeView: View {
             VStack(spacing: KISEDesign.Spacing.md) {
                 Text("KISE")
                     .font(KISEDesign.Typography.brand(48))
-                    .foregroundStyle(KISEDesign.Colors.textPrimary)
+                    .foregroundStyle(theme.colors.textPrimary)
 
                 Text("Dress with intention")
                     .font(KISEDesign.Typography.title)
-                    .foregroundStyle(KISEDesign.Colors.textSecondary)
+                    .foregroundStyle(theme.colors.textSecondary)
             }
 
             Text("KISE learns your wardrobe and suggests outfits based on your style, the weather, and where you're headed.")
                 .font(KISEDesign.Typography.bodyText)
-                .foregroundStyle(KISEDesign.Colors.textSecondary)
+                .foregroundStyle(theme.colors.textSecondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, KISEDesign.Spacing.xl)
 
@@ -31,15 +32,15 @@ struct WelcomeView: View {
             } label: {
                 Text("Get Started")
                     .font(KISEDesign.Typography.subtitle)
-                    .foregroundStyle(KISEDesign.Colors.background)
+                    .foregroundStyle(theme.colors.background)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, KISEDesign.Spacing.md)
-                    .background(KISEDesign.Colors.accent)
+                    .background(theme.colors.accent)
                     .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
             }
             .padding(.horizontal, KISEDesign.Spacing.md)
             .padding(.bottom, KISEDesign.Spacing.lg)
         }
-        .background(KISEDesign.Colors.background)
+        .background(theme.colors.background)
     }
 }

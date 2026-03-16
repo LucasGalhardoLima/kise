@@ -3,6 +3,7 @@ import SwiftUI
 import SwiftData
 
 struct SuggestionView: View {
+    @Environment(ThemeProvider.self) private var theme
     @Environment(\.modelContext) private var modelContext
     @State private var viewModel = SuggestionViewModel()
     @Query(filter: #Predicate<GarmentPiece> { $0.isActive })
@@ -11,7 +12,7 @@ struct SuggestionView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                KISEDesign.Colors.background.ignoresSafeArea()
+                theme.colors.background.ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: KISEDesign.Spacing.lg) {
@@ -41,7 +42,7 @@ struct SuggestionView: View {
                 ToolbarItem(placement: .principal) {
                     Text("Today")
                         .font(KISEDesign.Typography.largeTitle)
-                        .foregroundStyle(KISEDesign.Colors.textPrimary)
+                        .foregroundStyle(theme.colors.textPrimary)
                 }
             }
         }
@@ -67,14 +68,14 @@ struct SuggestionView: View {
                 if let city = viewModel.cityName {
                     Text(city)
                         .font(KISEDesign.Typography.bodyText)
-                        .foregroundStyle(KISEDesign.Colors.textSecondary)
+                        .foregroundStyle(theme.colors.textSecondary)
                 }
                 Text("\(Int(weather.temperature))°")
                     .font(KISEDesign.Typography.title)
-                    .foregroundStyle(KISEDesign.Colors.textPrimary)
+                    .foregroundStyle(theme.colors.textPrimary)
                 Text("Feels like \(Int(weather.feelsLike))° · Humidity \(Int(weather.humidity))% · Wind \(Int(weather.windSpeed))km/h · \(weather.condition)")
                     .font(KISEDesign.Typography.caption)
-                    .foregroundStyle(KISEDesign.Colors.textTertiary)
+                    .foregroundStyle(theme.colors.textTertiary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
             }
@@ -95,7 +96,7 @@ struct SuggestionView: View {
 
     private var skeletonCard: some View {
         RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
-            .fill(KISEDesign.Colors.surface)
+            .fill(theme.colors.surface)
             .frame(height: 120)
             .overlay(
                 RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
@@ -103,7 +104,7 @@ struct SuggestionView: View {
                         LinearGradient(
                             colors: [
                                 Color.clear,
-                                KISEDesign.Colors.border.opacity(0.3),
+                                theme.colors.border.opacity(0.3),
                                 Color.clear,
                             ],
                             startPoint: .leading,
@@ -126,11 +127,11 @@ struct SuggestionView: View {
 
             Text("Ready when you are")
                 .font(KISEDesign.Typography.title)
-                .foregroundStyle(KISEDesign.Colors.textPrimary)
+                .foregroundStyle(theme.colors.textPrimary)
 
             Text("\(activePieces.count) pieces in your wardrobe")
                 .font(KISEDesign.Typography.bodyText)
-                .foregroundStyle(KISEDesign.Colors.textSecondary)
+                .foregroundStyle(theme.colors.textSecondary)
 
             Button {
                 Task {
@@ -139,10 +140,10 @@ struct SuggestionView: View {
             } label: {
                 Text("Get a suggestion")
                     .font(KISEDesign.Typography.subtitle)
-                    .foregroundStyle(KISEDesign.Colors.background)
+                    .foregroundStyle(theme.colors.background)
                     .padding(.horizontal, KISEDesign.Spacing.xl)
                     .padding(.vertical, KISEDesign.Spacing.md)
-                    .background(KISEDesign.Colors.accent)
+                    .background(theme.colors.accent)
                     .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
             }
         }
@@ -191,20 +192,20 @@ struct SuggestionView: View {
                         .font(KISEDesign.Typography.caption)
                         .foregroundStyle(
                             viewModel.occasion == occasion
-                                ? KISEDesign.Colors.background
-                                : KISEDesign.Colors.textPrimary
+                                ? theme.colors.background
+                                : theme.colors.textPrimary
                         )
                         .padding(.horizontal, KISEDesign.Spacing.sm)
                         .padding(.vertical, KISEDesign.Spacing.xs)
                         .background(
                             viewModel.occasion == occasion
-                                ? KISEDesign.Colors.accent
+                                ? theme.colors.accent
                                 : Color.clear
                         )
                         .clipShape(Capsule())
                         .overlay(
                             Capsule()
-                                .strokeBorder(KISEDesign.Colors.accentMuted, lineWidth: viewModel.occasion == occasion ? 0 : 1)
+                                .strokeBorder(theme.colors.accentMuted, lineWidth: viewModel.occasion == occasion ? 0 : 1)
                         )
                 }
             }
@@ -219,7 +220,7 @@ struct SuggestionView: View {
                 .font(KISEDesign.Typography.small)
                 .tracking(1)
                 .textCase(.uppercase)
-                .foregroundStyle(KISEDesign.Colors.textTertiary)
+                .foregroundStyle(theme.colors.textTertiary)
 
             GradientTrackSlider(
                 value: $viewModel.boldness,
@@ -236,7 +237,7 @@ struct SuggestionView: View {
                 .font(KISEDesign.Typography.small)
                 .tracking(1)
                 .textCase(.uppercase)
-                .foregroundStyle(KISEDesign.Colors.textTertiary)
+                .foregroundStyle(theme.colors.textTertiary)
         }
     }
 
@@ -258,16 +259,16 @@ struct SuggestionView: View {
         VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
             Text(suggestion.reasoning)
                 .font(KISEDesign.Typography.bodyText)
-                .foregroundStyle(KISEDesign.Colors.textSecondary)
+                .foregroundStyle(theme.colors.textSecondary)
 
             if let note = suggestion.layeringNote {
                 HStack(alignment: .top, spacing: KISEDesign.Spacing.sm) {
                     Image(systemName: "cloud.sun")
                         .font(.caption)
-                        .foregroundStyle(KISEDesign.Colors.textTertiary)
+                        .foregroundStyle(theme.colors.textTertiary)
                     Text(note)
                         .font(KISEDesign.Typography.caption)
-                        .foregroundStyle(KISEDesign.Colors.textTertiary)
+                        .foregroundStyle(theme.colors.textTertiary)
                 }
             }
 
@@ -275,10 +276,10 @@ struct SuggestionView: View {
                 HStack(alignment: .top, spacing: KISEDesign.Spacing.sm) {
                     Image(systemName: "arrow.triangle.2.circlepath")
                         .font(.caption)
-                        .foregroundStyle(KISEDesign.Colors.textTertiary)
+                        .foregroundStyle(theme.colors.textTertiary)
                     Text(swap.reason)
                         .font(KISEDesign.Typography.caption)
-                        .foregroundStyle(KISEDesign.Colors.textTertiary)
+                        .foregroundStyle(theme.colors.textTertiary)
                 }
             }
         }
@@ -297,8 +298,8 @@ struct SuggestionView: View {
                     .font(.body)
                     .foregroundStyle(
                         viewModel.currentSuggestion?.feedback?.liked == false
-                            ? KISEDesign.Colors.disliked
-                            : KISEDesign.Colors.textTertiary
+                            ? theme.colors.disliked
+                            : theme.colors.textTertiary
                     )
             }
 
@@ -310,12 +311,12 @@ struct SuggestionView: View {
                     Text("Try another")
                 }
                 .font(KISEDesign.Typography.caption)
-                .foregroundStyle(KISEDesign.Colors.textTertiary)
+                .foregroundStyle(theme.colors.textTertiary)
                 .padding(.horizontal, KISEDesign.Spacing.md)
                 .padding(.vertical, KISEDesign.Spacing.sm)
                 .overlay(
                     Capsule()
-                        .strokeBorder(KISEDesign.Colors.border, lineWidth: 1)
+                        .strokeBorder(theme.colors.border, lineWidth: 1)
                 )
             }
 
@@ -326,8 +327,8 @@ struct SuggestionView: View {
                     .font(.body)
                     .foregroundStyle(
                         viewModel.currentSuggestion?.feedback?.liked == true
-                            ? KISEDesign.Colors.liked
-                            : KISEDesign.Colors.textTertiary
+                            ? theme.colors.liked
+                            : theme.colors.textTertiary
                     )
             }
         }
@@ -338,6 +339,7 @@ struct SuggestionView: View {
 // MARK: - Gradient Track Slider
 
 private struct GradientTrackSlider: View {
+    @Environment(ThemeProvider.self) private var theme
     @Binding var value: Double
     var trackHeight: CGFloat = 3
     var thumbSize: CGFloat = 14
@@ -351,13 +353,13 @@ private struct GradientTrackSlider: View {
 
             ZStack {
                 Capsule()
-                    .fill(KISEDesign.Colors.border)
+                    .fill(theme.colors.border)
                     .frame(height: trackHeight)
 
                 Capsule()
                     .fill(
                         LinearGradient(
-                            colors: [KISEDesign.Colors.accentMuted, KISEDesign.Colors.accent],
+                            colors: [theme.colors.accentMuted, theme.colors.accent],
                             startPoint: .leading,
                             endPoint: .trailing
                         )

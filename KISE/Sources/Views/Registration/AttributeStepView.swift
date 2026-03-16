@@ -4,6 +4,7 @@ import SwiftUI
 // MARK: - Generic Option Picker Step
 
 struct OptionPickerStepView<T: Identifiable>: View where T: Equatable {
+    @Environment(ThemeProvider.self) private var theme
     let title: String
     let options: [T]
     let labelFor: (T) -> String
@@ -14,7 +15,7 @@ struct OptionPickerStepView<T: Identifiable>: View where T: Equatable {
         VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
             Text(title)
                 .font(KISEDesign.Typography.title)
-                .foregroundStyle(KISEDesign.Colors.textPrimary)
+                .foregroundStyle(theme.colors.textPrimary)
 
             VStack(spacing: KISEDesign.Spacing.sm) {
                 ForEach(options) { option in
@@ -24,14 +25,14 @@ struct OptionPickerStepView<T: Identifiable>: View where T: Equatable {
                         HStack {
                             Text(labelFor(option))
                                 .font(KISEDesign.Typography.bodyText)
-                                .foregroundStyle(KISEDesign.Colors.textPrimary)
+                                .foregroundStyle(theme.colors.textPrimary)
 
                             Spacer()
 
                             if let suggested, suggested.id as AnyHashable == option.id as AnyHashable {
                                 Text("Suggested")
                                     .font(KISEDesign.Typography.small)
-                                    .foregroundStyle(KISEDesign.Colors.textTertiary)
+                                    .foregroundStyle(theme.colors.textTertiary)
                             }
                         }
                         .padding(KISEDesign.Spacing.md)
@@ -46,6 +47,7 @@ struct OptionPickerStepView<T: Identifiable>: View where T: Equatable {
 // MARK: - Material Picker (String-based)
 
 struct MaterialPickerStepView: View {
+    @Environment(ThemeProvider.self) private var theme
     let materials: [String]
     let onSelect: (String) -> Void
 
@@ -53,7 +55,7 @@ struct MaterialPickerStepView: View {
         VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
             Text("What material?")
                 .font(KISEDesign.Typography.title)
-                .foregroundStyle(KISEDesign.Colors.textPrimary)
+                .foregroundStyle(theme.colors.textPrimary)
 
             VStack(spacing: KISEDesign.Spacing.sm) {
                 ForEach(materials, id: \.self) { material in
@@ -62,7 +64,7 @@ struct MaterialPickerStepView: View {
                     } label: {
                         Text(material.capitalized)
                             .font(KISEDesign.Typography.bodyText)
-                            .foregroundStyle(KISEDesign.Colors.textPrimary)
+                            .foregroundStyle(theme.colors.textPrimary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(KISEDesign.Spacing.md)
                             .kiseCard()

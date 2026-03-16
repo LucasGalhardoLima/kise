@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct EmptyStateView: View {
+    @Environment(ThemeProvider.self) private var theme
     let title: String
     let message: String
     let actionLabel: String?
@@ -18,21 +19,21 @@ struct EmptyStateView: View {
         VStack(spacing: KISEDesign.Spacing.md) {
             Text(title)
                 .font(KISEDesign.Typography.title)
-                .foregroundStyle(KISEDesign.Colors.textPrimary)
+                .foregroundStyle(theme.colors.textPrimary)
 
             Text(message)
                 .font(KISEDesign.Typography.bodyText)
-                .foregroundStyle(KISEDesign.Colors.textSecondary)
+                .foregroundStyle(theme.colors.textSecondary)
                 .multilineTextAlignment(.center)
 
             if let actionLabel, let action {
                 Button(action: action) {
                     Text(actionLabel)
                         .font(KISEDesign.Typography.subtitle)
-                        .foregroundStyle(KISEDesign.Colors.background)
+                        .foregroundStyle(theme.colors.background)
                         .padding(.horizontal, KISEDesign.Spacing.xl)
                         .padding(.vertical, KISEDesign.Spacing.md)
-                        .background(KISEDesign.Colors.accent)
+                        .background(theme.colors.accent)
                         .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
                 }
             }

@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct RegistrationFlowView: View {
+    @Environment(ThemeProvider.self) private var theme
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var viewModel = RegistrationViewModel()
@@ -85,7 +86,7 @@ struct RegistrationFlowView: View {
                 .animation(.easeInOut(duration: 0.2), value: viewModel.currentStep)
                 .padding(KISEDesign.Spacing.md)
             }
-            .background(KISEDesign.Colors.background)
+            .background(theme.colors.background)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -105,10 +106,10 @@ struct RegistrationFlowView: View {
                         Spacer()
                         Text("Added!")
                             .font(KISEDesign.Typography.subtitle)
-                            .foregroundStyle(KISEDesign.Colors.background)
+                            .foregroundStyle(theme.colors.background)
                             .padding(.horizontal, KISEDesign.Spacing.xl)
                             .padding(.vertical, KISEDesign.Spacing.md)
-                            .background(KISEDesign.Colors.accent)
+                            .background(theme.colors.accent)
                             .clipShape(Capsule())
                             .padding(.bottom, KISEDesign.Spacing.xxl)
                     }

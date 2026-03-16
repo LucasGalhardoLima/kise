@@ -3,6 +3,7 @@ import SwiftUI
 import SwiftData
 
 struct GarmentDetailView: View {
+    @Environment(ThemeProvider.self) private var theme
     @Environment(\.dismiss) private var dismiss
     let piece: GarmentPiece
 
@@ -45,19 +46,19 @@ struct GarmentDetailView: View {
                     .overlay {
                         if garmentColor.needsBorder {
                             RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
-                                .strokeBorder(KISEDesign.Colors.border, lineWidth: 1)
+                                .strokeBorder(theme.colors.border, lineWidth: 1)
                         }
                     }
 
                 // Title — auto-generated name
                 Text("\(piece.fit.displayName) \(garmentColor.name) \(piece.category.displayName)")
                     .font(KISEDesign.Typography.title)
-                    .foregroundStyle(KISEDesign.Colors.textPrimary)
+                    .foregroundStyle(theme.colors.textPrimary)
 
                 // Inline subtitle
                 Text("\(piece.material.capitalized) · \(garmentColor.name) · \(piece.fit.displayName)")
                     .font(KISEDesign.Typography.bodyText)
-                    .foregroundStyle(KISEDesign.Colors.textSecondary)
+                    .foregroundStyle(theme.colors.textSecondary)
 
                 // Usage stats
                 StatsRowView(items: [
@@ -73,13 +74,13 @@ struct GarmentDetailView: View {
             }
             .padding(KISEDesign.Spacing.md)
         }
-        .background(KISEDesign.Colors.background)
+        .background(theme.colors.background)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text(piece.category.displayName)
                     .font(KISEDesign.Typography.subtitle)
-                    .foregroundStyle(KISEDesign.Colors.textPrimary)
+                    .foregroundStyle(theme.colors.textPrimary)
             }
             ToolbarItem(placement: .bottomBar) {
                 Button(role: piece.isActive ? .destructive : nil) {
@@ -152,7 +153,7 @@ struct GarmentDetailView: View {
             if let occasion = suggestion.occasion {
                 Text(occasion.displayName)
                     .font(KISEDesign.Typography.small)
-                    .foregroundStyle(KISEDesign.Colors.textSecondary)
+                    .foregroundStyle(theme.colors.textSecondary)
             }
         }
         .frame(width: 120)

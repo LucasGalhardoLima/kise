@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct CompositionDemoView: View {
+    @Environment(ThemeProvider.self) private var theme
     let onContinue: () -> Void
 
     /// Hardcoded sample pieces for the demo composition (spec: 3 pieces, varied colors)
@@ -22,11 +23,11 @@ struct CompositionDemoView: View {
             VStack(spacing: KISEDesign.Spacing.md) {
                 Text("Your outfit, as color")
                     .font(KISEDesign.Typography.title)
-                    .foregroundStyle(KISEDesign.Colors.textPrimary)
+                    .foregroundStyle(theme.colors.textPrimary)
 
                 Text("KISE shows your outfit as a color composition — tap to explore how pieces work together.")
                     .font(KISEDesign.Typography.bodyText)
-                    .foregroundStyle(KISEDesign.Colors.textSecondary)
+                    .foregroundStyle(theme.colors.textSecondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, KISEDesign.Spacing.md)
             }
@@ -42,15 +43,15 @@ struct CompositionDemoView: View {
             } label: {
                 Text("Continue")
                     .font(KISEDesign.Typography.subtitle)
-                    .foregroundStyle(KISEDesign.Colors.background)
+                    .foregroundStyle(theme.colors.background)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, KISEDesign.Spacing.md)
-                    .background(KISEDesign.Colors.accent)
+                    .background(theme.colors.accent)
                     .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
             }
             .padding(.horizontal, KISEDesign.Spacing.md)
             .padding(.bottom, KISEDesign.Spacing.lg)
         }
-        .background(KISEDesign.Colors.background)
+        .background(theme.colors.background)
     }
 }

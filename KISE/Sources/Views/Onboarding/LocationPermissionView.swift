@@ -3,6 +3,7 @@ import SwiftUI
 import CoreLocation
 
 struct LocationPermissionView: View {
+    @Environment(ThemeProvider.self) private var theme
     let onContinue: () -> Void
     @State private var locationManager = CLLocationManager()
 
@@ -13,15 +14,15 @@ struct LocationPermissionView: View {
             VStack(spacing: KISEDesign.Spacing.md) {
                 Image(systemName: "location.circle")
                     .font(.system(size: 48, weight: .light))
-                    .foregroundStyle(KISEDesign.Colors.accent)
+                    .foregroundStyle(theme.colors.accent)
 
                 Text("Weather-aware outfits")
                     .font(KISEDesign.Typography.title)
-                    .foregroundStyle(KISEDesign.Colors.textPrimary)
+                    .foregroundStyle(theme.colors.textPrimary)
 
                 Text("KISE uses your location to check the weather and suggest outfits that match your day. Your location is never stored or shared.")
                     .font(KISEDesign.Typography.bodyText)
-                    .foregroundStyle(KISEDesign.Colors.textSecondary)
+                    .foregroundStyle(theme.colors.textSecondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, KISEDesign.Spacing.md)
             }
@@ -37,10 +38,10 @@ struct LocationPermissionView: View {
                 } label: {
                     Text("Allow Location")
                         .font(KISEDesign.Typography.subtitle)
-                        .foregroundStyle(KISEDesign.Colors.background)
+                        .foregroundStyle(theme.colors.background)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, KISEDesign.Spacing.md)
-                        .background(KISEDesign.Colors.accent)
+                        .background(theme.colors.accent)
                         .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
                 }
 
@@ -49,12 +50,12 @@ struct LocationPermissionView: View {
                 } label: {
                     Text("Skip")
                         .font(KISEDesign.Typography.caption)
-                        .foregroundStyle(KISEDesign.Colors.textTertiary)
+                        .foregroundStyle(theme.colors.textTertiary)
                 }
             }
             .padding(.horizontal, KISEDesign.Spacing.md)
             .padding(.bottom, KISEDesign.Spacing.lg)
         }
-        .background(KISEDesign.Colors.background)
+        .background(theme.colors.background)
     }
 }

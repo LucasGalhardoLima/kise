@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct CategoryPickerView: View {
+    @Environment(ThemeProvider.self) private var theme
     let onSelect: (GarmentCategory) -> Void
 
     private let columns = [
@@ -14,7 +15,7 @@ struct CategoryPickerView: View {
         VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
             Text("What type of piece?")
                 .font(KISEDesign.Typography.title)
-                .foregroundStyle(KISEDesign.Colors.textPrimary)
+                .foregroundStyle(theme.colors.textPrimary)
 
             VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
                 ForEach(TabGroup.allCases, id: \.self) { group in
@@ -30,13 +31,13 @@ struct CategoryPickerView: View {
                                 } label: {
                                     Text(category.displayName)
                                         .font(KISEDesign.Typography.caption)
-                                        .foregroundStyle(KISEDesign.Colors.textPrimary)
+                                        .foregroundStyle(theme.colors.textPrimary)
                                         .frame(maxWidth: .infinity)
                                         .padding(.vertical, KISEDesign.Spacing.md)
                                         .kiseCard()
                                         .overlay {
                                             RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
-                                                .strokeBorder(KISEDesign.Colors.accentMuted, lineWidth: 1)
+                                                .strokeBorder(theme.colors.accentMuted, lineWidth: 1)
                                         }
                                 }
                             }

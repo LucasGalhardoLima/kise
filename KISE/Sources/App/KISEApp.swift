@@ -5,6 +5,7 @@ import SwiftData
 @main
 struct KISEApp: App {
     @State private var appState = AppState()
+    @State private var themeProvider = ThemeProvider()
 
     init() {
         BackgroundPrefetchService.register()
@@ -14,6 +15,7 @@ struct KISEApp: App {
         WindowGroup {
             ContentView()
                 .environment(appState)
+                .environment(themeProvider)
                 .onAppear {
                     BackgroundPrefetchService.scheduleNextRefresh()
                 }
@@ -46,6 +48,7 @@ struct ContentView: View {
 }
 
 struct MainTabView: View {
+    @Environment(ThemeProvider.self) private var theme
     @State private var selectedTab = 0
     @State private var showRegistration = false
 
@@ -68,7 +71,7 @@ struct MainTabView: View {
                         Label("Settings", systemImage: "gearshape")
                     }
             }
-            .tint(KISEDesign.Colors.accent)
+            .tint(theme.colors.accent)
 
             if selectedTab == 1 {
                 addPieceButton
@@ -88,7 +91,7 @@ struct MainTabView: View {
             showRegistration = true
         } label: {
             Circle()
-                .fill(KISEDesign.Colors.accent)
+                .fill(theme.colors.accent)
                 .frame(width: 56, height: 56)
                 .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
                 .overlay(

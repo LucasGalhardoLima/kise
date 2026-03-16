@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct ColorTileView: View {
+    @Environment(ThemeProvider.self) private var theme
     let colorHex: String
     let colorName: String
     let category: String
@@ -21,7 +22,7 @@ struct ColorTileView: View {
                 .overlay {
                     if garmentColor.needsBorder {
                         RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
-                            .strokeBorder(KISEDesign.Colors.border, lineWidth: 1)
+                            .strokeBorder(theme.colors.border, lineWidth: 1)
                     }
                 }
                 .overlay(alignment: .topTrailing) {
@@ -32,12 +33,12 @@ struct ColorTileView: View {
             VStack(spacing: 2) {
                 Text("\(garmentColor.name) \(category)")
                     .font(KISEDesign.Typography.caption)
-                    .foregroundStyle(KISEDesign.Colors.textPrimary)
+                    .foregroundStyle(theme.colors.textPrimary)
                     .lineLimit(1)
 
                 Text("\(material.capitalized) · \(lastUsedText)")
                     .font(.system(size: 10))
-                    .foregroundStyle(KISEDesign.Colors.textTertiary)
+                    .foregroundStyle(theme.colors.textTertiary)
                     .lineLimit(1)
             }
         }
@@ -49,7 +50,7 @@ struct ColorTileView: View {
             let isDormant = days >= 60
             Text("\(days)d")
                 .font(.system(size: 9, weight: .medium))
-                .foregroundStyle(isDormant ? KISEDesign.Colors.disliked : KISEDesign.Colors.textTertiary)
+                .foregroundStyle(isDormant ? theme.colors.disliked : theme.colors.textTertiary)
                 .padding(.horizontal, 5)
                 .padding(.vertical, 2)
                 .background(.white.opacity(0.85))

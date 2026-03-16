@@ -3,6 +3,7 @@ import SwiftUI
 import SwiftData
 
 struct WardrobeView: View {
+    @Environment(ThemeProvider.self) private var theme
     @Query(filter: #Predicate<GarmentPiece> { $0.isActive })
     private var pieces: [GarmentPiece]
 
@@ -80,7 +81,7 @@ struct WardrobeView: View {
                 }
             }
             .background {
-                KISEDesign.Colors.background.ignoresSafeArea()
+                theme.colors.background.ignoresSafeArea()
             }
             .navigationDestination(isPresented: $viewModel.showDormantPieces) {
                 DormantPiecesView()
@@ -91,7 +92,7 @@ struct WardrobeView: View {
                 ToolbarItem(placement: .principal) {
                     Text("Wardrobe")
                         .font(KISEDesign.Typography.largeTitle)
-                        .foregroundStyle(KISEDesign.Colors.textPrimary)
+                        .foregroundStyle(theme.colors.textPrimary)
                 }
             }
             .sheet(isPresented: $viewModel.showRegistration) {
@@ -122,15 +123,15 @@ struct WardrobeView: View {
                 .font(KISEDesign.Typography.caption)
                 .foregroundStyle(
                     viewModel.selectedTab == tab
-                        ? KISEDesign.Colors.background
-                        : KISEDesign.Colors.textPrimary
+                        ? theme.colors.background
+                        : theme.colors.textPrimary
                 )
                 .padding(.horizontal, KISEDesign.Spacing.md)
                 .padding(.vertical, KISEDesign.Spacing.sm)
                 .background(
                     viewModel.selectedTab == tab
-                        ? KISEDesign.Colors.accent
-                        : KISEDesign.Colors.surface
+                        ? theme.colors.accent
+                        : theme.colors.surface
                 )
                 .clipShape(Capsule())
                 .overlay(
@@ -138,7 +139,7 @@ struct WardrobeView: View {
                         .strokeBorder(
                             viewModel.selectedTab == tab
                                 ? Color.clear
-                                : KISEDesign.Colors.accentMuted,
+                                : theme.colors.accentMuted,
                             lineWidth: 1
                         )
                 )

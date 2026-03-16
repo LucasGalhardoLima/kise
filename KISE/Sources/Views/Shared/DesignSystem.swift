@@ -1,4 +1,7 @@
 // KISE/Sources/Views/Shared/DesignSystem.swift
+// NOTE: KISEDesign.Colors static properties are the "default" theme values.
+// All views use @Environment(ThemeProvider.self).colors for theme support.
+// See ThemeProvider.swift for the Observable theme system.
 import SwiftUI
 
 enum KISEDesign {
@@ -87,11 +90,13 @@ enum KISEDesign {
 // MARK: - Card Style Modifier
 
 struct KISECardStyle: ViewModifier {
+    @Environment(ThemeProvider.self) private var theme
+
     func body(content: Content) -> some View {
         content
-            .background(KISEDesign.Colors.surface)
+            .background(theme.colors.surface)
             .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
-            .shadow(color: KISEDesign.Colors.cardShadow, radius: 8, x: 0, y: 2)
+            .shadow(color: theme.colors.cardShadow, radius: 8, x: 0, y: 2)
     }
 }
 
@@ -104,12 +109,14 @@ extension View {
 // MARK: - Section Label Style Modifier
 
 struct KISESectionLabelStyle: ViewModifier {
+    @Environment(ThemeProvider.self) private var theme
+
     func body(content: Content) -> some View {
         content
             .font(KISEDesign.Typography.sectionLabel)
             .tracking(3)
             .textCase(.uppercase)
-            .foregroundStyle(KISEDesign.Colors.textTertiary)
+            .foregroundStyle(theme.colors.textTertiary)
     }
 }
 

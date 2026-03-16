@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct CuratedColorPicker: View {
+    @Environment(ThemeProvider.self) private var theme
     let onSelect: (GarmentColor) -> Void
     @State private var showCustomPicker = false
     @State private var customColor: Color = .gray
@@ -15,7 +16,7 @@ struct CuratedColorPicker: View {
         VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
             Text("What color?")
                 .font(KISEDesign.Typography.title)
-                .foregroundStyle(KISEDesign.Colors.textPrimary)
+                .foregroundStyle(theme.colors.textPrimary)
 
             LazyVGrid(columns: columns, spacing: KISEDesign.Spacing.md) {
                 ForEach(GarmentColor.allColors) { color in
@@ -29,12 +30,12 @@ struct CuratedColorPicker: View {
                                 .overlay {
                                     if color.needsBorder {
                                         RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
-                                            .strokeBorder(KISEDesign.Colors.border, lineWidth: 1)
+                                            .strokeBorder(theme.colors.border, lineWidth: 1)
                                     }
                                 }
                             Text(color.name)
                                 .font(KISEDesign.Typography.small)
-                                .foregroundStyle(KISEDesign.Colors.textSecondary)
+                                .foregroundStyle(theme.colors.textSecondary)
                                 .lineLimit(1)
                                 .frame(width: 68)
                         }
@@ -47,16 +48,16 @@ struct CuratedColorPicker: View {
                 } label: {
                     VStack(spacing: KISEDesign.Spacing.xs) {
                         RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
-                            .strokeBorder(KISEDesign.Colors.border, style: StrokeStyle(lineWidth: 1, dash: [4]))
+                            .strokeBorder(theme.colors.border, style: StrokeStyle(lineWidth: 1, dash: [4]))
                             .frame(width: 68, height: 68)
                             .overlay {
                                 Image(systemName: "plus")
                                     .font(.title3)
-                                    .foregroundStyle(KISEDesign.Colors.textTertiary)
+                                    .foregroundStyle(theme.colors.textTertiary)
                             }
                         Text("Custom")
                             .font(KISEDesign.Typography.small)
-                            .foregroundStyle(KISEDesign.Colors.textTertiary)
+                            .foregroundStyle(theme.colors.textTertiary)
                             .frame(width: 68)
                     }
                 }
@@ -77,7 +78,7 @@ struct CuratedColorPicker: View {
                         .padding(KISEDesign.Spacing.xl)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(KISEDesign.Colors.background)
+                .background(theme.colors.background)
                 .navigationTitle("Custom Color")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

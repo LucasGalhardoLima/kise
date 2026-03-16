@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct OnboardingFlowView: View {
+    @Environment(ThemeProvider.self) private var theme
     @State private var currentPage = 0
     private let totalPages = 4
 
@@ -11,7 +12,7 @@ struct OnboardingFlowView: View {
             HStack(spacing: KISEDesign.Spacing.sm) {
                 ForEach(0..<totalPages, id: \.self) { page in
                     Circle()
-                        .fill(page == currentPage ? KISEDesign.Colors.accent : KISEDesign.Colors.border)
+                        .fill(page == currentPage ? theme.colors.accent : theme.colors.border)
                         .frame(width: 6, height: 6)
                 }
             }
@@ -40,6 +41,6 @@ struct OnboardingFlowView: View {
             .tabViewStyle(.page(indexDisplayMode: .never))
             .animation(.easeInOut(duration: 0.3), value: currentPage)
         }
-        .background(KISEDesign.Colors.background)
+        .background(theme.colors.background)
     }
 }
