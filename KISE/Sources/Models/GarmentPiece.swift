@@ -12,6 +12,8 @@ final class GarmentPiece {
     var material: String
     var weight: FabricWeight
     var formality: Formality
+    var shoeType: ShoeType?
+    var colorDisplayName: String?
     var userPhotoPath: String?
     var isActive: Bool
     var createdAt: Date
