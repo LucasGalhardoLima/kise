@@ -16,6 +16,14 @@ final class SuggestionViewModel {
     var occasion: Occasion = .everyday
     var boldness: Double = 0.3
 
+    var weather: WeatherSnapshot? {
+        weatherService.currentWeather
+    }
+
+    var cityName: String? {
+        weatherService.currentWeather?.cityName
+    }
+
     private let suggestionService = SuggestionService()
     private let weatherService = WeatherService()
 
