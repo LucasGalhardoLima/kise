@@ -62,6 +62,11 @@ struct MainTabView: View {
                     .tabItem {
                         Label("Wardrobe", systemImage: "cabinet")
                     }
+                SettingsView()
+                    .tag(2)
+                    .tabItem {
+                        Label("Settings", systemImage: "gearshape")
+                    }
             }
             .tint(KISEDesign.Colors.accent)
 
