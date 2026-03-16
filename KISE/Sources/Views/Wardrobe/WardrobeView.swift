@@ -20,12 +20,25 @@ struct WardrobeView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
+                // Stats row
+                if !pieces.isEmpty {
+                    StatsRowView(items: [
+                        StatItem(count: viewModel.inRotationCount, label: "In Rotation"),
+                        StatItem(count: viewModel.rarelyUsedCount, label: "Rarely Used",
+                                 action: { viewModel.showDormantPieces = true }),
+                        StatItem(count: viewModel.dormantCount, label: "Dormant",
+                                 action: { viewModel.showDormantPieces = true }),
+                    ])
+                    .padding(.horizontal, KISEDesign.Spacing.md)
+                }
+
                 // Tab filter
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: KISEDesign.Spacing.sm) {
-                        tabButton("All", tab: nil)
+                        tabButton("All \(pieces.count)", tab: nil)
                         ForEach(TabGroup.allCases, id: \.self) { tab in
-                            tabButton(tab.rawValue.capitalized, tab: tab)
+                            let count = pieces.filter { $0.category.tabGroup == tab }.count
+                            tabButton("\(tab.rawValue.capitalized) \(count)", tab: tab)
                         }
                     }
                     .padding(.horizontal, KISEDesign.Spacing.md)
@@ -69,6 +82,10 @@ struct WardrobeView: View {
             .background {
                 KISEDesign.Colors.background.ignoresSafeArea()
             }
+            // TODO: uncomment after Task 8
+            // .navigationDestination(isPresented: $viewModel.showDormantPieces) {
+            //     DormantPiecesView()
+            // }
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
