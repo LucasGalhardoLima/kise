@@ -34,6 +34,17 @@ struct RegistrationFlowView: View {
                         }
                         .transition(.opacity)
 
+                    case .shoeType:
+                        OptionPickerStepView(
+                            title: "What type?",
+                            options: ShoeType.allCases,
+                            labelFor: { $0.displayName },
+                            suggested: nil
+                        ) { type in
+                            withAnimation { viewModel.selectShoeType(type) }
+                        }
+                        .transition(.opacity)
+
                     case .material:
                         MaterialPickerStepView(
                             materials: viewModel.availableMaterials
