@@ -26,7 +26,13 @@ final class WardrobeViewModel {
         return filtered.sorted { a, b in
             let colorA = GarmentColor.resolve(color: a.color, hex: a.colorHex)
             let colorB = GarmentColor.resolve(color: b.color, hex: b.colorHex)
-            return colorA.hueSortValue < colorB.hueSortValue
+            if selectedTab == nil {
+                // "All" tab: lightness-first (white → black)
+                return colorA.lightnessFirstSortValue < colorB.lightnessFirstSortValue
+            } else {
+                // Category tabs: hue-based sort
+                return colorA.hueSortValue < colorB.hueSortValue
+            }
         }
     }
 
