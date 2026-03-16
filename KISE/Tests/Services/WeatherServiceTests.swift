@@ -20,7 +20,8 @@ struct WeatherServiceTests {
             hourlyForecast: [
                 HourlyEntry(hour: 7, temperature: 20, condition: "clear"),
                 HourlyEntry(hour: 12, temperature: 25, condition: "sunny"),
-            ]
+            ],
+            cityName: nil
         )
         #expect(noTransition.hasSignificantTransition == false)
 
@@ -33,7 +34,8 @@ struct WeatherServiceTests {
             hourlyForecast: [
                 HourlyEntry(hour: 7, temperature: 14, condition: "cloudy"),
                 HourlyEntry(hour: 14, temperature: 26, condition: "sunny"),
-            ]
+            ],
+            cityName: nil
         )
         #expect(withTransition.hasSignificantTransition == true)
     }
