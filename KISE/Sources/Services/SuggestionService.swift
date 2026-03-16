@@ -78,7 +78,8 @@ final class SuggestionService {
                 fit: piece.fit.rawValue,
                 material: piece.material,
                 weight: piece.weight.rawValue,
-                formality: piece.formality.rawValue
+                formality: piece.formality.rawValue,
+                shoe_type: piece.shoeType?.rawValue
             )
         }
 
@@ -155,6 +156,7 @@ struct WardrobeItem: Encodable {
     let material: String
     let weight: String
     let formality: String
+    let shoe_type: String?
 }
 
 struct RecentSuggestionItem: Encodable {
