@@ -82,10 +82,9 @@ struct WardrobeView: View {
             .background {
                 KISEDesign.Colors.background.ignoresSafeArea()
             }
-            // TODO: uncomment after Task 8
-            // .navigationDestination(isPresented: $viewModel.showDormantPieces) {
-            //     DormantPiecesView()
-            // }
+            .navigationDestination(isPresented: $viewModel.showDormantPieces) {
+                DormantPiecesView()
+            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
