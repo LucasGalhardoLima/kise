@@ -359,6 +359,18 @@ struct SuggestionView: View {
                             : theme.colors.textTertiary
                     )
             }
+
+            Button {
+                let cardData = ShareCardData(
+                    pieces: viewModel.suggestedPieces,
+                    weather: viewModel.weather
+                )
+                ShareCardRenderer.share(data: cardData, theme: theme.colors)
+            } label: {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.body)
+                    .foregroundStyle(theme.colors.textTertiary)
+            }
         }
         .padding(.bottom, KISEDesign.Spacing.md)
     }
