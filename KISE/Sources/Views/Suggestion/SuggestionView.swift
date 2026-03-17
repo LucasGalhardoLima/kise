@@ -123,8 +123,6 @@ struct SuggestionView: View {
 
     private var readyState: some View {
         VStack(spacing: KISEDesign.Spacing.lg) {
-            Spacer().frame(height: KISEDesign.Spacing.xxl)
-
             Text("suggestion.readyTitle")
                 .font(KISEDesign.Typography.title)
                 .foregroundStyle(theme.colors.textPrimary)
@@ -147,6 +145,8 @@ struct SuggestionView: View {
                     .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
             }
         }
+        .containerRelativeFrame(.vertical) { length, _ in length }
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Suggestion Content
