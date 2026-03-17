@@ -84,8 +84,12 @@ struct CompositionDemoView: View {
 
     private static func makePieces(_ items: (GarmentCategory, String, String)...) -> [GarmentPiece] {
         items.map { category, color, hex in
-            GarmentPiece(category: category, color: color, colorHex: hex,
-                         fit: .regular, material: "cotton", weight: .mid, formality: .casual)
+            let material = category == .shoes ? "leather"
+                : category == .jeans ? "denim"
+                : category == .jacket || category == .coat ? "wool"
+                : "cotton"
+            return GarmentPiece(category: category, color: color, colorHex: hex,
+                                fit: .regular, material: material, weight: .mid, formality: .casual)
         }
     }
 }
