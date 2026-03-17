@@ -222,16 +222,7 @@ struct SuggestionView: View {
                 .textCase(.uppercase)
                 .foregroundStyle(theme.colors.textTertiary)
 
-            GradientTrackSlider(
-                value: $viewModel.boldness,
-                trackHeight: 3,
-                thumbSize: 14,
-                onEditingChanged: { editing in
-                    if !editing {
-                        Task { await viewModel.regenerate(context: modelContext) }
-                    }
-                }
-            )
+            nativeSlider
 
             Text("slider.bold")
                 .font(KISEDesign.Typography.small)
@@ -239,6 +230,25 @@ struct SuggestionView: View {
                 .textCase(.uppercase)
                 .foregroundStyle(theme.colors.textTertiary)
         }
+    }
+
+    private var nativeSlider: some View {
+        Slider(value: $viewModel.boldness, in: 0...1, step: 0.1) { editing in
+            if !editing {
+                Task { await viewModel.regenerate(context: modelContext) }
+            }
+        }
+        .tint(theme.colors.accent)
+        .padding(.horizontal, KISEDesign.Spacing.sm)
+        .padding(.vertical, KISEDesign.Spacing.xs)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(theme.colors.surface)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .strokeBorder(theme.colors.border, lineWidth: 1)
+                )
+        )
     }
 
     // MARK: - Outfit Cards
@@ -333,67 +343,5 @@ struct SuggestionView: View {
             }
         }
         .padding(.bottom, KISEDesign.Spacing.md)
-    }
-}
-
-// MARK: - Gradient Track Slider
-
-private struct GradientTrackSlider: View {
-    @Environment(ThemeProvider.self) private var theme
-    @Binding var value: Double
-    var trackHeight: CGFloat = 3
-    var thumbSize: CGFloat = 14
-    var onEditingChanged: (Bool) -> Void = { _ in }
-    @State private var isEditing = false
-
-    var body: some View {
-        GeometryReader { geo in
-            let usableWidth = geo.size.width - thumbSize
-            let thumbX = thumbSize / 2 + usableWidth * value
-
-            ZStack {
-                Capsule()
-                    .fill(theme.colors.border)
-                    .frame(height: trackHeight)
-
-                Capsule()
-                    .fill(
-                        LinearGradient(
-                            colors: [theme.colors.accentMuted, theme.colors.accent],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .frame(width: max(trackHeight, thumbX), height: trackHeight)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                Circle()
-                    .fill(.white)
-                    .shadow(color: .black.opacity(0.12), radius: 4, y: 2)
-                    .frame(width: thumbSize, height: thumbSize)
-                    .position(x: thumbX, y: geo.size.height / 2)
-            }
-            .contentShape(Rectangle())
-            .gesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { drag in
-                        if !isEditing {
-                            isEditing = true
-                            onEditingChanged(true)
-                        }
-                        let raw = (drag.location.x - thumbSize / 2) / usableWidth
-                        let clamped = min(max(raw, 0), 1)
-                        let stepped = (clamped * 10).rounded() / 10
-                        if stepped != value {
-                            value = stepped
-                        }
-                    }
-                    .onEnded { _ in
-                        isEditing = false
-                        onEditingChanged(false)
-                    }
-            )
-        }
-        .frame(height: thumbSize)
     }
 }
