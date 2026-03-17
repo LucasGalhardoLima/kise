@@ -83,5 +83,9 @@ function buildUserMessage(body: SuggestionRequest): string {
     }
   }
 
+  if (body.language) {
+    parts.push(`\nRespond in ${body.language}.`);
+  }
+
   return parts.join("\n");
 }

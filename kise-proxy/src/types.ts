@@ -38,6 +38,7 @@ export interface SuggestionRequest {
   weather?: WeatherPayload;
   wardrobe: WardrobePiece[];
   recent_suggestions: RecentSuggestion[];
+  language?: string;
 }
 
 export interface AlternativePiece {
