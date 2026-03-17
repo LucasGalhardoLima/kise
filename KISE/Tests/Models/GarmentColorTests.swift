@@ -24,7 +24,7 @@ final class GarmentColorTests: XCTestCase {
     }
 
     func testColorCount() {
-        XCTAssertEqual(GarmentColor.allColors.count, 15)
+        XCTAssertEqual(GarmentColor.allColors.count, 22)
     }
 
     func testNearestCuratedForExactMatch() {
@@ -41,12 +41,36 @@ final class GarmentColorTests: XCTestCase {
         let custom = GarmentColor(customHex: "#FF6B35")
         XCTAssertTrue(custom.isCustom)
         XCTAssertEqual(custom.hex, "#FF6B35")
-        XCTAssertTrue(custom.name.hasPrefix("Custom"))
+        XCTAssertEqual(custom.id, "custom-FF6B35")
+        XCTAssertEqual(custom.name, String(localized: "color.custom"))
     }
 
     func testCustomColorNaming() {
         let custom = GarmentColor(customHex: "#FF0000")
-        XCTAssertTrue(custom.name.contains("Custom"))
+        XCTAssertEqual(custom.name, String(localized: "color.custom"))
+        XCTAssertEqual(custom.id, "custom-FF0000")
+    }
+
+    func testResolveBackwardCompatibility() {
+        let legacy = GarmentColor.resolve(color: "custom", hex: "#FF6B35")
+        XCTAssertTrue(legacy.isCustom)
+        XCTAssertEqual(legacy.id, "custom-FF6B35")
+
+        let newFormat = GarmentColor.resolve(color: "custom-FF6B35", hex: "#FF6B35")
+        XCTAssertTrue(newFormat.isCustom)
+        XCTAssertEqual(newFormat.id, "custom-FF6B35")
+
+        let curated = GarmentColor.resolve(color: "navy", hex: "#1B2A4A")
+        XCTAssertFalse(curated.isCustom)
+        XCTAssertEqual(curated.id, "navy")
+    }
+
+    func testLightnessFirstSortOrder() {
+        let white = GarmentColor.allColors.first { $0.id == "white" }!
+        let black = GarmentColor.allColors.first { $0.id == "black" }!
+        let navy = GarmentColor.allColors.first { $0.id == "navy" }!
+        XCTAssertLessThan(white.lightnessFirstSortValue, black.lightnessFirstSortValue)
+        XCTAssertLessThan(white.lightnessFirstSortValue, navy.lightnessFirstSortValue)
     }
 
     func testHueSortValue() {

@@ -3,36 +3,48 @@ import SwiftUI
 import SwiftData
 
 struct SuggestionView: View {
+    @Environment(ThemeProvider.self) private var theme
     @Environment(\.modelContext) private var modelContext
     @State private var viewModel = SuggestionViewModel()
-    @State private var showControls = false
-
     @Query(filter: #Predicate<GarmentPiece> { $0.isActive })
     private var activePieces: [GarmentPiece]
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: KISEDesign.Spacing.lg) {
-                    if activePieces.count < 2 {
-                        emptyState
-                    } else if viewModel.isLoading && viewModel.currentSuggestion == nil {
-                        loadingState
-                    } else if viewModel.currentSuggestion != nil {
-                        suggestionContent
-                            .opacity(viewModel.isRegenerating ? 0.5 : 1.0)
-                            .allowsHitTesting(!viewModel.isRegenerating)
-                            .animation(.easeInOut(duration: 0.2), value: viewModel.isRegenerating)
-                    } else {
-                        readyState
+            ZStack {
+                theme.colors.background.ignoresSafeArea()
+
+                ScrollView {
+                    VStack(spacing: KISEDesign.Spacing.lg) {
+                        if activePieces.count < 2 {
+                            emptyState
+                        } else if viewModel.isLoading && viewModel.currentSuggestion == nil {
+                            loadingState
+                        } else if viewModel.currentSuggestion != nil {
+                            suggestionContent
+                                .opacity(viewModel.isRegenerating ? 0.5 : 1.0)
+                                .allowsHitTesting(!viewModel.isRegenerating)
+                                .animation(.easeInOut(duration: 0.2), value: viewModel.isRegenerating)
+                        } else {
+                            readyState
+                        }
                     }
+                    .padding(.horizontal, KISEDesign.Spacing.md)
+                    .padding(.top, KISEDesign.Spacing.md)
                 }
-                .padding(.horizontal, KISEDesign.Spacing.md)
-                .padding(.top, KISEDesign.Spacing.md)
             }
-            .background(KISEDesign.Colors.background)
-            .navigationTitle("Today")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.hidden, for: .navigationBar)
+            .task {
+                await viewModel.fetchWeather()
+            }
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("suggestion.title")
+                        .font(KISEDesign.Typography.largeTitle)
+                        .foregroundStyle(theme.colors.textPrimary)
+                }
+            }
         }
     }
 
@@ -40,11 +52,35 @@ struct SuggestionView: View {
 
     private var emptyState: some View {
         EmptyStateView(
-            title: "Build your wardrobe",
-            message: "Add at least 2 pieces and I'll start suggesting outfits."
+            title: String(localized: "suggestion.emptyTitle"),
+            message: String(localized: "suggestion.emptyMessage")
         )
-        .frame(maxHeight: .infinity)
-        .padding(.top, KISEDesign.Spacing.xxl)
+        .containerRelativeFrame(.vertical) { length, _ in length }
+        .frame(maxWidth: .infinity)
+    }
+
+    // MARK: - Weather
+
+    @ViewBuilder
+    private var weatherSection: some View {
+        if let weather = viewModel.weather {
+            VStack(alignment: .leading, spacing: KISEDesign.Spacing.xs) {
+                if let city = viewModel.cityName {
+                    Text(city)
+                        .font(KISEDesign.Typography.bodyText)
+                        .foregroundStyle(theme.colors.textSecondary)
+                }
+                Text("\(Int(weather.temperature))°")
+                    .font(KISEDesign.Typography.title)
+                    .foregroundStyle(theme.colors.textPrimary)
+                Text("Feels like \(Int(weather.feelsLike))° · Humidity \(Int(weather.humidity))% · Wind \(Int(weather.windSpeed))km/h · \(weather.condition)")
+                    .font(KISEDesign.Typography.caption)
+                    .foregroundStyle(theme.colors.textTertiary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 
     // MARK: - Loading State
@@ -60,7 +96,7 @@ struct SuggestionView: View {
 
     private var skeletonCard: some View {
         RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
-            .fill(KISEDesign.Colors.surface)
+            .fill(theme.colors.surface)
             .frame(height: 120)
             .overlay(
                 RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
@@ -68,7 +104,7 @@ struct SuggestionView: View {
                         LinearGradient(
                             colors: [
                                 Color.clear,
-                                KISEDesign.Colors.border.opacity(0.3),
+                                theme.colors.border.opacity(0.3),
                                 Color.clear,
                             ],
                             startPoint: .leading,
@@ -89,25 +125,25 @@ struct SuggestionView: View {
         VStack(spacing: KISEDesign.Spacing.lg) {
             Spacer().frame(height: KISEDesign.Spacing.xxl)
 
-            Text("Ready when you are")
+            Text("suggestion.readyTitle")
                 .font(KISEDesign.Typography.title)
-                .foregroundStyle(KISEDesign.Colors.textPrimary)
+                .foregroundStyle(theme.colors.textPrimary)
 
-            Text("\(activePieces.count) pieces in your wardrobe")
+            Text("suggestion.readyPieceCount \(activePieces.count)")
                 .font(KISEDesign.Typography.bodyText)
-                .foregroundStyle(KISEDesign.Colors.textSecondary)
+                .foregroundStyle(theme.colors.textSecondary)
 
             Button {
                 Task {
                     await viewModel.fetchSuggestion(context: modelContext)
                 }
             } label: {
-                Text("Get a suggestion")
+                Text("suggestion.getSuggestion")
                     .font(KISEDesign.Typography.subtitle)
-                    .foregroundStyle(KISEDesign.Colors.background)
+                    .foregroundStyle(theme.colors.background)
                     .padding(.horizontal, KISEDesign.Spacing.xl)
                     .padding(.vertical, KISEDesign.Spacing.md)
-                    .background(KISEDesign.Colors.accent)
+                    .background(theme.colors.accent)
                     .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
             }
         }
@@ -116,100 +152,92 @@ struct SuggestionView: View {
     // MARK: - Suggestion Content
 
     private var suggestionContent: some View {
-        VStack(spacing: KISEDesign.Spacing.lg) {
-            // Controls toggle
-            controlsSection
+        VStack(spacing: KISEDesign.Spacing.md) {
+            // 1. Weather
+            weatherSection
 
-            // Outfit cards
-            outfitCards
+            // 2. Occasion pills (context-setter, ABOVE the outfit)
+            occasionPills
 
-            // Reasoning
+            // 3. YOUR LOOK + Composition + Piece names
+            VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
+                Text("suggestion.yourLook")
+                    .kiseSectionLabel()
+                outfitCards
+            }
+
+            // 4. Reasoning + layering note + alternative swap
             if let suggestion = viewModel.currentSuggestion {
                 reasoningSection(suggestion)
             }
 
-            // Feedback buttons
-            feedbackButtons
+            // 5. Boldness slider (thin, inline)
+            thinBoldnessSlider
 
-            // Regenerate
-            regenerateButton
+            // 6. Action row (feedback + regenerate, one line)
+            actionRow
         }
     }
 
-    // MARK: - Controls (Occasion + Boldness)
+    // MARK: - Occasion Pills
 
-    private var controlsSection: some View {
-        VStack(spacing: KISEDesign.Spacing.sm) {
-            Button {
-                withAnimation(.easeInOut(duration: 0.25)) {
-                    showControls.toggle()
-                }
-            } label: {
-                HStack {
-                    Text(viewModel.occasion.displayName)
+    private var occasionPills: some View {
+        HStack(spacing: KISEDesign.Spacing.sm) {
+            ForEach(Occasion.allCases) { occasion in
+                Button {
+                    viewModel.occasion = occasion
+                    Task { await viewModel.regenerate(context: modelContext) }
+                } label: {
+                    Text(occasion.displayName)
                         .font(KISEDesign.Typography.caption)
-                        .foregroundStyle(KISEDesign.Colors.textSecondary)
-                    Image(systemName: showControls ? "chevron.up" : "chevron.down")
-                        .font(.caption2)
-                        .foregroundStyle(KISEDesign.Colors.textTertiary)
+                        .foregroundStyle(
+                            viewModel.occasion == occasion
+                                ? theme.colors.background
+                                : theme.colors.textPrimary
+                        )
+                        .padding(.horizontal, KISEDesign.Spacing.sm)
+                        .padding(.vertical, KISEDesign.Spacing.xs)
+                        .background(
+                            viewModel.occasion == occasion
+                                ? theme.colors.accent
+                                : Color.clear
+                        )
+                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .strokeBorder(theme.colors.accentMuted, lineWidth: viewModel.occasion == occasion ? 0 : 1)
+                        )
                 }
             }
+        }
+    }
 
-            if showControls {
-                VStack(spacing: KISEDesign.Spacing.md) {
-                    // Occasion picker
-                    HStack(spacing: KISEDesign.Spacing.sm) {
-                        ForEach(Occasion.allCases) { occasion in
-                            Button {
-                                viewModel.occasion = occasion
-                                Task { await viewModel.regenerate(context: modelContext) }
-                            } label: {
-                                Text(occasion.displayName)
-                                    .font(KISEDesign.Typography.caption)
-                                    .foregroundStyle(
-                                        viewModel.occasion == occasion
-                                            ? KISEDesign.Colors.background
-                                            : KISEDesign.Colors.textPrimary
-                                    )
-                                    .padding(.horizontal, KISEDesign.Spacing.sm)
-                                    .padding(.vertical, KISEDesign.Spacing.xs)
-                                    .background(
-                                        viewModel.occasion == occasion
-                                            ? KISEDesign.Colors.accent
-                                            : KISEDesign.Colors.surface
-                                    )
-                                    .clipShape(Capsule())
-                                    .overlay(
-                                        Capsule()
-                                            .strokeBorder(KISEDesign.Colors.border, lineWidth: viewModel.occasion == occasion ? 0 : 1)
-                                    )
-                            }
-                        }
-                    }
+    // MARK: - Thin Boldness Slider
 
-                    // Boldness slider
-                    VStack(spacing: KISEDesign.Spacing.xs) {
-                        HStack {
-                            Text("Safe")
-                                .font(KISEDesign.Typography.small)
-                                .foregroundStyle(KISEDesign.Colors.textTertiary)
-                            Spacer()
-                            Text("Bold")
-                                .font(KISEDesign.Typography.small)
-                                .foregroundStyle(KISEDesign.Colors.textTertiary)
-                        }
-                        Slider(value: $viewModel.boldness, in: 0...1, step: 0.1) { editing in
-                            if !editing {
-                                Task { await viewModel.regenerate(context: modelContext) }
-                            }
-                        }
-                            .tint(KISEDesign.Colors.accent)
+    private var thinBoldnessSlider: some View {
+        HStack(spacing: KISEDesign.Spacing.sm) {
+            Text("slider.safe")
+                .font(KISEDesign.Typography.small)
+                .tracking(1)
+                .textCase(.uppercase)
+                .foregroundStyle(theme.colors.textTertiary)
+
+            GradientTrackSlider(
+                value: $viewModel.boldness,
+                trackHeight: 3,
+                thumbSize: 14,
+                onEditingChanged: { editing in
+                    if !editing {
+                        Task { await viewModel.regenerate(context: modelContext) }
                     }
                 }
-                .padding(KISEDesign.Spacing.md)
-                .kiseCard()
-                .transition(.opacity.combined(with: .move(edge: .top)))
-            }
+            )
+
+            Text("slider.bold")
+                .font(KISEDesign.Typography.small)
+                .tracking(1)
+                .textCase(.uppercase)
+                .foregroundStyle(theme.colors.textTertiary)
         }
     }
 
@@ -231,16 +259,16 @@ struct SuggestionView: View {
         VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
             Text(suggestion.reasoning)
                 .font(KISEDesign.Typography.bodyText)
-                .foregroundStyle(KISEDesign.Colors.textSecondary)
+                .foregroundStyle(theme.colors.textSecondary)
 
             if let note = suggestion.layeringNote {
                 HStack(alignment: .top, spacing: KISEDesign.Spacing.sm) {
                     Image(systemName: "cloud.sun")
                         .font(.caption)
-                        .foregroundStyle(KISEDesign.Colors.textTertiary)
+                        .foregroundStyle(theme.colors.textTertiary)
                     Text(note)
                         .font(KISEDesign.Typography.caption)
-                        .foregroundStyle(KISEDesign.Colors.textTertiary)
+                        .foregroundStyle(theme.colors.textTertiary)
                 }
             }
 
@@ -248,10 +276,10 @@ struct SuggestionView: View {
                 HStack(alignment: .top, spacing: KISEDesign.Spacing.sm) {
                     Image(systemName: "arrow.triangle.2.circlepath")
                         .font(.caption)
-                        .foregroundStyle(KISEDesign.Colors.textTertiary)
+                        .foregroundStyle(theme.colors.textTertiary)
                     Text(swap.reason)
                         .font(KISEDesign.Typography.caption)
-                        .foregroundStyle(KISEDesign.Colors.textTertiary)
+                        .foregroundStyle(theme.colors.textTertiary)
                 }
             }
         }
@@ -259,58 +287,113 @@ struct SuggestionView: View {
         .padding(KISEDesign.Spacing.md)
     }
 
-    // MARK: - Feedback
+    // MARK: - Action Row
 
-    private var feedbackButtons: some View {
-        HStack(spacing: KISEDesign.Spacing.xl) {
+    private var actionRow: some View {
+        HStack(spacing: KISEDesign.Spacing.lg) {
             Button {
                 viewModel.submitFeedback(liked: false, context: modelContext)
             } label: {
                 Image(systemName: viewModel.currentSuggestion?.feedback?.liked == false ? "hand.thumbsdown.fill" : "hand.thumbsdown")
-                    .font(.title2)
+                    .font(.body)
                     .foregroundStyle(
                         viewModel.currentSuggestion?.feedback?.liked == false
-                            ? KISEDesign.Colors.disliked
-                            : KISEDesign.Colors.textTertiary
+                            ? theme.colors.disliked
+                            : theme.colors.textTertiary
                     )
+            }
+
+            Button {
+                Task { await viewModel.regenerate(context: modelContext) }
+            } label: {
+                HStack(spacing: KISEDesign.Spacing.xs) {
+                    Image(systemName: "arrow.clockwise")
+                    Text("suggestion.tryAnother")
+                }
+                .font(KISEDesign.Typography.caption)
+                .foregroundStyle(theme.colors.textTertiary)
+                .padding(.horizontal, KISEDesign.Spacing.md)
+                .padding(.vertical, KISEDesign.Spacing.sm)
+                .overlay(
+                    Capsule()
+                        .strokeBorder(theme.colors.border, lineWidth: 1)
+                )
             }
 
             Button {
                 viewModel.submitFeedback(liked: true, context: modelContext)
             } label: {
                 Image(systemName: viewModel.currentSuggestion?.feedback?.liked == true ? "hand.thumbsup.fill" : "hand.thumbsup")
-                    .font(.title2)
+                    .font(.body)
                     .foregroundStyle(
                         viewModel.currentSuggestion?.feedback?.liked == true
-                            ? KISEDesign.Colors.liked
-                            : KISEDesign.Colors.textTertiary
+                            ? theme.colors.liked
+                            : theme.colors.textTertiary
                     )
             }
         }
-        .padding(.vertical, KISEDesign.Spacing.sm)
+        .padding(.bottom, KISEDesign.Spacing.md)
     }
+}
 
-    // MARK: - Regenerate
+// MARK: - Gradient Track Slider
 
-    private var regenerateButton: some View {
-        Button {
-            Task {
-                await viewModel.regenerate(context: modelContext)
-            }
-        } label: {
-            HStack(spacing: KISEDesign.Spacing.sm) {
-                Image(systemName: "arrow.clockwise")
-                Text("Try another")
-            }
-            .font(KISEDesign.Typography.caption)
-            .foregroundStyle(KISEDesign.Colors.textSecondary)
-            .padding(.horizontal, KISEDesign.Spacing.md)
-            .padding(.vertical, KISEDesign.Spacing.sm)
-            .overlay(
+private struct GradientTrackSlider: View {
+    @Environment(ThemeProvider.self) private var theme
+    @Binding var value: Double
+    var trackHeight: CGFloat = 3
+    var thumbSize: CGFloat = 14
+    var onEditingChanged: (Bool) -> Void = { _ in }
+    @State private var isEditing = false
+
+    var body: some View {
+        GeometryReader { geo in
+            let usableWidth = geo.size.width - thumbSize
+            let thumbX = thumbSize / 2 + usableWidth * value
+
+            ZStack {
                 Capsule()
-                    .strokeBorder(KISEDesign.Colors.border, lineWidth: 1)
+                    .fill(theme.colors.border)
+                    .frame(height: trackHeight)
+
+                Capsule()
+                    .fill(
+                        LinearGradient(
+                            colors: [theme.colors.accentMuted, theme.colors.accent],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .frame(width: max(trackHeight, thumbX), height: trackHeight)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                Circle()
+                    .fill(.white)
+                    .shadow(color: .black.opacity(0.12), radius: 4, y: 2)
+                    .frame(width: thumbSize, height: thumbSize)
+                    .position(x: thumbX, y: geo.size.height / 2)
+            }
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { drag in
+                        if !isEditing {
+                            isEditing = true
+                            onEditingChanged(true)
+                        }
+                        let raw = (drag.location.x - thumbSize / 2) / usableWidth
+                        let clamped = min(max(raw, 0), 1)
+                        let stepped = (clamped * 10).rounded() / 10
+                        if stepped != value {
+                            value = stepped
+                        }
+                    }
+                    .onEnded { _ in
+                        isEditing = false
+                        onEditingChanged(false)
+                    }
             )
         }
-        .padding(.bottom, KISEDesign.Spacing.lg)
+        .frame(height: thumbSize)
     }
 }

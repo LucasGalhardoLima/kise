@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct ColorCompositionView: View {
+    @Environment(ThemeProvider.self) private var theme
     let pieces: [GarmentPiece]
     var swappablePieceID: String?
     var onSwap: (() -> Void)?
@@ -61,7 +62,7 @@ struct ColorCompositionView: View {
             // Labels
             Text(labelText)
                 .font(KISEDesign.Typography.small)
-                .foregroundStyle(KISEDesign.Colors.textSecondary)
+                .foregroundStyle(theme.colors.textSecondary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
 
@@ -72,11 +73,11 @@ struct ColorCompositionView: View {
                     VStack(alignment: .leading, spacing: KISEDesign.Spacing.xs) {
                         Text(piece.category.displayName)
                             .font(KISEDesign.Typography.subtitle)
-                            .foregroundStyle(KISEDesign.Colors.textPrimary)
+                            .foregroundStyle(theme.colors.textPrimary)
                         HStack(spacing: KISEDesign.Spacing.md) {
-                            detailLabel("Fit", piece.fit.displayName)
-                            detailLabel("Material", piece.material.capitalized)
-                            detailLabel("Formality", piece.formality.displayName)
+                            detailLabel(String(localized: "detail.fit"), piece.fit.displayName)
+                            detailLabel(String(localized: "detail.material"), materialDisplayName(piece.material))
+                            detailLabel(String(localized: "detail.formality"), piece.formality.displayName)
                         }
                     }
 
@@ -87,7 +88,7 @@ struct ColorCompositionView: View {
                         Button(action: onSwap) {
                             Image(systemName: "arrow.triangle.2.circlepath")
                                 .font(.body)
-                                .foregroundStyle(KISEDesign.Colors.accent)
+                                .foregroundStyle(theme.colors.accent)
                                 .padding(KISEDesign.Spacing.sm)
                         }
                     }
@@ -111,10 +112,10 @@ struct ColorCompositionView: View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label)
                 .font(.system(size: 10))
-                .foregroundStyle(KISEDesign.Colors.textTertiary)
+                .foregroundStyle(theme.colors.textTertiary)
             Text(value)
                 .font(KISEDesign.Typography.caption)
-                .foregroundStyle(KISEDesign.Colors.textSecondary)
+                .foregroundStyle(theme.colors.textSecondary)
         }
     }
 }

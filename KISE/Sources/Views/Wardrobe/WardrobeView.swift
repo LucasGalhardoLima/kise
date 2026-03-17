@@ -3,8 +3,12 @@ import SwiftUI
 import SwiftData
 
 struct WardrobeView: View {
+    @Environment(ThemeProvider.self) private var theme
     @Query(filter: #Predicate<GarmentPiece> { $0.isActive })
     private var pieces: [GarmentPiece]
+
+    @Query(sort: \OutfitSuggestion.suggestedAt, order: .reverse)
+    private var suggestions: [OutfitSuggestion]
 
     @State private var viewModel = WardrobeViewModel()
 
@@ -17,12 +21,25 @@ struct WardrobeView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
+                // Stats row
+                if !pieces.isEmpty {
+                    StatsRowView(items: [
+                        StatItem(count: viewModel.inRotationCount, label: String(localized: "stats.inRotation")),
+                        StatItem(count: viewModel.rarelyUsedCount, label: String(localized: "stats.rarelyUsed"),
+                                 action: { viewModel.showDormantPieces = true }),
+                        StatItem(count: viewModel.dormantCount, label: String(localized: "stats.dormant"),
+                                 action: { viewModel.showDormantPieces = true }),
+                    ])
+                    .padding(.horizontal, KISEDesign.Spacing.md)
+                }
+
                 // Tab filter
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: KISEDesign.Spacing.sm) {
-                        tabButton("All", tab: nil)
+                        tabButton(String(localized: "wardrobe.tabAll") + " \(pieces.count)", tab: nil)
                         ForEach(TabGroup.allCases, id: \.self) { tab in
-                            tabButton(tab.rawValue.capitalized, tab: tab)
+                            let count = pieces.filter { $0.category.tabGroup == tab }.count
+                            tabButton("\(tab.displayName) \(count)", tab: tab)
                         }
                     }
                     .padding(.horizontal, KISEDesign.Spacing.md)
@@ -33,9 +50,9 @@ struct WardrobeView: View {
                 if pieces.isEmpty {
                     Spacer()
                     EmptyStateView(
-                        title: "Your wardrobe is empty",
-                        message: "Add your first pieces to get started",
-                        actionLabel: "Add Piece",
+                        title: String(localized: "wardrobe.emptyTitle"),
+                        message: String(localized: "wardrobe.emptyMessage"),
+                        actionLabel: String(localized: "wardrobe.addPiece"),
                         action: { viewModel.showRegistration = true }
                     )
                     Spacer()
@@ -54,7 +71,7 @@ struct WardrobeView: View {
                                             WardrobeViewModel.archivePiece(piece)
                                         }
                                     } label: {
-                                        Label("Archive", systemImage: "archivebox")
+                                        Label(String(localized: "action.archive"), systemImage: "archivebox")
                                     }
                                 }
                             }
@@ -63,16 +80,19 @@ struct WardrobeView: View {
                     }
                 }
             }
-            .background(KISEDesign.Colors.background)
-            .navigationTitle("Wardrobe")
-            .navigationBarTitleDisplayMode(.large)
+            .background {
+                theme.colors.background.ignoresSafeArea()
+            }
+            .navigationDestination(isPresented: $viewModel.showDormantPieces) {
+                DormantPiecesView()
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        viewModel.showRegistration = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
+                ToolbarItem(placement: .principal) {
+                    Text("wardrobe.title")
+                        .font(KISEDesign.Typography.largeTitle)
+                        .foregroundStyle(theme.colors.textPrimary)
                 }
             }
             .sheet(isPresented: $viewModel.showRegistration) {
@@ -82,6 +102,15 @@ struct WardrobeView: View {
                 NavigationStack {
                     GarmentDetailView(piece: piece)
                 }
+            }
+            .onAppear {
+                viewModel.computeStats(pieces: pieces, suggestions: suggestions)
+            }
+            .onChange(of: pieces.count) {
+                viewModel.computeStats(pieces: pieces, suggestions: suggestions)
+            }
+            .onChange(of: suggestions.count) {
+                viewModel.computeStats(pieces: pieces, suggestions: suggestions)
             }
         }
     }
@@ -94,17 +123,26 @@ struct WardrobeView: View {
                 .font(KISEDesign.Typography.caption)
                 .foregroundStyle(
                     viewModel.selectedTab == tab
-                        ? KISEDesign.Colors.background
-                        : KISEDesign.Colors.textPrimary
+                        ? theme.colors.background
+                        : theme.colors.textPrimary
                 )
                 .padding(.horizontal, KISEDesign.Spacing.md)
                 .padding(.vertical, KISEDesign.Spacing.sm)
                 .background(
                     viewModel.selectedTab == tab
-                        ? KISEDesign.Colors.accent
-                        : KISEDesign.Colors.surface
+                        ? theme.colors.accent
+                        : theme.colors.surface
                 )
                 .clipShape(Capsule())
+                .overlay(
+                    Capsule()
+                        .strokeBorder(
+                            viewModel.selectedTab == tab
+                                ? Color.clear
+                                : theme.colors.accentMuted,
+                            lineWidth: 1
+                        )
+                )
         }
     }
 
@@ -113,7 +151,9 @@ struct WardrobeView: View {
             colorHex: piece.colorHex,
             colorName: piece.color,
             category: piece.category.displayName,
-            fit: piece.fit.displayName
+            material: piece.material,
+            lastUsedText: viewModel.lastUsedText(for: piece.id),
+            daysUnused: viewModel.daysUnused(for: piece)
         )
     }
 }

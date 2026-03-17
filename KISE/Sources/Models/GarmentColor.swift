@@ -34,27 +34,49 @@ struct GarmentColor: Identifiable, Equatable {
         return Double(h)
     }
 
+    /// Sort key for "All" wardrobe view: white → pastels → colors → darks → black
+    var lightnessFirstSortValue: Double {
+        let (h, s, b) = hsbComponents
+        // Primary axis: brightness (inverted so white sorts first)
+        // Secondary axis: hue for visual flow within similar brightness
+        return (1 - b) * 0.8 + (s < 0.1 ? 0.0 : h) * 0.2
+    }
+
     var needsBorder: Bool {
         let (_, s, b) = hsbComponents
         return b > 0.85 && s < 0.1
     }
 
     static let allColors: [GarmentColor] = [
-        GarmentColor(id: "white", name: "White", hex: "#FFFFFF", isCustom: false),
-        GarmentColor(id: "cream", name: "Off-White", hex: "#F5F0E8", isCustom: false),
-        GarmentColor(id: "lightGray", name: "Light Gray", hex: "#C8C8C8", isCustom: false),
-        GarmentColor(id: "charcoal", name: "Charcoal", hex: "#4A4A4A", isCustom: false),
-        GarmentColor(id: "black", name: "Black", hex: "#1A1A1A", isCustom: false),
-        GarmentColor(id: "navy", name: "Navy", hex: "#1B2A4A", isCustom: false),
-        GarmentColor(id: "lightBlue", name: "Light Blue", hex: "#A4C8E8", isCustom: false),
-        GarmentColor(id: "olive", name: "Olive", hex: "#6B7F4E", isCustom: false),
-        GarmentColor(id: "khaki", name: "Khaki", hex: "#C4A46C", isCustom: false),
-        GarmentColor(id: "brown", name: "Brown", hex: "#6B4226", isCustom: false),
-        GarmentColor(id: "burgundy", name: "Burgundy", hex: "#722F37", isCustom: false),
-        GarmentColor(id: "terracotta", name: "Terracotta", hex: "#C75B39", isCustom: false),
-        GarmentColor(id: "sage", name: "Sage", hex: "#9CAF88", isCustom: false),
-        GarmentColor(id: "indigo", name: "Indigo", hex: "#3F5277", isCustom: false),
-        GarmentColor(id: "camel", name: "Camel", hex: "#C19A6B", isCustom: false),
+        // Whites & Neutrals
+        GarmentColor(id: "white", name: String(localized: "color.white"), hex: "#FFFFFF", isCustom: false),
+        GarmentColor(id: "cream", name: String(localized: "color.cream"), hex: "#F5F0E8", isCustom: false),
+        GarmentColor(id: "beige", name: String(localized: "color.beige"), hex: "#D4C5A9", isCustom: false),
+        GarmentColor(id: "tan", name: String(localized: "color.tan"), hex: "#C2956B", isCustom: false),
+        // Grays
+        GarmentColor(id: "lightGray", name: String(localized: "color.lightGray"), hex: "#C8C8C8", isCustom: false),
+        GarmentColor(id: "charcoal", name: String(localized: "color.charcoal"), hex: "#4A4A4A", isCustom: false),
+        GarmentColor(id: "black", name: String(localized: "color.black"), hex: "#1A1A1A", isCustom: false),
+        // Blues
+        GarmentColor(id: "navy", name: String(localized: "color.navy"), hex: "#1B2A4A", isCustom: false),
+        GarmentColor(id: "lightBlue", name: String(localized: "color.lightBlue"), hex: "#A4C8E8", isCustom: false),
+        GarmentColor(id: "indigo", name: String(localized: "color.indigo"), hex: "#3F5277", isCustom: false),
+        GarmentColor(id: "teal", name: String(localized: "color.teal"), hex: "#2E8B8B", isCustom: false),
+        // Greens
+        GarmentColor(id: "olive", name: String(localized: "color.olive"), hex: "#6B7F4E", isCustom: false),
+        GarmentColor(id: "sage", name: String(localized: "color.sage"), hex: "#9CAF88", isCustom: false),
+        // Warm tones
+        GarmentColor(id: "camel", name: String(localized: "color.camel"), hex: "#C19A6B", isCustom: false),
+        GarmentColor(id: "khaki", name: String(localized: "color.khaki"), hex: "#C4A46C", isCustom: false),
+        GarmentColor(id: "mustard", name: String(localized: "color.mustard"), hex: "#D4A520", isCustom: false),
+        GarmentColor(id: "coral", name: String(localized: "color.coral"), hex: "#E8826A", isCustom: false),
+        GarmentColor(id: "terracotta", name: String(localized: "color.terracotta"), hex: "#C75B39", isCustom: false),
+        // Cool tones
+        GarmentColor(id: "lavender", name: String(localized: "color.lavender"), hex: "#B4A7D6", isCustom: false),
+        // Deep tones
+        GarmentColor(id: "brown", name: String(localized: "color.brown"), hex: "#6B4226", isCustom: false),
+        GarmentColor(id: "burgundy", name: String(localized: "color.burgundy"), hex: "#722F37", isCustom: false),
+        GarmentColor(id: "maroon", name: String(localized: "color.maroon"), hex: "#5B1E31", isCustom: false),
     ]
 
     static func byName(_ name: String) -> GarmentColor? {
@@ -77,10 +99,10 @@ struct GarmentColor: Identifiable, Equatable {
     }
 
     static func resolve(color: String, hex: String) -> GarmentColor {
-        if color == "custom" {
+        if color.hasPrefix("custom") {  // matches both "custom" (legacy) and "custom-XXXXXX"
             return GarmentColor(customHex: hex)
         }
-        return byName(color) ?? GarmentColor(customHex: hex)
+        return allColors.first { $0.id == color } ?? GarmentColor(customHex: hex)
     }
 
     private static func rgbComponents(hex: String) -> (r: Double, g: Double, b: Double) {
@@ -98,9 +120,9 @@ struct GarmentColor: Identifiable, Equatable {
 
 extension GarmentColor {
     init(customHex: String) {
-        let nearest = GarmentColor.nearestCurated(hex: customHex)
-        self.id = "custom"
-        self.name = "Custom \(nearest.name)"
+        let hexClean = customHex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
+        self.id = "custom-\(hexClean)"
+        self.name = String(localized: "color.custom")  // Placeholder — replaced by ColorNamingService
         self.hex = customHex
         self.isCustom = true
     }

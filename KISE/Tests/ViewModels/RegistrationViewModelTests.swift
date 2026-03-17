@@ -21,7 +21,7 @@ final class RegistrationViewModelTests: XCTestCase {
         let vm = RegistrationViewModel()
         vm.selectCategory(.tShirt)
         vm.selectColor(GarmentColor.allColors[0]) // White
-        XCTAssertEqual(vm.selectedColor?.name, "White")
+        XCTAssertEqual(vm.selectedColor?.id, "white")
         XCTAssertEqual(vm.currentStep, .fit)
     }
 
@@ -98,5 +98,80 @@ final class RegistrationViewModelTests: XCTestCase {
         vm.reset()
         XCTAssertEqual(vm.currentStep, .category)
         XCTAssertNil(vm.selectedCategory)
+    }
+
+    // MARK: - Shoe Flow
+
+    func testShoeFlowSkipsFit() {
+        let vm = RegistrationViewModel()
+        vm.selectCategory(.shoes)
+        vm.selectColor(GarmentColor.allColors[0])
+        // Should skip .fit and go to .shoeType
+        XCTAssertEqual(vm.currentStep, .shoeType)
+    }
+
+    func testNonShoeFlowSkipsShoeType() {
+        let vm = RegistrationViewModel()
+        vm.selectCategory(.tShirt)
+        vm.selectColor(GarmentColor.allColors[0])
+        // Should go to .fit, not .shoeType
+        XCTAssertEqual(vm.currentStep, .fit)
+    }
+
+    func testShoeGoBackFromMaterial() {
+        let vm = RegistrationViewModel()
+        vm.selectCategory(.shoes)
+        vm.selectColor(GarmentColor.allColors[0])
+        vm.selectShoeType(.sneakers)
+        XCTAssertEqual(vm.currentStep, .material)
+        vm.goBack()
+        // Should go back to .shoeType, not .fit
+        XCTAssertEqual(vm.currentStep, .shoeType)
+    }
+
+    func testShoeGoBackFromShoeType() {
+        let vm = RegistrationViewModel()
+        vm.selectCategory(.shoes)
+        vm.selectColor(GarmentColor.allColors[0])
+        XCTAssertEqual(vm.currentStep, .shoeType)
+        vm.goBack()
+        XCTAssertEqual(vm.currentStep, .color)
+    }
+
+    func testShoeFullFlow() {
+        let vm = RegistrationViewModel()
+        vm.selectCategory(.shoes)
+        vm.selectColor(GarmentColor.byName("black")!)
+        vm.selectShoeType(.oxfords)
+        vm.selectMaterial("leather")
+        vm.selectWeight(.mid)
+        vm.selectFormality(.smartCasual)
+
+        let piece = vm.buildPiece()
+        XCTAssertNotNil(piece)
+        XCTAssertEqual(piece?.category, .shoes)
+        XCTAssertEqual(piece?.shoeType, .oxfords)
+        XCTAssertEqual(piece?.fit, .regular) // default for shoes
+    }
+
+    func testShoeBuildPieceFailsWithoutShoeType() {
+        let vm = RegistrationViewModel()
+        vm.selectCategory(.shoes)
+        vm.selectColor(GarmentColor.allColors[0])
+        // Skip shoeType selection
+        vm.selectMaterial("leather")
+        vm.selectWeight(.mid)
+        vm.selectFormality(.casual)
+
+        XCTAssertNil(vm.buildPiece())
+    }
+
+    func testResetClearsShoeType() {
+        let vm = RegistrationViewModel()
+        vm.selectCategory(.shoes)
+        vm.selectColor(GarmentColor.allColors[0])
+        vm.selectShoeType(.boots)
+        vm.reset()
+        XCTAssertNil(vm.selectedShoeType)
     }
 }

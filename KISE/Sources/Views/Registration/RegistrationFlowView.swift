@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct RegistrationFlowView: View {
+    @Environment(ThemeProvider.self) private var theme
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var viewModel = RegistrationViewModel()
@@ -15,21 +16,35 @@ struct RegistrationFlowView: View {
                         CategoryPickerView { category in
                             withAnimation { viewModel.selectCategory(category) }
                         }
+                        .transition(.opacity)
 
                     case .color:
                         CuratedColorPicker { color in
                             withAnimation { viewModel.selectColor(color) }
                         }
+                        .transition(.opacity)
 
                     case .fit:
                         OptionPickerStepView(
-                            title: "What fit?",
+                            title: String(localized: "registration.whatFit"),
                             options: viewModel.availableFits,
                             labelFor: { $0.displayName },
                             suggested: nil
                         ) { fit in
                             withAnimation { viewModel.selectFit(fit) }
                         }
+                        .transition(.opacity)
+
+                    case .shoeType:
+                        OptionPickerStepView(
+                            title: String(localized: "registration.whatType"),
+                            options: ShoeType.allCases,
+                            labelFor: { $0.displayName },
+                            suggested: nil
+                        ) { type in
+                            withAnimation { viewModel.selectShoeType(type) }
+                        }
+                        .transition(.opacity)
 
                     case .material:
                         MaterialPickerStepView(
@@ -37,20 +52,22 @@ struct RegistrationFlowView: View {
                         ) { material in
                             withAnimation { viewModel.selectMaterial(material) }
                         }
+                        .transition(.opacity)
 
                     case .weight:
                         OptionPickerStepView(
-                            title: "Fabric weight?",
+                            title: String(localized: "registration.fabricWeight"),
                             options: FabricWeight.allCases,
                             labelFor: { $0.displayName },
                             suggested: viewModel.selectedWeight
                         ) { weight in
                             withAnimation { viewModel.selectWeight(weight) }
                         }
+                        .transition(.opacity)
 
                     case .formality:
                         OptionPickerStepView(
-                            title: "Formality level?",
+                            title: String(localized: "registration.formalityLevel"),
                             options: Formality.allCases,
                             labelFor: { $0.displayName },
                             suggested: viewModel.suggestedFormality
@@ -63,34 +80,36 @@ struct RegistrationFlowView: View {
                                 }
                             }
                         }
+                        .transition(.opacity)
                     }
                 }
+                .animation(.easeInOut(duration: 0.2), value: viewModel.currentStep)
                 .padding(KISEDesign.Spacing.md)
             }
-            .background(KISEDesign.Colors.background)
+            .background(theme.colors.background)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     if viewModel.currentStep > .category {
-                        Button("Back") {
+                        Button(String(localized: "action.back")) {
                             withAnimation { viewModel.goBack() }
                         }
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(String(localized: "action.cancel")) { dismiss() }
                 }
             }
             .overlay {
                 if viewModel.showAddedConfirmation {
                     VStack {
                         Spacer()
-                        Text("Added!")
+                        Text("registration.added")
                             .font(KISEDesign.Typography.subtitle)
-                            .foregroundStyle(KISEDesign.Colors.background)
+                            .foregroundStyle(theme.colors.background)
                             .padding(.horizontal, KISEDesign.Spacing.xl)
                             .padding(.vertical, KISEDesign.Spacing.md)
-                            .background(KISEDesign.Colors.accent)
+                            .background(theme.colors.accent)
                             .clipShape(Capsule())
                             .padding(.bottom, KISEDesign.Spacing.xxl)
                     }
