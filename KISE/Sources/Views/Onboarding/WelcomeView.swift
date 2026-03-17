@@ -14,6 +14,10 @@ struct WelcomeView: View {
                     .font(KISEDesign.Typography.brand(48))
                     .foregroundStyle(theme.colors.textPrimary)
 
+                Text("着せ")
+                    .font(KISEDesign.Typography.brand(28))
+                    .foregroundStyle(theme.colors.textTertiary)
+
                 Text("onboarding.tagline")
                     .font(KISEDesign.Typography.title)
                     .foregroundStyle(theme.colors.textSecondary)
