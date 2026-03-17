@@ -1,4 +1,7 @@
 import SwiftUI
+import os.log
+
+private let logger = Logger(subsystem: "com.kise.app", category: "ShareCard")
 
 @MainActor
 enum ShareCardRenderer {
@@ -12,7 +15,10 @@ enum ShareCardRenderer {
 
     /// Presents UIActivityViewController with the rendered card image
     static func share(data: ShareCardData, theme: ThemeColors) {
-        guard let image = renderImage(data: data, theme: theme) else { return }
+        guard let image = renderImage(data: data, theme: theme) else {
+            logger.error("Failed to render share card image")
+            return
+        }
 
         let activityVC = UIActivityViewController(
             activityItems: [image],
