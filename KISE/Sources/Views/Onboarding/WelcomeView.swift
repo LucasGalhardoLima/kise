@@ -10,13 +10,14 @@ struct WelcomeView: View {
             Spacer()
 
             VStack(spacing: KISEDesign.Spacing.md) {
-                Text("KISE")
-                    .font(KISEDesign.Typography.brand(48))
-                    .foregroundStyle(theme.colors.textPrimary)
-
-                Text("着せ")
-                    .font(KISEDesign.Typography.brand(28))
-                    .foregroundStyle(theme.colors.textTertiary)
+                HStack(alignment: .firstTextBaseline, spacing: KISEDesign.Spacing.sm) {
+                    Text("KISE")
+                        .font(KISEDesign.Typography.brand(48))
+                        .foregroundStyle(theme.colors.textPrimary)
+                    Text("着せ")
+                        .font(KISEDesign.Typography.brand(28))
+                        .foregroundStyle(theme.colors.textTertiary)
+                }
 
                 Text("onboarding.tagline")
                     .font(KISEDesign.Typography.title)
