@@ -4,13 +4,26 @@ import SwiftUI
 struct CuratedColorPicker: View {
     @Environment(ThemeProvider.self) private var theme
     let onSelect: (GarmentColor) -> Void
-    @State private var showCustomPicker = false
-    @State private var customColor: Color = .gray
+    @State private var showHuePicker = false
+    @State private var hueValue: Double = 0.0
 
     private let columns = [
         GridItem(.flexible()), GridItem(.flexible()),
         GridItem(.flexible()), GridItem(.flexible()),
     ]
+
+    /// Auto-derived wearable tone from hue
+    private var derivedColor: Color {
+        Color(hue: hueValue, saturation: 0.55, brightness: 0.65)
+    }
+
+    private var derivedHex: String {
+        derivedColor.toHex()
+    }
+
+    private var derivedName: String {
+        ColorDictionary.nearestName(for: derivedHex)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: KISEDesign.Spacing.lg) {
@@ -37,6 +50,7 @@ struct CuratedColorPicker: View {
                                 .font(KISEDesign.Typography.small)
                                 .foregroundStyle(theme.colors.textSecondary)
                                 .lineLimit(1)
+                                .minimumScaleFactor(0.7)
                                 .frame(width: 68)
                         }
                     }
@@ -44,65 +58,132 @@ struct CuratedColorPicker: View {
 
                 // Custom color "+" button
                 Button {
-                    showCustomPicker = true
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        showHuePicker.toggle()
+                    }
                 } label: {
                     VStack(spacing: KISEDesign.Spacing.xs) {
                         RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
                             .strokeBorder(theme.colors.border, style: StrokeStyle(lineWidth: 1, dash: [4]))
                             .frame(width: 68, height: 68)
                             .overlay {
-                                Image(systemName: "plus")
+                                Image(systemName: showHuePicker ? "minus" : "plus")
                                     .font(.title3)
                                     .foregroundStyle(theme.colors.textTertiary)
                             }
                         Text("color.custom")
                             .font(KISEDesign.Typography.small)
                             .foregroundStyle(theme.colors.textTertiary)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                             .frame(width: 68)
                     }
                 }
             }
-        }
-        .sheet(isPresented: $showCustomPicker) {
-            NavigationStack {
-                VStack(spacing: KISEDesign.Spacing.xl) {
-                    // Large color preview
-                    RoundedRectangle(cornerRadius: KISEDesign.Radius.lg)
-                        .fill(customColor)
-                        .frame(height: 200)
-                        .padding(.horizontal, KISEDesign.Spacing.xl)
 
-                    ColorPicker("Pick a color", selection: $customColor, supportsOpacity: false)
-                        .labelsHidden()
-                        .scaleEffect(1.5)
-                        .padding(KISEDesign.Spacing.xl)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(theme.colors.background)
-                .navigationTitle(String(localized: "registration.customColor"))
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button(String(localized: "action.cancel")) { showCustomPicker = false }
+            // Inline hue picker — slides in below the grid
+            if showHuePicker {
+                inlineHuePicker
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+            }
+        }
+    }
+
+    // MARK: - Inline Hue Picker
+
+    private var inlineHuePicker: some View {
+        VStack(spacing: KISEDesign.Spacing.md) {
+            // Hue gradient bar
+            HueSlider(hue: $hueValue)
+                .frame(height: 36)
+
+            HStack(spacing: KISEDesign.Spacing.md) {
+                // Preview swatch
+                RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
+                    .fill(derivedColor)
+                    .frame(width: 52, height: 52)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
+                            .strokeBorder(theme.colors.border, lineWidth: 1)
                     }
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button(String(localized: "action.done")) {
-                            let hex = customColor.toHex()
-                            let dictionaryName = ColorDictionary.nearestName(for: hex)
-                            let hexClean = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
-                            let garmentColor = GarmentColor(
-                                id: "custom-\(hexClean)",
-                                name: dictionaryName,
-                                hex: hex,
-                                isCustom: true
-                            )
-                            showCustomPicker = false
-                            onSelect(garmentColor)
-                        }
-                    }
+
+                // Color name
+                Text(derivedName)
+                    .font(KISEDesign.Typography.bodyText)
+                    .foregroundStyle(theme.colors.textPrimary)
+                    .lineLimit(1)
+
+                Spacer()
+
+                // Done button
+                Button {
+                    let hex = derivedHex
+                    let name = derivedName
+                    let hexClean = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
+                    let garmentColor = GarmentColor(
+                        id: "custom-\(hexClean)",
+                        name: name,
+                        hex: hex,
+                        isCustom: true
+                    )
+                    onSelect(garmentColor)
+                } label: {
+                    Text("action.done")
+                        .font(KISEDesign.Typography.subtitle)
+                        .foregroundStyle(theme.colors.background)
+                        .padding(.horizontal, KISEDesign.Spacing.lg)
+                        .padding(.vertical, KISEDesign.Spacing.sm)
+                        .background(theme.colors.accent)
+                        .clipShape(Capsule())
                 }
             }
-            .presentationDetents([.large])
+        }
+        .padding(KISEDesign.Spacing.md)
+        .background(
+            RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
+                .fill(theme.colors.surface)
+                .overlay(
+                    RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
+                        .strokeBorder(theme.colors.border, lineWidth: 1)
+                )
+        )
+    }
+}
+
+// MARK: - Hue Slider
+
+private struct HueSlider: View {
+    @Binding var hue: Double
+
+    var body: some View {
+        GeometryReader { geo in
+            let width = geo.size.width
+            ZStack(alignment: .leading) {
+                // Rainbow gradient
+                LinearGradient(
+                    gradient: Gradient(colors: stride(from: 0.0, through: 1.0, by: 0.1).map {
+                        Color(hue: $0, saturation: 0.55, brightness: 0.65)
+                    }),
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+                .clipShape(Capsule())
+
+                // Thumb
+                Circle()
+                    .fill(.white)
+                    .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
+                    .frame(width: 28, height: 28)
+                    .offset(x: hue * (width - 28))
+            }
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { drag in
+                        let raw = drag.location.x / width
+                        hue = min(max(raw, 0), 1)
+                    }
+            )
         }
     }
 }
