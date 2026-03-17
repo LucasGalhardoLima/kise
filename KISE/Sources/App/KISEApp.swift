@@ -83,7 +83,7 @@ struct MainTabView: View {
     }
 }
 
-// MARK: - Add Piece Accessory (iOS 26 vs fallback)
+// MARK: - Add Piece Accessory
 
 private struct AddPieceAccessoryModifier: ViewModifier {
     let isVisible: Bool
@@ -91,36 +91,26 @@ private struct AddPieceAccessoryModifier: ViewModifier {
     let action: () -> Void
 
     func body(content: Content) -> some View {
-        if #available(iOS 26, *) {
-            content.tabViewBottomAccessory(isEnabled: isVisible) {
-                addButton
-            }
-        } else {
-            ZStack(alignment: .bottomTrailing) {
-                content
-                if isVisible {
-                    addButton
-                        .padding(.trailing, KISEDesign.Spacing.lg)
-                        .padding(.bottom, 60)
-                        .transition(.scale.combined(with: .opacity))
+        ZStack(alignment: .bottomTrailing) {
+            content
+            if isVisible {
+                Button(action: action) {
+                    Circle()
+                        .fill(theme.colors.accent)
+                        .frame(width: 56, height: 56)
+                        .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
+                        .overlay(
+                            Image(systemName: "plus")
+                                .font(.title2.weight(.medium))
+                                .foregroundStyle(.white)
+                        )
                 }
+                .buttonStyle(.plain)
+                .padding(.trailing, KISEDesign.Spacing.lg)
+                .padding(.bottom, 80) // clear tab bar
+                .transition(.scale.combined(with: .opacity))
             }
         }
-    }
-
-    private var addButton: some View {
-        Button(action: action) {
-            Circle()
-                .fill(theme.colors.accent)
-                .frame(width: 56, height: 56)
-                .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
-                .overlay(
-                    Image(systemName: "plus")
-                        .font(.title2.weight(.medium))
-                        .foregroundStyle(.white)
-                )
-        }
-        .buttonStyle(.plain)
     }
 }
 
