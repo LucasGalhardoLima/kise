@@ -32,18 +32,8 @@ struct ShareCardData {
         let available = CompositionLayout.templates(for: pieces.count)
         guard !available.isEmpty else { return CompositionLayout(blocks: []) }
         let key = pieces.map(\.colorHex).joined()
-        let index = abs(fnv1a(key)) % available.count
+        let index = abs(StableHash.fnv1a(key)) % available.count
         return available[index]
-    }
-
-    /// FNV-1a hash — deterministic across launches (unlike Swift's hashValue)
-    private func fnv1a(_ string: String) -> Int {
-        var hash: UInt64 = 14695981039346656037
-        for byte in string.utf8 {
-            hash ^= UInt64(byte)
-            hash &*= 1099511628211
-        }
-        return Int(truncatingIfNeeded: hash)
     }
 }
 
