@@ -32,7 +32,7 @@ struct ColorTileView: View {
                 .accessibilityLabel("\(colorName) \(category)")
 
             VStack(spacing: 2) {
-                Text("\(colorDisplayName ?? garmentColor.name) \(category)")
+                Text(pieceLabel(color: colorDisplayName ?? garmentColor.name, category: category))
                     .font(KISEDesign.Typography.caption)
                     .foregroundStyle(theme.colors.textPrimary)
                     .lineLimit(1)

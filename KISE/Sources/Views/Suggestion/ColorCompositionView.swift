@@ -51,7 +51,10 @@ struct ColorCompositionView: View {
                                 }
                             }
                             .accessibilityLabel(
-                                "\(GarmentColor.resolve(color: piece.color, hex: piece.colorHex).name) \(piece.category.displayName)"
+                                pieceLabel(
+                                    color: GarmentColor.resolve(color: piece.color, hex: piece.colorHex).name,
+                                    category: piece.category.displayName
+                                )
                             )
                     }
                 }
@@ -104,7 +107,7 @@ struct ColorCompositionView: View {
     private var labelText: String {
         sortedPieces.map { piece in
             let color = GarmentColor.resolve(color: piece.color, hex: piece.colorHex)
-            return "\(color.name) \(piece.category.displayName)"
+            return pieceLabel(color: color.name, category: piece.category.displayName)
         }.joined(separator: " · ")
     }
 
