@@ -150,6 +150,7 @@ struct WardrobeView: View {
         ColorTileView(
             colorHex: piece.colorHex,
             colorName: piece.color,
+            colorDisplayName: piece.colorDisplayName,
             category: piece.category.displayName,
             material: piece.material,
             lastUsedText: viewModel.lastUsedText(for: piece.id),
