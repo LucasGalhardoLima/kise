@@ -159,14 +159,8 @@ final class RegistrationViewModel {
         piece.userPhotoPath = userPhotoPath
         context.insert(piece)
         try? context.save()
-        // Async: upgrade custom color name via AI if available
-        if let color = selectedColor, color.isCustom {
-            Task {
-                let aiName = await ColorNamingService.generateName(for: color.hex)
-                piece.colorDisplayName = aiName
-                try? context.save()
-            }
-        }
+        // colorDisplayName is already set to the ColorDictionary name
+        // the user saw during registration — no need to override.
         return true
     }
 }

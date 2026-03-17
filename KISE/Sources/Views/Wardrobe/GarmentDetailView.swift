@@ -53,9 +53,9 @@ struct GarmentDetailView: View {
                 // Title — auto-generated name
                 Group {
                     if piece.category == .shoes, let shoeType = piece.shoeType {
-                        Text(pieceLabel(color: garmentColor.name, category: shoeType.displayName))
+                        Text(pieceLabel(color: piece.resolvedColorName, category: shoeType.displayName))
                     } else {
-                        Text("\(piece.fit.displayName) \(pieceLabel(color: garmentColor.name, category: piece.category.displayName))")
+                        Text("\(piece.fit.displayName) \(pieceLabel(color: piece.resolvedColorName, category: piece.category.displayName))")
                     }
                 }
                 .font(KISEDesign.Typography.title)
@@ -64,9 +64,9 @@ struct GarmentDetailView: View {
                 // Inline subtitle
                 Group {
                     if piece.category == .shoes, let shoeType = piece.shoeType {
-                        Text("\(materialDisplayName(piece.material)) · \(garmentColor.name) · \(shoeType.displayName)")
+                        Text("\(materialDisplayName(piece.material)) · \(piece.resolvedColorName) · \(shoeType.displayName)")
                     } else {
-                        Text("\(materialDisplayName(piece.material)) · \(garmentColor.name) · \(piece.fit.displayName)")
+                        Text("\(materialDisplayName(piece.material)) · \(piece.resolvedColorName) · \(piece.fit.displayName)")
                     }
                 }
                 .font(KISEDesign.Typography.bodyText)

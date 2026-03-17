@@ -39,4 +39,9 @@ final class GarmentPiece {
         self.isActive = true
         self.createdAt = Date()
     }
+
+    /// Resolved color name: prefers stored display name, falls back to curated/dictionary name
+    var resolvedColorName: String {
+        colorDisplayName ?? GarmentColor.resolve(color: color, hex: colorHex).name
+    }
 }

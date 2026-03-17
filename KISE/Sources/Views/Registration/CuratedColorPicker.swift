@@ -58,16 +58,14 @@ struct CuratedColorPicker: View {
 
                 // Custom color "+" button
                 Button {
-                    withAnimation(.easeInOut(duration: 0.25)) {
-                        showHuePicker.toggle()
-                    }
+                    showHuePicker = true
                 } label: {
                     VStack(spacing: KISEDesign.Spacing.xs) {
                         RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
                             .strokeBorder(theme.colors.border, style: StrokeStyle(lineWidth: 1, dash: [4]))
                             .frame(width: 68, height: 68)
                             .overlay {
-                                Image(systemName: showHuePicker ? "minus" : "plus")
+                                Image(systemName: "plus")
                                     .font(.title3)
                                     .foregroundStyle(theme.colors.textTertiary)
                             }
@@ -80,73 +78,73 @@ struct CuratedColorPicker: View {
                     }
                 }
             }
-
-            // Inline hue picker — slides in below the grid
-            if showHuePicker {
-                inlineHuePicker
-                    .transition(.opacity.combined(with: .move(edge: .top)))
-            }
+        }
+        .sheet(isPresented: $showHuePicker) {
+            huePickerSheet
+                .presentationDetents([.medium])
         }
     }
 
-    // MARK: - Inline Hue Picker
+    // MARK: - Hue Picker Sheet
 
-    private var inlineHuePicker: some View {
-        VStack(spacing: KISEDesign.Spacing.md) {
-            // Hue gradient bar
-            HueSlider(hue: $hueValue)
-                .frame(height: 36)
+    private var huePickerSheet: some View {
+        NavigationStack {
+            VStack(spacing: KISEDesign.Spacing.lg) {
+                HueSlider(hue: $hueValue)
+                    .frame(height: 36)
 
-            HStack(spacing: KISEDesign.Spacing.md) {
-                // Preview swatch
-                RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
-                    .fill(derivedColor)
-                    .frame(width: 52, height: 52)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
-                            .strokeBorder(theme.colors.border, lineWidth: 1)
+                HStack(spacing: KISEDesign.Spacing.md) {
+                    RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
+                        .fill(derivedColor)
+                        .frame(width: 52, height: 52)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
+                                .strokeBorder(theme.colors.border, lineWidth: 1)
+                        }
+
+                    Text(derivedName)
+                        .font(KISEDesign.Typography.bodyText)
+                        .foregroundStyle(theme.colors.textPrimary)
+                        .lineLimit(1)
+
+                    Spacer()
+
+                    Button {
+                        let hex = derivedHex
+                        let name = derivedName
+                        let hexClean = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
+                        let garmentColor = GarmentColor(
+                            id: "custom-\(hexClean)",
+                            name: name,
+                            hex: hex,
+                            isCustom: true
+                        )
+                        showHuePicker = false
+                        onSelect(garmentColor)
+                    } label: {
+                        Text("action.done")
+                            .font(KISEDesign.Typography.subtitle)
+                            .foregroundStyle(theme.colors.background)
+                            .padding(.horizontal, KISEDesign.Spacing.lg)
+                            .padding(.vertical, KISEDesign.Spacing.sm)
+                            .background(theme.colors.accent)
+                            .clipShape(Capsule())
                     }
-
-                // Color name
-                Text(derivedName)
-                    .font(KISEDesign.Typography.bodyText)
-                    .foregroundStyle(theme.colors.textPrimary)
-                    .lineLimit(1)
-
-                Spacer()
-
-                // Done button
-                Button {
-                    let hex = derivedHex
-                    let name = derivedName
-                    let hexClean = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
-                    let garmentColor = GarmentColor(
-                        id: "custom-\(hexClean)",
-                        name: name,
-                        hex: hex,
-                        isCustom: true
-                    )
-                    onSelect(garmentColor)
-                } label: {
-                    Text("action.done")
-                        .font(KISEDesign.Typography.subtitle)
-                        .foregroundStyle(theme.colors.background)
-                        .padding(.horizontal, KISEDesign.Spacing.lg)
-                        .padding(.vertical, KISEDesign.Spacing.sm)
-                        .background(theme.colors.accent)
-                        .clipShape(Capsule())
+                }
+            }
+            .padding(KISEDesign.Spacing.lg)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .background(theme.colors.background)
+            .navigationTitle("registration.customColor")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("action.cancel") {
+                        showHuePicker = false
+                    }
                 }
             }
         }
-        .padding(KISEDesign.Spacing.md)
-        .background(
-            RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
-                .fill(theme.colors.surface)
-                .overlay(
-                    RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
-                        .strokeBorder(theme.colors.border, lineWidth: 1)
-                )
-        )
     }
 }
 

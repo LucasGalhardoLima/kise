@@ -86,37 +86,55 @@ struct SuggestionView: View {
     // MARK: - Loading State
 
     private var loadingState: some View {
-        VStack(spacing: KISEDesign.Spacing.lg) {
-            ForEach(0..<3, id: \.self) { _ in
-                skeletonCard
+        VStack(spacing: KISEDesign.Spacing.md) {
+            // Occasion pills skeleton
+            HStack(spacing: KISEDesign.Spacing.sm) {
+                ForEach(0..<4, id: \.self) { _ in
+                    skeletonPill
+                }
             }
+
+            // "YOUR LOOK" label skeleton
+            skeletonBlock(width: 80, height: 12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            // Color composition skeleton
+            skeletonBlock(height: nil)
+                .aspectRatio(4 / 3, contentMode: .fit)
+                .padding(.horizontal, KISEDesign.Spacing.md)
+
+            // Piece names skeleton
+            skeletonBlock(width: 200, height: 14)
+
+            // Reasoning lines skeleton
+            VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
+                skeletonBlock(height: 14)
+                skeletonBlock(height: 14)
+                skeletonBlock(width: 180, height: 14)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(KISEDesign.Spacing.md)
+
+            // Boldness slider skeleton
+            skeletonBlock(height: 36)
+                .clipShape(Capsule())
         }
         .padding(.top, KISEDesign.Spacing.md)
     }
 
-    private var skeletonCard: some View {
-        RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
+    private var skeletonPill: some View {
+        Capsule()
             .fill(theme.colors.surface)
-            .frame(height: 120)
-            .overlay(
-                RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.clear,
-                                theme.colors.border.opacity(0.3),
-                                Color.clear,
-                            ],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .phaseAnimator([false, true]) { content, phase in
-                        content.offset(x: phase ? 200 : -200)
-                    }
-            )
-            .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
-            .kiseCard()
+            .frame(width: 72, height: 28)
+            .overlay(Capsule().strokeBorder(theme.colors.border, lineWidth: 1))
+            .shimmer(theme: theme)
+    }
+
+    private func skeletonBlock(width: CGFloat? = nil, height: CGFloat? = nil) -> some View {
+        RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
+            .fill(theme.colors.surface)
+            .frame(width: width, height: height)
+            .shimmer(theme: theme)
     }
 
     // MARK: - Ready State (has pieces, no suggestion yet)
@@ -343,5 +361,38 @@ struct SuggestionView: View {
             }
         }
         .padding(.bottom, KISEDesign.Spacing.md)
+    }
+}
+
+// MARK: - Shimmer Effect
+
+private struct ShimmerModifier: ViewModifier {
+    let theme: ThemeProvider
+
+    func body(content: Content) -> some View {
+        content
+            .overlay(
+                LinearGradient(
+                    colors: [
+                        Color.clear,
+                        theme.colors.border.opacity(0.3),
+                        Color.clear,
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+                .phaseAnimator([false, true]) { content, phase in
+                    content.offset(x: phase ? 200 : -200)
+                } animation: { _ in
+                    .easeInOut(duration: 1.2).repeatForever(autoreverses: false)
+                }
+            )
+            .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.sm))
+    }
+}
+
+private extension View {
+    func shimmer(theme: ThemeProvider) -> some View {
+        modifier(ShimmerModifier(theme: theme))
     }
 }

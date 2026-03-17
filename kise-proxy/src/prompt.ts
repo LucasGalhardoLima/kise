@@ -2,7 +2,7 @@
 
 import { ARCHETYPE_BRIEFS } from "./archetypes";
 
-export function buildSystemPrompt(archetypes: string[]): string {
+export function buildSystemPrompt(archetypes: string[], language?: string): string {
   const archetypeSections = archetypes
     .filter((a) => a in ARCHETYPE_BRIEFS)
     .map((a) => `- ${ARCHETYPE_BRIEFS[a]}`)
@@ -33,5 +33,5 @@ SOFT RULES (use judgment):
 
 OUTPUT: Use the suggest_outfit tool to return your suggestion. Always include reasoning (1-2 sentences explaining why this combination works). Include layering_note only when weather transitions warrant it. Include alternative_piece only when there's a meaningful swap available.
 
-If the wardrobe has too few pieces to form a coherent outfit for the given occasion and weather, return what you can and explain in reasoning what's missing.`;
+If the wardrobe has too few pieces to form a coherent outfit for the given occasion and weather, return what you can and explain in reasoning what's missing.${language ? `\n\nLANGUAGE: You MUST write ALL text output (reasoning, layering_note, alternative_piece reason) in ${language}. Never respond in English unless the user's language is English.` : ""}`;
 }
