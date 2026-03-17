@@ -68,10 +68,10 @@ final class WardrobeViewModelTests: XCTestCase {
     @MainActor
     func testFilterPiecesSortedByHue() {
         let white = GarmentPiece(category: .tShirt, color: "white", colorHex: "#FFFFFF", fit: .slim, material: "cotton", weight: .light, formality: .casual)
-        let navy = GarmentPiece(category: .polo, color: "navy", colorHex: "#1B2A4A", fit: .regular, material: "cotton", weight: .mid, formality: .smartCasual)
+        let navy = GarmentPiece(category: .tShirt, color: "navy", colorHex: "#1B2A4A", fit: .regular, material: "cotton", weight: .mid, formality: .smartCasual)
 
         let vm = WardrobeViewModel()
-        vm.selectedTab = nil
+        vm.selectedTab = .tops
         let sorted = vm.filterPieces([white, navy])
         XCTAssertEqual(sorted.first?.color, "navy", "Chromatic colors should sort before neutrals")
     }
@@ -131,13 +131,13 @@ final class WardrobeViewModelTests: XCTestCase {
         let vm = WardrobeViewModel()
         vm.computeStats(pieces: [piece], suggestions: [suggestion])
 
-        XCTAssertEqual(vm.lastUsedText(for: piece.id), "3d ago")
+        XCTAssertEqual(vm.lastUsedText(for: piece.id), "3" + String(localized: "lastUsed.daysShort"))
     }
 
     @MainActor
     func testLastUsedTextNewPiece() {
         let vm = WardrobeViewModel()
         vm.computeStats(pieces: [], suggestions: [])
-        XCTAssertEqual(vm.lastUsedText(for: UUID()), "New")
+        XCTAssertEqual(vm.lastUsedText(for: UUID()), String(localized: "lastUsed.new"))
     }
 }

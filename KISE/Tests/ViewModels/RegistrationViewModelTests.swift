@@ -21,7 +21,7 @@ final class RegistrationViewModelTests: XCTestCase {
         let vm = RegistrationViewModel()
         vm.selectCategory(.tShirt)
         vm.selectColor(GarmentColor.allColors[0]) // White
-        XCTAssertEqual(vm.selectedColor?.name, "White")
+        XCTAssertEqual(vm.selectedColor?.id, "white")
         XCTAssertEqual(vm.currentStep, .fit)
     }
 
@@ -145,7 +145,7 @@ final class RegistrationViewModelTests: XCTestCase {
         vm.selectShoeType(.oxfords)
         vm.selectMaterial("leather")
         vm.selectWeight(.mid)
-        vm.selectFormality(.smart)
+        vm.selectFormality(.smartCasual)
 
         let piece = vm.buildPiece()
         XCTAssertNotNil(piece)

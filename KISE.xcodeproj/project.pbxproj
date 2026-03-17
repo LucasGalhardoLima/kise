@@ -58,6 +58,14 @@
 		ED69DEF4F56D03D0835A4DFC /* SuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722AF366C32F3654A4761263 /* SuggestionView.swift */; };
 		F272568ECD8B4D0675D8AB6E /* WeatherSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62534F845BFB662A1FFEEF5A /* WeatherSnapshot.swift */; };
 		F869D7A7C8F8A76F1B08D6E8 /* GarmentColorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01A1E23C4B8FE58270EB79D /* GarmentColorTests.swift */; };
+		E2B3C4D5F6071829A0B1C2D3 /* ThemeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A2B3C4E5F60718A9B0C1D2 /* ThemeProvider.swift */; };
+		E4B5C6D7F8091041A2B3C4D5 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A4B5C6E7F80930A1B2C3D4 /* WelcomeView.swift */; };
+		E6B7C8D9FA1B2263A4B5C6D7 /* CompositionDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A6B7C8E9FA1152A3B4C5D6 /* CompositionDemoView.swift */; };
+		E8B9CADBEFC04485A6B7C8D9 /* LocationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A8B9CAEBFC3374A5B6C7D8 /* LocationPermissionView.swift */; };
+		EABBCCDDEF0166A7A8B9CADB /* OnboardingFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9AABBCCEDF05596A7B8C9DA /* OnboardingFlowView.swift */; };
+		ECBDDEEFFE0388C9AABBCCDD /* ColorDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBACCDDEEFC277B8A9BACBDC /* ColorDictionary.swift */; };
+		EEBFFA0BC2E5AAEBBCCDDEEF /* ColorNamingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAEEFFAB1D499DAABCBCDDE /* ColorNamingService.swift */; };
+		F0B2C3D4E5F607B8C9D0E1F2 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = DFA1B2C3D4E5F6A7B8C9D0E1 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +132,14 @@
 		F503FEC027C955E89687E818 /* CompositionLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionLayout.swift; sourceTree = "<group>"; };
 		F85CA45FBBE3EF382E48CE25 /* CormorantGaramond-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-Light.ttf"; sourceTree = "<group>"; };
 		FFAAB8C612766EB7B31E6BBE /* DMSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-Regular.ttf"; sourceTree = "<group>"; };
+		D1A2B3C4E5F60718A9B0C1D2 /* ThemeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeProvider.swift; sourceTree = "<group>"; };
+		D3A4B5C6E7F80930A1B2C3D4 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		D5A6B7C8E9FA1152A3B4C5D6 /* CompositionDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionDemoView.swift; sourceTree = "<group>"; };
+		D7A8B9CAEBFC3374A5B6C7D8 /* LocationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPermissionView.swift; sourceTree = "<group>"; };
+		D9AABBCCEDF05596A7B8C9DA /* OnboardingFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlowView.swift; sourceTree = "<group>"; };
+		DBACCDDEEFC277B8A9BACBDC /* ColorDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorDictionary.swift; sourceTree = "<group>"; };
+		DDAEEFFAB1D499DAABCBCDDE /* ColorNamingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorNamingService.swift; sourceTree = "<group>"; };
+		DFA1B2C3D4E5F6A7B8C9D0E1 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -183,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				BC3A62224376814E6DBDF830 /* Assets.xcassets */,
+				DFA1B2C3D4E5F6A7B8C9D0E1 /* Localizable.xcstrings */,
 			);
 			path = KISE;
 			sourceTree = "<group>";
@@ -257,6 +274,7 @@
 		60342CEA62A80D8011084D96 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				DBACCDDEEFC277B8A9BACBDC /* ColorDictionary.swift */,
 				F503FEC027C955E89687E818 /* CompositionLayout.swift */,
 				5F24ECEE06EA7B6DC1B4DEC6 /* Enums.swift */,
 				71235497E1F72A4E3A56DF79 /* Feedback.swift */,
@@ -292,6 +310,7 @@
 				32294854B5A55E020F17F1BC /* DesignSystem.swift */,
 				C9100978485D407EC382C6D5 /* EmptyStateView.swift */,
 				C2357CB0666A348462F6F167 /* StatsRowView.swift */,
+				D1A2B3C4E5F60718A9B0C1D2 /* ThemeProvider.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -327,7 +346,11 @@
 		CF8CD3B64DF3EC521879D7BE /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				D5A6B7C8E9FA1152A3B4C5D6 /* CompositionDemoView.swift */,
+				D7A8B9CAEBFC3374A5B6C7D8 /* LocationPermissionView.swift */,
+				D9AABBCCEDF05596A7B8C9DA /* OnboardingFlowView.swift */,
 				013C7CAB770871236093DB60 /* StyleOnboardingView.swift */,
+				D3A4B5C6E7F80930A1B2C3D4 /* WelcomeView.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -374,6 +397,7 @@
 			isa = PBXGroup;
 			children = (
 				2ED2117C9C3D1AA3E1772A02 /* BackgroundPrefetchService.swift */,
+				DDAEEFFAB1D499DAABCBCDDE /* ColorNamingService.swift */,
 				C1BBC9F242CF8C87B7A85674 /* OnDeviceSuggestionService.swift */,
 				07CE6A9777CD41A8507816F7 /* SuggestionService.swift */,
 				4453B50A6264856485D01479 /* WeatherService.swift */,
@@ -441,6 +465,7 @@
 			knownRegions = (
 				Base,
 				en,
+				"pt-BR",
 			);
 			mainGroup = 06B190391990342C0B610AF3;
 			minimizedProjectReferenceProxies = 1;
@@ -460,6 +485,7 @@
 			files = (
 				5634DA4078C72020DC57D938 /* Assets.xcassets in Resources */,
 				E1A1C8D517605576947CF0DA /* CormorantGaramond-Light.ttf in Resources */,
+				F0B2C3D4E5F607B8C9D0E1F2 /* Localizable.xcstrings in Resources */,
 				6838D86133DDD18009A24A4E /* DMSans-Light.ttf in Resources */,
 				B451F78B00BF4B76CA011B9E /* DMSans-Medium.ttf in Resources */,
 				155BE472453A3D66DD77F5A3 /* DMSans-Regular.ttf in Resources */,
@@ -478,6 +504,13 @@
 				4B3E238FF7B5C108843E1C90 /* BackgroundPrefetchService.swift in Sources */,
 				46A24A74C22CEBA7F995EE48 /* CategoryPickerView.swift in Sources */,
 				412834C148F76D6353B46393 /* ColorCompositionView.swift in Sources */,
+				ECBDDEEFFE0388C9AABBCCDD /* ColorDictionary.swift in Sources */,
+				EEBFFA0BC2E5AAEBBCCDDEEF /* ColorNamingService.swift in Sources */,
+				E6B7C8D9FA1B2263A4B5C6D7 /* CompositionDemoView.swift in Sources */,
+				E8B9CADBEFC04485A6B7C8D9 /* LocationPermissionView.swift in Sources */,
+				EABBCCDDEF0166A7A8B9CADB /* OnboardingFlowView.swift in Sources */,
+				E2B3C4D5F6071829A0B1C2D3 /* ThemeProvider.swift in Sources */,
+				E4B5C6D7F8091041A2B3C4D5 /* WelcomeView.swift in Sources */,
 				674FBEA0765FBB65DC96E4B2 /* ColorTileView.swift in Sources */,
 				952B56850A42960BF910EDCD /* CompositionLayout.swift in Sources */,
 				1FE17A2AE0C2979B42984459 /* CuratedColorPicker.swift in Sources */,

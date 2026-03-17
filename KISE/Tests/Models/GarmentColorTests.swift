@@ -42,12 +42,12 @@ final class GarmentColorTests: XCTestCase {
         XCTAssertTrue(custom.isCustom)
         XCTAssertEqual(custom.hex, "#FF6B35")
         XCTAssertEqual(custom.id, "custom-FF6B35")
-        XCTAssertEqual(custom.name, "Custom")
+        XCTAssertEqual(custom.name, String(localized: "color.custom"))
     }
 
     func testCustomColorNaming() {
         let custom = GarmentColor(customHex: "#FF0000")
-        XCTAssertEqual(custom.name, "Custom")
+        XCTAssertEqual(custom.name, String(localized: "color.custom"))
         XCTAssertEqual(custom.id, "custom-FF0000")
     }
 

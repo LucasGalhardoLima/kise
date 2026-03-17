@@ -5,7 +5,7 @@ import XCTest
 final class EnumsTests: XCTestCase {
 
     func testGarmentCategoryDisplayName() {
-        XCTAssertEqual(GarmentCategory.tShirt.displayName, "T-Shirt")
+        XCTAssertEqual(GarmentCategory.tShirt.displayName, String(localized: "category.tShirt"))
         XCTAssertEqual(GarmentCategory.tShirt.rawValue, "tShirt")  // verify raw value
     }
 
@@ -42,7 +42,7 @@ final class EnumsTests: XCTestCase {
     }
 
     func testOccasionDisplayName() {
-        XCTAssertEqual(Occasion.everyday.displayName, "Everyday")
-        XCTAssertEqual(Occasion.dateNight.displayName, "Date Night")
+        XCTAssertEqual(Occasion.everyday.displayName, String(localized: "occasion.everyday"))
+        XCTAssertEqual(Occasion.dateNight.displayName, String(localized: "occasion.dateNight"))
     }
 }
