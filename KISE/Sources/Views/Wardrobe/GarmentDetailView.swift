@@ -51,14 +51,26 @@ struct GarmentDetailView: View {
                     }
 
                 // Title — auto-generated name
-                Text("\(piece.fit.displayName) \(garmentColor.name) \(piece.category.displayName)")
-                    .font(KISEDesign.Typography.title)
-                    .foregroundStyle(theme.colors.textPrimary)
+                Group {
+                    if piece.category == .shoes, let shoeType = piece.shoeType {
+                        Text(pieceLabel(color: garmentColor.name, category: shoeType.displayName))
+                    } else {
+                        Text("\(piece.fit.displayName) \(pieceLabel(color: garmentColor.name, category: piece.category.displayName))")
+                    }
+                }
+                .font(KISEDesign.Typography.title)
+                .foregroundStyle(theme.colors.textPrimary)
 
                 // Inline subtitle
-                Text("\(materialDisplayName(piece.material)) · \(garmentColor.name) · \(piece.fit.displayName)")
-                    .font(KISEDesign.Typography.bodyText)
-                    .foregroundStyle(theme.colors.textSecondary)
+                Group {
+                    if piece.category == .shoes, let shoeType = piece.shoeType {
+                        Text("\(materialDisplayName(piece.material)) · \(garmentColor.name) · \(shoeType.displayName)")
+                    } else {
+                        Text("\(materialDisplayName(piece.material)) · \(garmentColor.name) · \(piece.fit.displayName)")
+                    }
+                }
+                .font(KISEDesign.Typography.bodyText)
+                .foregroundStyle(theme.colors.textSecondary)
 
                 // Usage stats
                 StatsRowView(items: [

@@ -78,7 +78,13 @@ struct ColorCompositionView: View {
                             .font(KISEDesign.Typography.subtitle)
                             .foregroundStyle(theme.colors.textPrimary)
                         HStack(spacing: KISEDesign.Spacing.md) {
-                            detailLabel(String(localized: "detail.fit"), piece.fit.displayName)
+                            if piece.category == .shoes {
+                                if let shoeType = piece.shoeType {
+                                    detailLabel(String(localized: "detail.type"), shoeType.displayName)
+                                }
+                            } else {
+                                detailLabel(String(localized: "detail.fit"), piece.fit.displayName)
+                            }
                             detailLabel(String(localized: "detail.material"), materialDisplayName(piece.material))
                             detailLabel(String(localized: "detail.formality"), piece.formality.displayName)
                         }

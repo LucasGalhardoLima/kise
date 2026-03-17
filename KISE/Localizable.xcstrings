@@ -913,6 +913,22 @@
         }
       }
     },
+    "detail.type" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipo"
+          }
+        }
+      }
+    },
     "detail.formality" : {
       "extractionState" : "stale",
       "localizations" : {
