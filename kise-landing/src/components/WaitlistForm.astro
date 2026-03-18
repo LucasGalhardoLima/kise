@@ -1,0 +1,34 @@
+---
+// kise-landing/src/components/WaitlistForm.astro
+interface Props {
+  title: string;
+  body: string;
+  cta: string;
+  success: string;
+  placeholder?: string;
+}
+
+const { title, body, cta, success, placeholder = "" } = Astro.props;
+---
+
+<section class="py-20 text-center">
+  <h2 class="font-brand text-3xl font-light">{title}</h2>
+  <p class="mt-4 font-body text-base text-pine/60">{body}</p>
+
+  <form class="mt-8 flex justify-center gap-3" data-waitlist>
+    <input
+      type="email"
+      name="email"
+      required
+      placeholder={placeholder}
+      class="w-64 rounded-lg border border-sage/40 bg-white px-4 py-3 font-body text-sm text-pine placeholder:text-pine/30 focus:border-fern focus:outline-none"
+    />
+    <button
+      type="submit"
+      class="rounded-lg bg-fern px-6 py-3 font-body text-sm font-medium text-dust transition hover:bg-hunter"
+    >
+      {cta}
+    </button>
+  </form>
+  <p class="mt-2 hidden font-body text-sm text-fern" data-waitlist-success>{success}</p>
+</section>

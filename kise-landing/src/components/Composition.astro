@@ -1,0 +1,36 @@
+---
+// kise-landing/src/components/Composition.astro
+interface Props {
+  colors: string[];
+  class?: string;
+}
+
+const { colors, class: className } = Astro.props;
+---
+
+<div class:list={["relative aspect-[4/3] w-full", className]}>
+  {colors[0] && (
+    <div
+      class="absolute shadow-sm"
+      style={`background:${colors[0]};left:5%;top:15%;width:55%;height:55%`}
+    />
+  )}
+  {colors[1] && (
+    <div
+      class="absolute shadow-sm"
+      style={`background:${colors[1]};left:25%;top:5%;width:50%;height:40%`}
+    />
+  )}
+  {colors[2] && (
+    <div
+      class="absolute shadow-sm"
+      style={`background:${colors[2]};left:45%;top:55%;width:40%;height:35%`}
+    />
+  )}
+  {colors[3] && (
+    <div
+      class="absolute shadow-sm"
+      style={`background:${colors[3]};left:10%;top:60%;width:30%;height:25%`}
+    />
+  )}
+</div>

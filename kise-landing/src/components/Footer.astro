@@ -1,0 +1,22 @@
+---
+// kise-landing/src/components/Footer.astro
+interface Props {
+  tagline: string;
+  threadsUrl: string;
+}
+
+const { tagline, threadsUrl } = Astro.props;
+---
+
+<footer class="border-t border-sage/20 py-12 text-center">
+  <p class="font-brand text-xl font-light">KISE 着せ</p>
+  <p class="mt-2 font-body text-sm text-pine/50">{tagline}</p>
+  <a
+    href={threadsUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="mt-3 inline-block font-body text-sm text-fern underline underline-offset-2 hover:text-hunter"
+  >
+    Threads
+  </a>
+</footer>
