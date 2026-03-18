@@ -12,6 +12,7 @@ struct ShareCardData {
     let weatherLine: String?
     let brandSignature = "KISE 着せ"
     let tagline = String(localized: "share.tagline")
+    let paletteName: String?
 
     /// Sorted by composition priority (outerwear → tops → bottoms → shoes)
     var sortedPieces: [PieceInfo] {
@@ -20,9 +21,12 @@ struct ShareCardData {
         }
     }
 
-    /// Piece labels joined with " · " — same format as in-app
-    var pieceNamesText: String {
-        sortedPieces.map { piece in
+    /// Piece labels or palette name
+    var displayText: String {
+        if let paletteName {
+            return paletteName
+        }
+        return sortedPieces.map { piece in
             pieceLabel(color: piece.colorName, category: piece.categoryName)
         }.joined(separator: " · ")
     }
@@ -54,5 +58,21 @@ extension ShareCardData {
         } else {
             self.weatherLine = nil
         }
+
+        self.paletteName = nil
+    }
+
+    /// Build from daily palette
+    init(palette: DailyPalette) {
+        self.pieces = palette.colors.map { hex in
+            PieceInfo(
+                colorHex: hex,
+                colorName: hex.uppercased(),
+                categoryName: "",
+                category: .tShirt
+            )
+        }
+        self.weatherLine = "\(palette.city) · \(palette.temperature)°C · \(palette.condition)"
+        self.paletteName = palette.paletteName
     }
 }

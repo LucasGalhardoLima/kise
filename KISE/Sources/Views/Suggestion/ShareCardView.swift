@@ -17,7 +17,7 @@ struct ShareCardView: View {
             Spacer(minLength: KISEDesign.Spacing.md)
 
             // Piece names
-            Text(data.pieceNamesText)
+            Text(data.displayText)
                 .font(KISEDesign.Typography.caption)
                 .foregroundStyle(theme.textSecondary)
                 .lineLimit(2)
