@@ -1,0 +1,28 @@
+---
+import "@fontsource/cormorant-garamond/300.css";
+import "@fontsource/dm-sans/400.css";
+import "@fontsource/dm-sans/500.css";
+
+interface Props {
+  title: string;
+  description: string;
+  lang: string;
+}
+
+const { title, description, lang } = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang} class="bg-dust text-pine">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body class="font-body antialiased">
+    <main class="mx-auto max-w-content px-6 py-16">
+      <slot />
+    </main>
+  </body>
+</html>
