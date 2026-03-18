@@ -7,7 +7,7 @@ crons = ["0 6 * * *"]
 
 [[kv_namespaces]]
 binding = "DAILY_PICK"
-id = "TBD_CREATE_VIA_WRANGLER"
+id = "654bc8166fec4e138af946546a7c8c62"
 
 [vars]
 ADMIN_EMAIL = "lucas@lima-galhardo.com"
