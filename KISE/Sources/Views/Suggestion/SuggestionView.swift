@@ -36,9 +36,10 @@ struct SuggestionView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.hidden, for: .navigationBar)
             .task {
-                async let weather: () = viewModel.fetchWeather()
-                async let pick: () = viewModel.fetchDailyPick()
-                _ = await (weather, pick)
+                await viewModel.fetchWeather()
+            }
+            .task {
+                await viewModel.fetchDailyPick()
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {

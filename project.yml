@@ -20,6 +20,7 @@ targets:
       - path: KISE/Sources
       - path: KISE/Assets.xcassets
       - path: KISE/Preview Content
+      - path: KISE/Localizable.xcstrings
     settings:
       base:
         INFOPLIST_FILE: KISE/Info.plist

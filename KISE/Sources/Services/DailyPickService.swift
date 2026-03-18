@@ -9,8 +9,11 @@ final class DailyPickService {
     func fetchDailyPick() async -> DailyPalette? {
         guard let url = URL(string: "\(baseURL)/daily-pick") else { return nil }
 
+        var request = URLRequest(url: url)
+        request.timeoutInterval = 10
+
         do {
-            let (data, response) = try await URLSession.shared.data(from: url)
+            let (data, response) = try await URLSession.shared.data(for: request)
             guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
                 return nil
             }
