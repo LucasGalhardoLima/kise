@@ -4,6 +4,7 @@ import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
 import HowItWorks from "../components/HowItWorks.astro";
 import Philosophy from "../components/Philosophy.astro";
+import LivePalette from "../components/LivePalette.tsx";
 import WaitlistForm from "../components/WaitlistForm.astro";
 import Footer from "../components/Footer.astro";
 import { t } from "../i18n/strings";
@@ -15,6 +16,12 @@ const s = t("pt-BR");
   <Hero tagline={s.hero.tagline} cta={s.hero.cta} placeholder={s.hero.placeholder} />
   <HowItWorks title={s.howItWorks.title} steps={[...s.howItWorks.steps]} />
   <Philosophy title={s.philosophy.title} body={s.philosophy.body} pullQuote={s.philosophy.pullQuote} />
+  <LivePalette
+    client:visible
+    label={s.palette.label}
+    fallbackCity={s.palette.fallbackCity}
+    proxyBaseUrl="https://kise-proxy.lima-galhardo.workers.dev"
+  />
   <WaitlistForm
     title={s.waitlist.title}
     body={s.waitlist.body}
