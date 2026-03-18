@@ -36,7 +36,9 @@ struct SuggestionView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.hidden, for: .navigationBar)
             .task {
-                await viewModel.fetchWeather()
+                async let weather: () = viewModel.fetchWeather()
+                async let pick: () = viewModel.fetchDailyPick()
+                _ = await (weather, pick)
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -194,6 +196,14 @@ struct SuggestionView: View {
 
             // 6. Action row (feedback + regenerate, one line)
             actionRow
+
+            // 7. KISE's Pick (daily palette)
+            if let palette = viewModel.dailyPick {
+                DailyPickView(palette: palette) {
+                    let cardData = ShareCardData(palette: palette)
+                    ShareCardRenderer.share(data: cardData, theme: theme.colors)
+                }
+            }
         }
     }
 
