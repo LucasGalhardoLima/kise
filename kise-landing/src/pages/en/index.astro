@@ -1,17 +1,17 @@
 ---
-// kise-landing/src/pages/index.astro
-import Base from "../layouts/Base.astro";
-import Hero from "../components/Hero.astro";
-import HowItWorks from "../components/HowItWorks.astro";
-import Philosophy from "../components/Philosophy.astro";
-import WaitlistForm from "../components/WaitlistForm.astro";
-import Footer from "../components/Footer.astro";
-import { t } from "../i18n/strings";
+// kise-landing/src/pages/en/index.astro
+import Base from "../../layouts/Base.astro";
+import Hero from "../../components/Hero.astro";
+import HowItWorks from "../../components/HowItWorks.astro";
+import Philosophy from "../../components/Philosophy.astro";
+import WaitlistForm from "../../components/WaitlistForm.astro";
+import Footer from "../../components/Footer.astro";
+import { t } from "../../i18n/strings";
 
-const s = t("pt-BR");
+const s = t("en");
 ---
 
-<Base title={s.meta.title} description={s.meta.description} lang="pt-BR">
+<Base title={s.meta.title} description={s.meta.description} lang="en">
   <Hero tagline={s.hero.tagline} cta={s.hero.cta} placeholder={s.hero.placeholder} />
   <HowItWorks title={s.howItWorks.title} steps={[...s.howItWorks.steps]} />
   <Philosophy title={s.philosophy.title} body={s.philosophy.body} pullQuote={s.philosophy.pullQuote} />
