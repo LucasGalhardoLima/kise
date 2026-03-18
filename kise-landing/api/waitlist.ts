@@ -35,7 +35,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "KISE <hello@kise-app.com>",
+        from: "KISE <hello@contact.kise-app.com>",
         to: email,
         subject,
         html: `
@@ -55,7 +55,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "KISE <hello@kise-app.com>",
+        from: "KISE <hello@contact.kise-app.com>",
         to: "lucas.galhardo.lima@pm.me",
         subject: `New waitlist signup: ${email}`,
         html: `<p>${email} joined the KISE waitlist.</p>`,

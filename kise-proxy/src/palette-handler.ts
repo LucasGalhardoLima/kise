@@ -100,7 +100,7 @@ async function sendPaletteEmail(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "KISE <hello@kise-app.com>",
+      from: "KISE <hello@contact.kise-app.com>",
       to: env.ADMIN_EMAIL,
       subject: `KISE's Pick: ${palette.paletteName}`,
       html,
