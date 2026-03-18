@@ -12,25 +12,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: "Invalid email" });
   }
 
-  const audienceId = process.env.RESEND_AUDIENCE_ID;
   const apiKey = process.env.RESEND_API_KEY;
 
-  if (!audienceId || !apiKey) {
+  if (!apiKey) {
     return res.status(500).json({ error: "Server configuration error" });
   }
 
   try {
-    // Add to Resend audience
-    await fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, unsubscribed: false }),
-    });
-
-    // Send confirmation email
+    // Send confirmation email to the person who signed up
     const lang = req.headers["accept-language"]?.includes("en") ? "en" : "pt-BR";
     const subject =
       lang === "en" ? "You're on the list!" : "Você está na lista!";
@@ -55,6 +44,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             <p>${body}</p>
           </div>
         `,
+      }),
+    });
+
+    // Notify you about the signup
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "KISE <hello@kise-app.com>",
+        to: "lucas.galhardo.lima@pm.me",
+        subject: `New waitlist signup: ${email}`,
+        html: `<p>${email} joined the KISE waitlist.</p>`,
       }),
     });
 
