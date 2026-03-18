@@ -15,6 +15,7 @@ final class SuggestionViewModel {
 
     var occasion: Occasion = .everyday
     var boldness: Double = 0.3
+    var dailyPick: DailyPalette?
 
     var weather: WeatherSnapshot? {
         weatherService.currentWeather
@@ -26,9 +27,14 @@ final class SuggestionViewModel {
 
     private let suggestionService = SuggestionService()
     private let weatherService = WeatherService()
+    private let dailyPickService = DailyPickService()
 
     func fetchWeather() async {
         await weatherService.fetchWeather()
+    }
+
+    func fetchDailyPick() async {
+        dailyPick = await dailyPickService.fetchDailyPick()
     }
 
     var hasMinimumPieces: Bool {
