@@ -23,6 +23,41 @@ export default {
       });
     }
 
+    // GET /weather?lat=X&lon=Y — proxy OpenWeatherMap (keeps API key server-side)
+    if (request.method === "GET" && url.pathname === "/weather") {
+      const lat = url.searchParams.get("lat");
+      const lon = url.searchParams.get("lon");
+      if (!lat || !lon) {
+        return jsonError("Missing lat/lon parameters", 400);
+      }
+      try {
+        const owmUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${env.OPENWEATHER_API_KEY}`;
+        const owmRes = await fetch(owmUrl);
+        if (!owmRes.ok) throw new Error(`OWM: ${owmRes.status}`);
+        const data = (await owmRes.json()) as {
+          main: { temp: number };
+          weather: { description: string }[];
+          name: string;
+        };
+        return new Response(
+          JSON.stringify({
+            temp: Math.round(data.main.temp),
+            condition: data.weather[0]?.description ?? "unknown",
+            city: data.name,
+          }),
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Cache-Control": "public, max-age=1800",
+              ...corsHeaders(),
+            },
+          }
+        );
+      } catch (err) {
+        return jsonError("Weather fetch failed", 502);
+      }
+    }
+
     // POST /suggest — existing suggestion handler
     if (request.method === "POST" && url.pathname === "/suggest") {
       try {
