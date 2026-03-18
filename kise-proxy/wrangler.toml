@@ -10,7 +10,7 @@ binding = "DAILY_PICK"
 id = "654bc8166fec4e138af946546a7c8c62"
 
 [vars]
-ADMIN_EMAIL = "lucas@lima-galhardo.com"
+ADMIN_EMAIL = "lucas.galhard.lima@pm.me"
 # ANTHROPIC_API_KEY set via `wrangler secret put ANTHROPIC_API_KEY`
 # OPENWEATHER_API_KEY set via `wrangler secret put OPENWEATHER_API_KEY`
 # RESEND_API_KEY set via `wrangler secret put RESEND_API_KEY`
