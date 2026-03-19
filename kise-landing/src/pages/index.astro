@@ -5,6 +5,7 @@ import Hero from "../components/Hero.astro";
 import HowItWorks from "../components/HowItWorks.astro";
 import WhyKise from "../components/WhyKise.astro";
 import Understands from "../components/Understands.astro";
+import AppMockup from "../components/AppMockup.astro";
 import System from "../components/System.astro";
 import Philosophy from "../components/Philosophy.astro";
 import Credibility from "../components/Credibility.astro";
@@ -27,6 +28,9 @@ const s = t("pt-BR");
     closing={s.whyKise.closing}
   />
   <Understands title={s.understands.title} items={[...s.understands.items]} />
+  <div class="py-[100px]">
+    <AppMockup lang="pt-BR" />
+  </div>
   <System title={s.system.title} body={s.system.body} pullQuote={s.system.pullQuote} />
   <Philosophy title={s.philosophy.title} body={s.philosophy.body} pullQuote={s.philosophy.pullQuote} />
   <Credibility statements={s.credibility.statements} />
