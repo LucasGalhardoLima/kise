@@ -79,19 +79,42 @@ async function sendPaletteEmail(
   const colorSwatches = palette.colors
     .map(
       (c) =>
-        `<div style="display:inline-block;width:48px;height:48px;background:${c};border-radius:8px;margin-right:8px"></div>`
+        `<div style="display:inline-block;width:80px;height:80px;background:${c};margin:0 4px"></div>`
     )
     .join("");
 
+  const hexCodes = palette.colors.join("    ");
+
   const html = `
-    <div style="font-family:sans-serif;max-width:480px">
-      <h2 style="margin-bottom:4px">${palette.paletteName}</h2>
-      <p style="color:#666;margin-top:0">${palette.city} · ${palette.temperature}°C · ${palette.condition}</p>
-      <div style="margin:16px 0">${colorSwatches}</div>
-      <p style="color:#666;font-size:14px">${palette.colors.join("  ")}</p>
-      <p>${palette.description}</p>
-    </div>
-  `;
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F5F3EF;font-family:'DM Sans',Helvetica,Arial,sans-serif">
+  <tr><td align="center" style="padding:60px 20px">
+    <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px;width:100%">
+      <tr><td align="center" style="padding-bottom:12px">
+        <span style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:14px;color:#9B9B9B;letter-spacing:0.15em;text-transform:uppercase">KISE'S PICK</span>
+      </td></tr>
+      <tr><td align="center" style="padding-bottom:8px">
+        <span style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:28px;color:#344E41">${palette.paletteName}</span>
+      </td></tr>
+      <tr><td align="center" style="padding-bottom:32px">
+        <span style="font-size:13px;color:#6B6B6B">${palette.city} · ${palette.temperature}°C · ${palette.condition}</span>
+      </td></tr>
+      <tr><td align="center" style="padding-bottom:12px">${colorSwatches}</td></tr>
+      <tr><td align="center" style="padding-bottom:32px">
+        <span style="font-size:11px;color:#9B9B9B;letter-spacing:0.08em">${hexCodes}</span>
+      </td></tr>
+      <tr><td style="padding-bottom:32px">
+        <p style="margin:0;font-size:14px;line-height:1.7;color:#6B6B6B;text-align:center">${palette.description}</p>
+      </td></tr>
+      <tr><td align="center" style="padding:16px 0 32px">
+        <div style="width:60px;height:1px;background-color:#A3B18A;opacity:0.4"></div>
+      </td></tr>
+      <tr><td align="center">
+        <span style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:18px;color:#344E41">KISE 着せ</span>
+        <p style="margin:8px 0 0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:14px;color:#9B9B9B;font-style:italic">Vista com intenção.</p>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>`;
 
   await fetch("https://api.resend.com/emails", {
     method: "POST",
