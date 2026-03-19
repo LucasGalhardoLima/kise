@@ -10,7 +10,7 @@ export default defineConfig({
   integrations: [tailwind(), react()],
   i18n: {
     defaultLocale: "pt-BR",
-    locales: ["pt-BR", "en"],
+    locales: ["pt-BR", "en-US"],
     routing: {
       prefixDefaultLocale: false,
     },

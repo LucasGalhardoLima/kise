@@ -51,7 +51,7 @@ const strings = {
       statements: [
         "Construído com Apple Intelligence e IA avançada",
         "100% on-device. Seus dados nunca saem do celular.",
-        "Paletas inspiradas em 和色 (cores tradicionais japonesas) — séculos de tradição cromática.",
+        "Design inspirado em 和色 — cores tradicionais japonesas.",
       ],
     },
     palette: {
@@ -71,7 +71,7 @@ const strings = {
       copyright: "© 2026 KISE",
     },
   },
-  en: {
+  "en-US": {
     meta: {
       title: "KISE 着せ — Dress with intention",
       description:
@@ -121,7 +121,7 @@ const strings = {
       statements: [
         "Built with Apple Intelligence and advanced AI",
         "100% on-device. Your data never leaves your phone.",
-        "Palettes inspired by 和色 (traditional Japanese colors) — centuries of chromatic tradition.",
+        "Design inspired by 和色 — traditional Japanese colors.",
       ],
     },
     palette: {
