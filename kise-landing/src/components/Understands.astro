@@ -1,0 +1,24 @@
+---
+// kise-landing/src/components/Understands.astro
+interface Props {
+  title: string;
+  items: { number: string; title: string; body: string }[];
+}
+
+const { title, items } = Astro.props;
+---
+
+<section class="py-20">
+  <h2 class="font-brand text-3xl font-light">{title}</h2>
+  <div class="mt-10 grid gap-8 sm:grid-cols-2">
+    {items.map((item) => (
+      <div class="flex gap-4">
+        <span class="font-brand text-4xl font-light text-sage">{item.number}</span>
+        <div>
+          <h3 class="font-brand text-xl font-light">{item.title}</h3>
+          <p class="mt-1 font-body text-sm text-pine/60">{item.body}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

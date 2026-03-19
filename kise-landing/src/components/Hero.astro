@@ -1,7 +1,5 @@
 ---
 // kise-landing/src/components/Hero.astro
-import Composition from "./Composition.astro";
-
 interface Props {
   tagline: string;
   cta: string;
@@ -11,11 +9,11 @@ interface Props {
 const { tagline, cta, placeholder } = Astro.props;
 ---
 
-<section class="py-20 text-center">
-  <h1 class="font-brand text-6xl font-light tracking-tight">KISE 着せ</h1>
-  <p class="mt-4 font-body text-lg text-pine/70">{tagline}</p>
+<section class="py-32 text-center">
+  <h1 class="font-brand text-7xl font-light tracking-tight sm:text-8xl">KISE 着せ</h1>
+  <p class="mt-6 font-body text-lg text-pine/70">{tagline}</p>
 
-  <form class="mt-8 flex justify-center gap-3" data-waitlist>
+  <form class="mt-10 flex justify-center gap-3" data-waitlist>
     <input
       type="email"
       name="email"
@@ -31,8 +29,4 @@ const { tagline, cta, placeholder } = Astro.props;
     </button>
   </form>
   <p class="mt-2 hidden font-body text-sm text-fern" data-waitlist-success></p>
-
-  <div class="mx-auto mt-16 max-w-sm">
-    <Composition colors={["#3A5A40", "#A3B18A", "#588157", "#DAD7CD"]} />
-  </div>
 </section>

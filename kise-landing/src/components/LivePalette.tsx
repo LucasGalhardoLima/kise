@@ -5,11 +5,12 @@ interface Props {
   label: string;
   fallbackCity: string;
   proxyBaseUrl: string;
+  description: string;
 }
 
 const FALLBACK_COLORS = ["#3A5A40", "#A3B18A", "#588157", "#DAD7CD"];
 
-export default function LivePalette({ label, fallbackCity, proxyBaseUrl }: Props) {
+export default function LivePalette({ label, fallbackCity, proxyBaseUrl, description }: Props) {
   const [colors, setColors] = useState<string[]>(FALLBACK_COLORS);
   const [city, setCity] = useState(fallbackCity);
   const [loading, setLoading] = useState(true);
@@ -17,7 +18,6 @@ export default function LivePalette({ label, fallbackCity, proxyBaseUrl }: Props
   useEffect(() => {
     async function fetchPalette() {
       try {
-        // Try geolocation
         const pos = await new Promise<GeolocationPosition>((resolve, reject) =>
           navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 })
         );
@@ -28,7 +28,6 @@ export default function LivePalette({ label, fallbackCity, proxyBaseUrl }: Props
         );
         const weather = await weatherRes.json();
 
-        // Fetch today's daily pick as palette (or use fallback colors)
         const pickRes = await fetch(`${proxyBaseUrl}/daily-pick`);
         if (pickRes.ok) {
           const pick = await pickRes.json();
@@ -38,7 +37,6 @@ export default function LivePalette({ label, fallbackCity, proxyBaseUrl }: Props
           setCity(weather.city || fallbackCity);
         }
       } catch {
-        // Geolocation denied or failed — use fallback
         try {
           const pickRes = await fetch(`${proxyBaseUrl}/daily-pick`);
           if (pickRes.ok) {
@@ -56,6 +54,8 @@ export default function LivePalette({ label, fallbackCity, proxyBaseUrl }: Props
 
     fetchPalette();
   }, []);
+
+  const descriptionText = description.replace("{city}", city);
 
   return (
     <section className="py-20 text-center">
@@ -92,6 +92,10 @@ export default function LivePalette({ label, fallbackCity, proxyBaseUrl }: Props
           </span>
         ))}
       </div>
+
+      <p className="mx-auto mt-4 max-w-md font-body text-xs leading-relaxed text-pine/40">
+        {descriptionText}
+      </p>
     </section>
   );
 }

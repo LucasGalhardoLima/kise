@@ -3,7 +3,10 @@
 import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
 import HowItWorks from "../components/HowItWorks.astro";
+import Understands from "../components/Understands.astro";
+import System from "../components/System.astro";
 import Philosophy from "../components/Philosophy.astro";
+import Credibility from "../components/Credibility.astro";
 import LivePalette from "../components/LivePalette.tsx";
 import WaitlistForm from "../components/WaitlistForm.astro";
 import Footer from "../components/Footer.astro";
@@ -15,11 +18,15 @@ const s = t("pt-BR");
 <Base title={s.meta.title} description={s.meta.description} lang="pt-BR">
   <Hero tagline={s.hero.tagline} cta={s.hero.cta} placeholder={s.hero.placeholder} />
   <HowItWorks title={s.howItWorks.title} steps={[...s.howItWorks.steps]} />
+  <Understands title={s.understands.title} items={[...s.understands.items]} />
+  <System title={s.system.title} body={s.system.body} pullQuote={s.system.pullQuote} />
   <Philosophy title={s.philosophy.title} body={s.philosophy.body} pullQuote={s.philosophy.pullQuote} />
+  <Credibility statements={s.credibility.statements} />
   <LivePalette
     client:visible
     label={s.palette.label}
     fallbackCity={s.palette.fallbackCity}
+    description={s.palette.description}
     proxyBaseUrl="https://kise-proxy.lima-galhardo.workers.dev"
   />
   <WaitlistForm
@@ -29,5 +36,10 @@ const s = t("pt-BR");
     success={s.waitlist.success}
     placeholder={s.hero.placeholder}
   />
-  <Footer tagline={s.footer.tagline} threadsUrl="https://threads.net/@kise.app" />
+  <Footer
+    tagline={s.footer.tagline}
+    appStore={s.footer.appStore}
+    copyright={s.footer.copyright}
+    threadsUrl="https://threads.net/@kise.app"
+  />
 </Base>
