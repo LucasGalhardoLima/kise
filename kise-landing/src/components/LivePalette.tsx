@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 interface Props {
   label: string;
+  subtitle: string;
   fallbackCity: string;
   proxyBaseUrl: string;
   description: string;
@@ -10,10 +11,11 @@ interface Props {
 
 const FALLBACK_COLORS = ["#3A5A40", "#A3B18A", "#588157", "#DAD7CD"];
 
-export default function LivePalette({ label, fallbackCity, proxyBaseUrl, description }: Props) {
+export default function LivePalette({ label, subtitle, fallbackCity, proxyBaseUrl, description }: Props) {
   const [colors, setColors] = useState<string[]>(FALLBACK_COLORS);
   const [city, setCity] = useState(fallbackCity);
-  const [loading, setLoading] = useState(true);
+  const [temp, setTemp] = useState<number | null>(null);
+  const [condition, setCondition] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPalette() {
@@ -27,14 +29,19 @@ export default function LivePalette({ label, fallbackCity, proxyBaseUrl, descrip
           `${proxyBaseUrl}/weather?lat=${latitude}&lon=${longitude}`
         );
         const weather = await weatherRes.json();
+        setCity(weather.city || fallbackCity);
+        setTemp(weather.temp);
+        setCondition(weather.condition);
 
         const pickRes = await fetch(`${proxyBaseUrl}/daily-pick`);
         if (pickRes.ok) {
           const pick = await pickRes.json();
           setColors(pick.colors);
-          setCity(weather.city || pick.city);
-        } else {
-          setCity(weather.city || fallbackCity);
+          if (!weather.city) {
+            setCity(pick.city);
+            setTemp(pick.temperature);
+            setCondition(pick.condition);
+          }
         }
       } catch {
         try {
@@ -43,17 +50,21 @@ export default function LivePalette({ label, fallbackCity, proxyBaseUrl, descrip
             const pick = await pickRes.json();
             setColors(pick.colors);
             setCity(pick.city);
+            setTemp(pick.temperature);
+            setCondition(pick.condition);
           }
         } catch {
           // Total fallback — static palette
         }
-      } finally {
-        setLoading(false);
       }
     }
 
     fetchPalette();
   }, []);
+
+  const cityLine = [city, temp != null ? `${temp}°C` : null, condition]
+    .filter(Boolean)
+    .join(" · ");
 
   const descriptionText = description.replace("{city}", city);
 
@@ -63,7 +74,11 @@ export default function LivePalette({ label, fallbackCity, proxyBaseUrl, descrip
         {label}
       </p>
 
-      <div className="relative mx-auto mt-8 aspect-[4/3] max-w-sm">
+      <p className="mx-auto mt-4 max-w-lg whitespace-pre-line font-body text-sm leading-relaxed text-dust/50">
+        {subtitle}
+      </p>
+
+      <div className="relative mx-auto mt-10 aspect-[4/3] max-w-sm">
         {colors.map((color, i) => {
           const positions = [
             { left: "5%", top: "15%", width: "55%", height: "55%" },
@@ -83,7 +98,7 @@ export default function LivePalette({ label, fallbackCity, proxyBaseUrl, descrip
         })}
       </div>
 
-      <p className="mt-6 font-body text-sm text-dust/70">{city}</p>
+      <p className="mt-6 font-body text-sm text-dust/70">{cityLine}</p>
 
       <div className="mt-2 flex justify-center gap-3">
         {colors.map((color, i) => (
@@ -93,7 +108,7 @@ export default function LivePalette({ label, fallbackCity, proxyBaseUrl, descrip
         ))}
       </div>
 
-      <p className="mx-auto mt-5 max-w-md font-body text-xs leading-relaxed text-sage/70">
+      <p className="mx-auto mt-5 max-w-md whitespace-pre-line font-body text-xs leading-relaxed text-sage/70">
         {descriptionText}
       </p>
     </section>

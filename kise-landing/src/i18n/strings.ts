@@ -56,8 +56,9 @@ const strings = {
     },
     palette: {
       label: "Sua paleta agora",
+      subtitle: "O KISE pensa em cores antes de pensar em peças.\nCada sugestão começa com uma composição — cores que conversam entre si,\ncalibradas para o clima e o momento do seu dia.",
       fallbackCity: "São Paulo",
-      description: "Uma composição de cores inspirada no clima de {city}. Cada cidade, cada clima, uma paleta diferente.",
+      description: "A base cromática de uma sugestão para o clima de {city}.\nNo app, cada cor vira uma peça do seu guarda-roupa.",
     },
     waitlist: {
       title: "Quero experimentar",
@@ -126,8 +127,9 @@ const strings = {
     },
     palette: {
       label: "Your palette right now",
+      subtitle: "KISE thinks in colors before thinking in pieces.\nEvery suggestion starts with a composition — colors that talk to each other,\ncalibrated for the weather and the moment of your day.",
       fallbackCity: "São Paulo",
-      description: "A color composition inspired by the weather in {city}. Every city, every climate, a different palette.",
+      description: "The chromatic foundation of a suggestion for the weather in {city}.\nIn the app, each color becomes a piece from your wardrobe.",
     },
     waitlist: {
       title: "I want to try it",
