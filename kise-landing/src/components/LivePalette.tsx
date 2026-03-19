@@ -58,12 +58,12 @@ export default function LivePalette({ label, fallbackCity, proxyBaseUrl, descrip
   const descriptionText = description.replace("{city}", city);
 
   return (
-    <section className="py-20 text-center">
-      <p className="font-body text-sm uppercase tracking-widest text-pine/50">
+    <section className="-mx-6 bg-pine px-6 py-[140px] text-center">
+      <p className="font-body text-sm uppercase tracking-widest text-dust/50">
         {label}
       </p>
 
-      <div className="relative mx-auto mt-6 aspect-[4/3] max-w-sm">
+      <div className="relative mx-auto mt-8 aspect-[4/3] max-w-sm">
         {colors.map((color, i) => {
           const positions = [
             { left: "5%", top: "15%", width: "55%", height: "55%" },
@@ -83,17 +83,17 @@ export default function LivePalette({ label, fallbackCity, proxyBaseUrl, descrip
         })}
       </div>
 
-      <p className="mt-4 font-body text-sm text-pine/50">{city}</p>
+      <p className="mt-6 font-body text-sm text-dust/70">{city}</p>
 
       <div className="mt-2 flex justify-center gap-3">
         {colors.map((color, i) => (
-          <span key={i} className="font-body text-xs text-pine/40">
+          <span key={i} className="font-body text-xs text-dust/40">
             {color.toUpperCase()}
           </span>
         ))}
       </div>
 
-      <p className="mx-auto mt-4 max-w-md font-body text-xs leading-relaxed text-pine/40">
+      <p className="mx-auto mt-5 max-w-md font-body text-xs leading-relaxed text-sage/70">
         {descriptionText}
       </p>
     </section>

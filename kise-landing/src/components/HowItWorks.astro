@@ -17,9 +17,9 @@ const icons = [
 ];
 ---
 
-<section class="py-20">
-  <h2 class="font-brand text-3xl font-light">{title}</h2>
-  <div class="mt-10 grid gap-10 sm:grid-cols-3">
+<section class="py-[140px]">
+  <h2 class="font-brand text-5xl font-light tracking-[0.02em] sm:text-[56px]">{title}</h2>
+  <div class="mt-12 grid gap-10 sm:grid-cols-3">
     {steps.map((step, i) => (
       <div>
         <div class="text-hunter" set:html={icons[i]} />

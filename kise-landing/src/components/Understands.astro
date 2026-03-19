@@ -8,15 +8,15 @@ interface Props {
 const { title, items } = Astro.props;
 ---
 
-<section class="py-20">
-  <h2 class="font-brand text-3xl font-light">{title}</h2>
-  <div class="mt-10 grid gap-8 sm:grid-cols-2">
+<section class="py-[140px]">
+  <h2 class="font-brand text-5xl font-light tracking-[0.02em] sm:text-[56px]">{title}</h2>
+  <div class="mt-12 grid gap-10 sm:grid-cols-2">
     {items.map((item) => (
-      <div class="flex gap-4">
-        <span class="font-brand text-4xl font-light text-sage">{item.number}</span>
-        <div>
-          <h3 class="font-brand text-xl font-light">{item.title}</h3>
-          <p class="mt-1 font-body text-sm text-pine/60">{item.body}</p>
+      <div class="flex gap-5">
+        <span class="font-brand text-[72px] font-light leading-none text-sage/40">{item.number}</span>
+        <div class="pt-3">
+          <h3 class="font-body text-lg font-medium text-pine">{item.title}</h3>
+          <p class="mt-1 font-body text-sm font-light text-pine/60">{item.body}</p>
         </div>
       </div>
     ))}

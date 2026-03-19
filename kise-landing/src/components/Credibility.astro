@@ -7,10 +7,10 @@ interface Props {
 const { statements } = Astro.props;
 ---
 
-<section class="border-y border-sage/20 py-12">
-  <div class="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
+<section class="border-y border-sage/20 py-16">
+  <div class="flex flex-col items-center gap-7">
     {statements.map((statement) => (
-      <p class="text-center font-body text-xs uppercase tracking-[0.2em] text-sage">
+      <p class="text-center font-body text-sm font-light uppercase tracking-[0.15em] text-sage">
         {statement}
       </p>
     ))}
