@@ -9,8 +9,16 @@ const strings = {
     },
     hero: {
       tagline: "Seu guarda-roupa, com intenção.",
+      kanjiCaption: "vestir — do japonês",
       cta: "Entrar na lista",
       placeholder: "seu@email.com",
+    },
+    whyKise: {
+      title: "Por que KISE existe",
+      opening: "Todo dia a mesma pergunta: \"o que eu visto?\"",
+      pain: "Você tem roupas. Mas não sabe o que combina com o quê. Compra peças que pareciam boas na loja mas que não conversam com nada no seu guarda-roupa. Repete os mesmos 3 looks por segurança. E as outras peças ficam esquecidas.",
+      solution: "O KISE nasceu de uma ideia simples: e se um app pudesse olhar pro seu guarda-roupa, entender o clima do dia, e te dizer exatamente o que vestir — com as peças que você já tem?",
+      closing: "Não é sobre moda. É sobre intenção.",
     },
     howItWorks: {
       title: "Como funciona",
@@ -43,7 +51,7 @@ const strings = {
       statements: [
         "Construído com Apple Intelligence e IA avançada",
         "100% on-device. Seus dados nunca saem do celular.",
-        "Paletas inspiradas em 和色 — séculos de tradição cromática japonesa.",
+        "Paletas inspiradas em 和色 (cores tradicionais japonesas) — séculos de tradição cromática.",
       ],
     },
     palette: {
@@ -71,8 +79,16 @@ const strings = {
     },
     hero: {
       tagline: "Your wardrobe, with intention.",
+      kanjiCaption: "to dress — from Japanese",
       cta: "Join the waitlist",
       placeholder: "you@email.com",
+    },
+    whyKise: {
+      title: "Why KISE exists",
+      opening: "Every day, the same question: \"what do I wear?\"",
+      pain: "You have clothes. But you don't know what goes with what. You buy pieces that looked great in the store but don't talk to anything in your wardrobe. You repeat the same 3 outfits for safety. And the rest just sits there, forgotten.",
+      solution: "KISE was born from a simple idea: what if an app could look at your wardrobe, understand the weather, and tell you exactly what to wear — with the pieces you already own?",
+      closing: "It's not about fashion. It's about intention.",
     },
     howItWorks: {
       title: "How it works",
@@ -105,7 +121,7 @@ const strings = {
       statements: [
         "Built with Apple Intelligence and advanced AI",
         "100% on-device. Your data never leaves your phone.",
-        "Palettes inspired by 和色 — centuries of Japanese color tradition.",
+        "Palettes inspired by 和色 (traditional Japanese colors) — centuries of chromatic tradition.",
       ],
     },
     palette: {

@@ -2,16 +2,20 @@
 // kise-landing/src/components/Hero.astro
 interface Props {
   tagline: string;
+  kanjiCaption: string;
 }
 
-const { tagline } = Astro.props;
+const { tagline, kanjiCaption } = Astro.props;
 ---
 
-<section class="flex min-h-[70vh] flex-col items-center justify-center text-center">
+<section class="relative flex h-screen flex-col items-center justify-center text-center">
   <h1 class="font-brand text-7xl font-light tracking-tight sm:text-8xl">KISE 着せ</h1>
-  <p class="mt-6 font-body text-lg text-pine/70">{tagline}</p>
+  <p class="mt-3 font-body text-[13px] font-light italic tracking-[0.15em] text-sage">
+    "{kanjiCaption}"
+  </p>
+  <p class="mt-8 font-body text-lg text-pine/70">{tagline}</p>
 
-  <div class="mt-16 animate-bounce">
+  <div class="absolute bottom-10 animate-bounce">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor" class="text-sage/60">
       <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
