@@ -18,6 +18,8 @@ export default function LivePalette({ label, subtitle, fallbackCity, proxyBaseUr
   const [condition, setCondition] = useState<string | null>(null);
 
   useEffect(() => {
+    const lang = navigator.language?.startsWith("pt") ? "pt_br" : "en";
+
     async function fetchPalette() {
       try {
         const pos = await new Promise<GeolocationPosition>((resolve, reject) =>
@@ -26,7 +28,7 @@ export default function LivePalette({ label, subtitle, fallbackCity, proxyBaseUr
 
         const { latitude, longitude } = pos.coords;
         const weatherRes = await fetch(
-          `${proxyBaseUrl}/weather?lat=${latitude}&lon=${longitude}`
+          `${proxyBaseUrl}/weather?lat=${latitude}&lon=${longitude}&lang=${lang}`
         );
         const weather = await weatherRes.json();
         setCity(weather.city || fallbackCity);
@@ -66,6 +68,9 @@ export default function LivePalette({ label, subtitle, fallbackCity, proxyBaseUr
     .filter(Boolean)
     .join(" · ");
 
+  const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+  const cityLineDisplay = condition ? cityLine.replace(condition, capitalize(condition)) : cityLine;
+
   const descriptionText = description.replace("{city}", city);
 
   return (
@@ -74,7 +79,7 @@ export default function LivePalette({ label, subtitle, fallbackCity, proxyBaseUr
         {label}
       </p>
 
-      <p className="mx-auto mt-4 max-w-lg whitespace-pre-line font-body text-sm leading-relaxed text-dust/50">
+      <p className="mx-auto mt-4 max-w-md font-body text-xs leading-relaxed text-dust/40">
         {subtitle}
       </p>
 
@@ -98,7 +103,7 @@ export default function LivePalette({ label, subtitle, fallbackCity, proxyBaseUr
         })}
       </div>
 
-      <p className="mt-6 font-body text-sm text-dust/70">{cityLine}</p>
+      <p className="mt-6 font-body text-sm text-dust/70">{cityLineDisplay}</p>
 
       <div className="mt-2 flex justify-center gap-3">
         {colors.map((color, i) => (
@@ -108,7 +113,7 @@ export default function LivePalette({ label, subtitle, fallbackCity, proxyBaseUr
         ))}
       </div>
 
-      <p className="mx-auto mt-5 max-w-md whitespace-pre-line font-body text-xs leading-relaxed text-sage/70">
+      <p className="mx-auto mt-5 max-w-md font-body text-xs leading-relaxed text-sage/70">
         {descriptionText}
       </p>
     </section>

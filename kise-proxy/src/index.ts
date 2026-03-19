@@ -27,11 +27,12 @@ export default {
     if (request.method === "GET" && url.pathname === "/weather") {
       const lat = url.searchParams.get("lat");
       const lon = url.searchParams.get("lon");
+      const lang = url.searchParams.get("lang") || "en";
       if (!lat || !lon) {
         return jsonError("Missing lat/lon parameters", 400);
       }
       try {
-        const owmUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${env.OPENWEATHER_API_KEY}`;
+        const owmUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=${lang}&appid=${env.OPENWEATHER_API_KEY}`;
         const owmRes = await fetch(owmUrl);
         if (!owmRes.ok) throw new Error(`OWM: ${owmRes.status}`);
         const data = (await owmRes.json()) as {
