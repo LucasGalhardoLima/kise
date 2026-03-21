@@ -17,6 +17,22 @@ export default {
       maxWidth: {
         content: "720px",
       },
+      keyframes: {
+        fadeInUp: {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        expandLine: {
+          "0%": { width: "0px" },
+          "100%": { width: "60px" },
+        },
+      },
+      animation: {
+        "fade-in-up":
+          "fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) both",
+        "expand-line":
+          "expandLine 0.8s cubic-bezier(0.16, 1, 0.3, 1) both",
+      },
     },
   },
   plugins: [],

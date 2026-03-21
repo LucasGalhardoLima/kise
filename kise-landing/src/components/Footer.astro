@@ -11,15 +11,15 @@ const { tagline, appStore, copyright, threadsUrl } = Astro.props;
 ---
 
 <footer class="border-t border-sage/20 py-12 text-center">
-  <p class="font-brand text-xl font-light">KISE 着せ</p>
-  <p class="mt-2 font-body text-sm text-pine/50">{tagline}</p>
-  <p class="mt-3 font-body text-xs text-pine/40">{appStore}</p>
-  <div class="mt-4 flex items-center justify-center gap-4">
+  <p data-reveal="subtle" class="font-brand text-xl font-light">KISE 着せ</p>
+  <p data-reveal="subtle" data-reveal-delay="100" class="mt-2 font-body text-sm text-pine/50">{tagline}</p>
+  <p data-reveal="subtle" data-reveal-delay="150" class="mt-3 font-body text-xs text-pine/40">{appStore}</p>
+  <div data-reveal="subtle" data-reveal-delay="200" class="mt-4 flex items-center justify-center gap-4">
     <a
       href={threadsUrl}
       target="_blank"
       rel="noopener noreferrer"
-      class="inline-flex items-center gap-1.5 font-body text-sm text-fern hover:text-hunter"
+      class="inline-flex items-center gap-1.5 font-body text-sm text-fern transition-colors duration-200 hover:text-hunter"
       aria-label="Threads"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
