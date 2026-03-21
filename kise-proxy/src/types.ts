@@ -54,6 +54,19 @@ export interface SuggestionResponse {
   alternative_piece?: AlternativePiece;
 }
 
+export interface DailyPalette {
+  city: string;
+  temperature: number;
+  condition: string;
+  paletteName: string;
+  description: string;
+  colors: string[];
+}
+
 export interface Env {
   ANTHROPIC_API_KEY: string;
+  OPENWEATHER_API_KEY: string;
+  RESEND_API_KEY: string;
+  ADMIN_EMAIL: string;
+  DAILY_PICK: KVNamespace;
 }

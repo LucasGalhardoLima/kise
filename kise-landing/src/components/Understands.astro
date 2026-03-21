@@ -1,0 +1,24 @@
+---
+// kise-landing/src/components/Understands.astro
+interface Props {
+  title: string;
+  items: { number: string; title: string; body: string }[];
+}
+
+const { title, items } = Astro.props;
+---
+
+<section class="py-[140px]">
+  <h2 data-reveal class="font-brand text-5xl font-light tracking-[0.02em] sm:text-[56px]">{title}</h2>
+  <div class="mt-12 grid gap-10 sm:grid-cols-2">
+    {items.map((item, i) => (
+      <div data-reveal data-reveal-delay={String(i * 150)} class="flex gap-5">
+        <span class="font-brand text-[72px] font-light leading-none text-sage/40">{item.number}</span>
+        <div class="pt-3">
+          <h3 class="font-body text-lg font-medium text-pine">{item.title}</h3>
+          <p class="mt-1 font-body text-sm font-light text-pine/60">{item.body}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

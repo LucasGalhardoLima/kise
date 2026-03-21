@@ -26,12 +26,12 @@ function makeRequest(
 }
 
 describe("Worker routing", () => {
-  it("returns 405 for GET requests", async () => {
+  it("returns 404 for GET /suggest (only GET /daily-pick is valid)", async () => {
     const req = makeRequest("GET", "/suggest");
     const res = await worker.fetch(req, mockEnv);
-    expect(res.status).toBe(405);
+    expect(res.status).toBe(404);
     const json = (await res.json()) as { error: string };
-    expect(json.error).toBe("Method not allowed");
+    expect(json.error).toBe("Not found");
   });
 
   it("returns 404 for unknown paths", async () => {

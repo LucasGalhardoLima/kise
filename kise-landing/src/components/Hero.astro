@@ -1,0 +1,21 @@
+---
+// kise-landing/src/components/Hero.astro
+interface Props {
+  tagline: string;
+}
+
+const { tagline } = Astro.props;
+---
+
+<section class="relative -mx-6 -mt-16 flex h-screen flex-col items-center justify-center px-6 text-center">
+  <h1 class="animate-fade-in-up font-brand text-7xl font-light tracking-tight opacity-0 sm:text-8xl" style="animation-delay: 0.3s">KISE 着せ</h1>
+  <p class="animate-fade-in-up mt-8 font-body text-lg text-pine/70 opacity-0" style="animation-delay: 0.6s">{tagline}</p>
+
+  <div class="animate-fade-in-up absolute bottom-10 opacity-0" style="animation-delay: 1.2s">
+    <div class="animate-bounce">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor" class="text-sage/60">
+        <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+</section>

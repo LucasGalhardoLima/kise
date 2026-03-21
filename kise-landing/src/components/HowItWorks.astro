@@ -1,0 +1,31 @@
+---
+// kise-landing/src/components/HowItWorks.astro
+interface Props {
+  title: string;
+  steps: { title: string; body: string }[];
+}
+
+const { title, steps } = Astro.props;
+
+const icons = [
+  // Hanger — register pieces
+  `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7l8 5.5a1 1 0 0 1-.5 1.85L12 17 3.5 14.35A1 1 0 0 1 3 12.5L11 7V5.73A2 2 0 0 1 12 2z"/><path d="M3.5 14.35 12 17l8.5-2.65"/><path d="M12 17v5"/></svg>`,
+  // Sun — daily suggestions
+  `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`,
+  // Check — dress with intention
+  `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`,
+];
+---
+
+<section class="py-[140px]">
+  <h2 data-reveal class="font-brand text-5xl font-light tracking-[0.02em] sm:text-[56px]">{title}</h2>
+  <div class="mt-12 grid gap-10 sm:grid-cols-3">
+    {steps.map((step, i) => (
+      <div data-reveal data-reveal-delay={String(i * 150)}>
+        <div class="text-hunter" set:html={icons[i]} />
+        <h3 class="mt-3 font-brand text-xl font-light">{step.title}</h3>
+        <p class="mt-2 font-body text-sm text-pine/60">{step.body}</p>
+      </div>
+    ))}
+  </div>
+</section>

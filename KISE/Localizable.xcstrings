@@ -884,6 +884,40 @@
         }
       }
     },
+    "dailyPick.sectionLabel" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KISE'S PICK"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ESCOLHA DO KISE"
+          }
+        }
+      }
+    },
+    "dailyPick.share" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share palette"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartilhar paleta"
+          }
+        }
+      }
+    },
     "detail.fit" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2333,6 +2367,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Versão"
+          }
+        }
+      }
+    },
+    "share.tagline" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dress with intention."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vista com intenção."
           }
         }
       }

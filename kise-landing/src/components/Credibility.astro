@@ -1,0 +1,18 @@
+---
+// kise-landing/src/components/Credibility.astro
+interface Props {
+  statements: readonly string[];
+}
+
+const { statements } = Astro.props;
+---
+
+<section class="border-y border-sage/20 py-16">
+  <div class="flex flex-col items-center gap-7">
+    {statements.map((statement, i) => (
+      <p data-reveal data-reveal-delay={String(i * 150)} class="text-center font-body text-sm font-light uppercase tracking-[0.15em] text-sage">
+        {statement}
+      </p>
+    ))}
+  </div>
+</section>

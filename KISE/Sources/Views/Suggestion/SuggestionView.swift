@@ -38,6 +38,9 @@ struct SuggestionView: View {
             .task {
                 await viewModel.fetchWeather()
             }
+            .task {
+                await viewModel.fetchDailyPick()
+            }
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("suggestion.title")
@@ -194,6 +197,14 @@ struct SuggestionView: View {
 
             // 6. Action row (feedback + regenerate, one line)
             actionRow
+
+            // 7. KISE's Pick (daily palette)
+            if let palette = viewModel.dailyPick {
+                DailyPickView(palette: palette) {
+                    let cardData = ShareCardData(palette: palette)
+                    ShareCardRenderer.share(data: cardData, theme: theme.colors)
+                }
+            }
         }
     }
 
@@ -358,6 +369,18 @@ struct SuggestionView: View {
                             ? theme.colors.liked
                             : theme.colors.textTertiary
                     )
+            }
+
+            Button {
+                let cardData = ShareCardData(
+                    pieces: viewModel.suggestedPieces,
+                    weather: viewModel.weather
+                )
+                ShareCardRenderer.share(data: cardData, theme: theme.colors)
+            } label: {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.body)
+                    .foregroundStyle(theme.colors.textTertiary)
             }
         }
         .padding(.bottom, KISEDesign.Spacing.md)
