@@ -1,0 +1,13 @@
+---
+import Base from "../layouts/Base.astro";
+import PaletteCard from "../components/PaletteCard";
+---
+
+<Base title="KISE's Pick" description="Today's color palette" lang="en">
+  <div class="flex flex-col items-center justify-center min-h-[60vh]">
+    <PaletteCard
+      client:load
+      proxyBaseUrl="https://kise-proxy.lima-galhardo.workers.dev"
+    />
+  </div>
+</Base>

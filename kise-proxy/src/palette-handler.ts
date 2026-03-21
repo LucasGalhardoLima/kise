@@ -105,6 +105,9 @@ async function sendPaletteEmail(
       <tr><td style="padding-bottom:32px">
         <p style="margin:0;font-size:14px;line-height:1.7;color:#6B6B6B;text-align:center">${palette.description}</p>
       </td></tr>
+      <tr><td align="center" style="padding-bottom:32px">
+        <a href="https://kise-app.com/pick" style="display:inline-block;padding:12px 28px;font-family:'DM Sans',Helvetica,Arial,sans-serif;font-size:13px;color:#344E41;text-decoration:none;border:1px solid #A3B18A;border-radius:24px">Download Image</a>
+      </td></tr>
       <tr><td align="center" style="padding:16px 0 32px">
         <div style="width:60px;height:1px;background-color:#A3B18A;opacity:0.4"></div>
       </td></tr>
