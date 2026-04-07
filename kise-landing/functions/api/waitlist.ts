@@ -10,10 +10,16 @@ function waitlistHtml(lang: "en" | "pt-BR") {
     ? "We'll let you know as soon as KISE is ready. In the meantime, your wardrobe is still waiting for intention."
     : "Vamos te avisar assim que o KISE estiver pronto. Enquanto isso, seu guarda-roupa continua esperando por intenção.";
   const tagline = lang === "en" ? "Dress with intention." : "Vista com intenção.";
+  const preheader = lang === "en"
+    ? "You're on the KISE list — we'll let you know when it's ready."
+    : "Você está na lista do KISE — vamos te avisar quando estiver pronto.";
 
   return `
+<div style="display:none;visibility:hidden;opacity:0;color:transparent;height:0;width:0;overflow:hidden;mso-hide:all;max-height:0;max-width:0;font-size:1px;line-height:1px">
+  ${preheader}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F5F3EF;font-family:'DM Sans',Helvetica,Arial,sans-serif">
-  <tr><td align="center" style="padding:60px 20px">
+  <tr><td align="center" style="padding:40px 20px">
     <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px;width:100%">
       <tr><td align="center" style="padding-bottom:48px">
         <span style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:32px;color:#344E41;letter-spacing:0.02em">KISE 着せ</span>
