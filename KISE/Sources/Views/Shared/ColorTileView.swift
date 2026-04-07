@@ -5,6 +5,7 @@ struct ColorTileView: View {
     @Environment(ThemeProvider.self) private var theme
     let colorHex: String
     let colorName: String
+    let colorDisplayName: String?
     let category: String
     let material: String
     let lastUsedText: String
@@ -31,7 +32,7 @@ struct ColorTileView: View {
                 .accessibilityLabel("\(colorName) \(category)")
 
             VStack(spacing: 2) {
-                Text("\(garmentColor.name) \(category)")
+                Text(pieceLabel(color: colorDisplayName ?? garmentColor.name, category: category))
                     .font(KISEDesign.Typography.caption)
                     .foregroundStyle(theme.colors.textPrimary)
                     .lineLimit(1)

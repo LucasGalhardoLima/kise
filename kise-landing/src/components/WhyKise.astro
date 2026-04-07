@@ -1,0 +1,23 @@
+---
+// kise-landing/src/components/WhyKise.astro
+interface Props {
+  title: string;
+  opening: string;
+  pain: string;
+  solution: string;
+  closing: string;
+}
+
+const { title, opening, pain, solution, closing } = Astro.props;
+---
+
+<section class="py-[140px]">
+  <h2 class="font-brand text-5xl font-light tracking-[0.02em] sm:text-[56px]">{title}</h2>
+
+  <div class="mt-10 space-y-6 font-body text-base leading-relaxed text-pine/70">
+    <p class="font-brand text-2xl font-light italic text-pine/80">{opening}</p>
+    <p>{pain}</p>
+    <p>{solution}</p>
+    <p class="font-body text-lg font-medium text-pine">{closing}</p>
+  </div>
+</section>

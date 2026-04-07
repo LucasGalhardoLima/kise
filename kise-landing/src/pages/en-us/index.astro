@@ -1,0 +1,58 @@
+---
+// kise-landing/src/pages/en/index.astro
+import Base from "../../layouts/Base.astro";
+import Hero from "../../components/Hero.astro";
+import HowItWorks from "../../components/HowItWorks.astro";
+import WhyKise from "../../components/WhyKise.astro";
+import Understands from "../../components/Understands.astro";
+import AppMockup from "../../components/AppMockup.astro";
+import System from "../../components/System.astro";
+import Philosophy from "../../components/Philosophy.astro";
+import Credibility from "../../components/Credibility.astro";
+import LivePalette from "../../components/LivePalette.tsx";
+import WaitlistForm from "../../components/WaitlistForm.astro";
+import Footer from "../../components/Footer.astro";
+import { t } from "../../i18n/strings";
+
+const s = t("en-US");
+---
+
+<Base title={s.meta.title} description={s.meta.description} lang="en">
+  <Hero tagline={s.hero.tagline} />
+  <HowItWorks title={s.howItWorks.title} steps={[...s.howItWorks.steps]} />
+  <WhyKise
+    title={s.whyKise.title}
+    opening={s.whyKise.opening}
+    pain={s.whyKise.pain}
+    solution={s.whyKise.solution}
+    closing={s.whyKise.closing}
+  />
+  <Understands title={s.understands.title} items={[...s.understands.items]} />
+  <div class="py-[100px]">
+    <AppMockup lang="en-US" />
+  </div>
+  <System title={s.system.title} body={s.system.body} pullQuote={s.system.pullQuote} />
+  <Philosophy title={s.philosophy.title} body={s.philosophy.body} pullQuote={s.philosophy.pullQuote} />
+  <Credibility statements={s.credibility.statements} />
+  <LivePalette
+    client:visible
+    label={s.palette.label}
+    subtitle={s.palette.subtitle}
+    fallbackCity={s.palette.fallbackCity}
+    description={s.palette.description}
+    proxyBaseUrl="https://kise-proxy.lima-galhardo.workers.dev"
+  />
+  <WaitlistForm
+    title={s.waitlist.title}
+    body={s.waitlist.body}
+    cta={s.waitlist.cta}
+    success={s.waitlist.success}
+    placeholder={s.hero.placeholder}
+  />
+  <Footer
+    tagline={s.footer.tagline}
+    appStore={s.footer.appStore}
+    copyright={s.footer.copyright}
+    threadsUrl="https://threads.net/@kise.app"
+  />
+</Base>

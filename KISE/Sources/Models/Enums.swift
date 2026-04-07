@@ -250,3 +250,8 @@ func materialDisplayName(_ material: String) -> String {
     default: material.capitalized
     }
 }
+
+/// Localized piece label: "Black Shoes" (en) / "Calçados Pretos" (pt-BR)
+func pieceLabel(color: String, category: String) -> String {
+    String(format: String(localized: "pieceLabel.colorCategory"), color, category)
+}

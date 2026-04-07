@@ -38,6 +38,9 @@ struct SuggestionView: View {
             .task {
                 await viewModel.fetchWeather()
             }
+            .task {
+                await viewModel.fetchDailyPick()
+            }
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("suggestion.title")
@@ -86,45 +89,61 @@ struct SuggestionView: View {
     // MARK: - Loading State
 
     private var loadingState: some View {
-        VStack(spacing: KISEDesign.Spacing.lg) {
-            ForEach(0..<3, id: \.self) { _ in
-                skeletonCard
+        VStack(spacing: KISEDesign.Spacing.md) {
+            // Occasion pills skeleton
+            HStack(spacing: KISEDesign.Spacing.sm) {
+                ForEach(0..<4, id: \.self) { _ in
+                    skeletonPill
+                }
             }
+
+            // "YOUR LOOK" label skeleton
+            skeletonBlock(width: 80, height: 12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            // Color composition skeleton
+            skeletonBlock(height: nil)
+                .aspectRatio(4 / 3, contentMode: .fit)
+                .padding(.horizontal, KISEDesign.Spacing.md)
+
+            // Piece names skeleton
+            skeletonBlock(width: 200, height: 14)
+
+            // Reasoning lines skeleton
+            VStack(alignment: .leading, spacing: KISEDesign.Spacing.sm) {
+                skeletonBlock(height: 14)
+                skeletonBlock(height: 14)
+                skeletonBlock(width: 180, height: 14)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(KISEDesign.Spacing.md)
+
+            // Boldness slider skeleton
+            skeletonBlock(height: 36)
+                .clipShape(Capsule())
         }
         .padding(.top, KISEDesign.Spacing.md)
     }
 
-    private var skeletonCard: some View {
-        RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
+    private var skeletonPill: some View {
+        Capsule()
             .fill(theme.colors.surface)
-            .frame(height: 120)
-            .overlay(
-                RoundedRectangle(cornerRadius: KISEDesign.Radius.md)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.clear,
-                                theme.colors.border.opacity(0.3),
-                                Color.clear,
-                            ],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .phaseAnimator([false, true]) { content, phase in
-                        content.offset(x: phase ? 200 : -200)
-                    }
-            )
-            .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
-            .kiseCard()
+            .frame(width: 72, height: 28)
+            .overlay(Capsule().strokeBorder(theme.colors.border, lineWidth: 1))
+            .shimmer(theme: theme)
+    }
+
+    private func skeletonBlock(width: CGFloat? = nil, height: CGFloat? = nil) -> some View {
+        RoundedRectangle(cornerRadius: KISEDesign.Radius.sm)
+            .fill(theme.colors.surface)
+            .frame(width: width, height: height)
+            .shimmer(theme: theme)
     }
 
     // MARK: - Ready State (has pieces, no suggestion yet)
 
     private var readyState: some View {
         VStack(spacing: KISEDesign.Spacing.lg) {
-            Spacer().frame(height: KISEDesign.Spacing.xxl)
-
             Text("suggestion.readyTitle")
                 .font(KISEDesign.Typography.title)
                 .foregroundStyle(theme.colors.textPrimary)
@@ -147,6 +166,8 @@ struct SuggestionView: View {
                     .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.md))
             }
         }
+        .containerRelativeFrame(.vertical) { length, _ in length }
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Suggestion Content
@@ -176,6 +197,14 @@ struct SuggestionView: View {
 
             // 6. Action row (feedback + regenerate, one line)
             actionRow
+
+            // 7. KISE's Pick (daily palette)
+            if let palette = viewModel.dailyPick {
+                DailyPickView(palette: palette) {
+                    let cardData = ShareCardData(palette: palette)
+                    ShareCardRenderer.share(data: cardData, theme: theme.colors)
+                }
+            }
         }
     }
 
@@ -222,16 +251,7 @@ struct SuggestionView: View {
                 .textCase(.uppercase)
                 .foregroundStyle(theme.colors.textTertiary)
 
-            GradientTrackSlider(
-                value: $viewModel.boldness,
-                trackHeight: 3,
-                thumbSize: 14,
-                onEditingChanged: { editing in
-                    if !editing {
-                        Task { await viewModel.regenerate(context: modelContext) }
-                    }
-                }
-            )
+            nativeSlider
 
             Text("slider.bold")
                 .font(KISEDesign.Typography.small)
@@ -239,6 +259,25 @@ struct SuggestionView: View {
                 .textCase(.uppercase)
                 .foregroundStyle(theme.colors.textTertiary)
         }
+    }
+
+    private var nativeSlider: some View {
+        Slider(value: $viewModel.boldness, in: 0...1, step: 0.1) { editing in
+            if !editing {
+                Task { await viewModel.regenerate(context: modelContext) }
+            }
+        }
+        .tint(theme.colors.accent)
+        .padding(.horizontal, KISEDesign.Spacing.sm)
+        .padding(.vertical, KISEDesign.Spacing.xs)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(theme.colors.surface)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .strokeBorder(theme.colors.border, lineWidth: 1)
+                )
+        )
     }
 
     // MARK: - Outfit Cards
@@ -331,69 +370,52 @@ struct SuggestionView: View {
                             : theme.colors.textTertiary
                     )
             }
+
+            Button {
+                let cardData = ShareCardData(
+                    pieces: viewModel.suggestedPieces,
+                    weather: viewModel.weather
+                )
+                ShareCardRenderer.share(data: cardData, theme: theme.colors)
+            } label: {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.body)
+                    .foregroundStyle(theme.colors.textTertiary)
+            }
         }
         .padding(.bottom, KISEDesign.Spacing.md)
     }
 }
 
-// MARK: - Gradient Track Slider
+// MARK: - Shimmer Effect
 
-private struct GradientTrackSlider: View {
-    @Environment(ThemeProvider.self) private var theme
-    @Binding var value: Double
-    var trackHeight: CGFloat = 3
-    var thumbSize: CGFloat = 14
-    var onEditingChanged: (Bool) -> Void = { _ in }
-    @State private var isEditing = false
+private struct ShimmerModifier: ViewModifier {
+    let theme: ThemeProvider
 
-    var body: some View {
-        GeometryReader { geo in
-            let usableWidth = geo.size.width - thumbSize
-            let thumbX = thumbSize / 2 + usableWidth * value
-
-            ZStack {
-                Capsule()
-                    .fill(theme.colors.border)
-                    .frame(height: trackHeight)
-
-                Capsule()
-                    .fill(
-                        LinearGradient(
-                            colors: [theme.colors.accentMuted, theme.colors.accent],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .frame(width: max(trackHeight, thumbX), height: trackHeight)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                Circle()
-                    .fill(.white)
-                    .shadow(color: .black.opacity(0.12), radius: 4, y: 2)
-                    .frame(width: thumbSize, height: thumbSize)
-                    .position(x: thumbX, y: geo.size.height / 2)
-            }
-            .contentShape(Rectangle())
-            .gesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { drag in
-                        if !isEditing {
-                            isEditing = true
-                            onEditingChanged(true)
-                        }
-                        let raw = (drag.location.x - thumbSize / 2) / usableWidth
-                        let clamped = min(max(raw, 0), 1)
-                        let stepped = (clamped * 10).rounded() / 10
-                        if stepped != value {
-                            value = stepped
-                        }
-                    }
-                    .onEnded { _ in
-                        isEditing = false
-                        onEditingChanged(false)
-                    }
+    func body(content: Content) -> some View {
+        content
+            .overlay(
+                LinearGradient(
+                    colors: [
+                        Color.clear,
+                        theme.colors.border.opacity(0.3),
+                        Color.clear,
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+                .phaseAnimator([false, true]) { content, phase in
+                    content.offset(x: phase ? 200 : -200)
+                } animation: { _ in
+                    .easeInOut(duration: 1.2).repeatForever(autoreverses: false)
+                }
             )
-        }
-        .frame(height: thumbSize)
+            .clipShape(RoundedRectangle(cornerRadius: KISEDesign.Radius.sm))
+    }
+}
+
+private extension View {
+    func shimmer(theme: ThemeProvider) -> some View {
+        modifier(ShimmerModifier(theme: theme))
     }
 }

@@ -53,53 +53,69 @@ struct MainTabView: View {
     @State private var showRegistration = false
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            TabView(selection: $selectedTab) {
-                SuggestionView()
-                    .tag(0)
-                    .tabItem {
-                        Label(String(localized: "tab.home"), systemImage: "tshirt")
-                    }
-                WardrobeView()
-                    .tag(1)
-                    .tabItem {
-                        Label(String(localized: "tab.wardrobe"), systemImage: "cabinet")
-                    }
-                SettingsView()
-                    .tag(2)
-                    .tabItem {
-                        Label(String(localized: "tab.settings"), systemImage: "gearshape")
-                    }
-            }
-            .tint(theme.colors.accent)
-
-            if selectedTab == 1 {
-                addPieceButton
-                    .padding(.trailing, KISEDesign.Spacing.lg)
-                    .offset(y: 6)
-                    .transition(.scale.combined(with: .opacity))
-            }
+        TabView(selection: $selectedTab) {
+            SuggestionView()
+                .tag(0)
+                .tabItem {
+                    Label(String(localized: "tab.home"), systemImage: "tshirt")
+                }
+            WardrobeView()
+                .tag(1)
+                .tabItem {
+                    Label(String(localized: "tab.wardrobe"), systemImage: "cabinet")
+                }
+            SettingsView()
+                .tag(2)
+                .tabItem {
+                    Label(String(localized: "tab.settings"), systemImage: "gearshape")
+                }
         }
+        .tint(theme.colors.accent)
+        .addPieceAccessory(
+            isVisible: selectedTab == 1,
+            theme: theme,
+            action: { showRegistration = true }
+        )
         .animation(.easeInOut(duration: 0.2), value: selectedTab)
         .sheet(isPresented: $showRegistration) {
             RegistrationFlowView()
         }
     }
+}
 
-    private var addPieceButton: some View {
-        Button {
-            showRegistration = true
-        } label: {
-            Circle()
-                .fill(theme.colors.accent)
-                .frame(width: 56, height: 56)
-                .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
-                .overlay(
-                    Image(systemName: "plus")
-                        .font(.title2.weight(.medium))
-                        .foregroundStyle(.white)
-                )
+// MARK: - Add Piece Accessory
+
+private struct AddPieceAccessoryModifier: ViewModifier {
+    let isVisible: Bool
+    let theme: ThemeProvider
+    let action: () -> Void
+
+    func body(content: Content) -> some View {
+        ZStack(alignment: .bottomTrailing) {
+            content
+            if isVisible {
+                Button(action: action) {
+                    Circle()
+                        .fill(theme.colors.accent)
+                        .frame(width: 56, height: 56)
+                        .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
+                        .overlay(
+                            Image(systemName: "plus")
+                                .font(.title2.weight(.medium))
+                                .foregroundStyle(.white)
+                        )
+                }
+                .buttonStyle(.plain)
+                .padding(.trailing, KISEDesign.Spacing.lg)
+                .padding(.bottom, 80) // clear tab bar
+                .transition(.scale.combined(with: .opacity))
+            }
         }
-        .buttonStyle(.plain)
+    }
+}
+
+private extension View {
+    func addPieceAccessory(isVisible: Bool, theme: ThemeProvider, action: @escaping () -> Void) -> some View {
+        modifier(AddPieceAccessoryModifier(isVisible: isVisible, theme: theme, action: action))
     }
 }

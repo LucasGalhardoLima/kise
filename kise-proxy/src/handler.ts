@@ -2,7 +2,7 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 import { buildSystemPrompt } from "./prompt";
-import { SUGGEST_OUTFIT_TOOL } from "./tool-schema";
+import { buildSuggestOutfitTool } from "./tool-schema";
 import type {
   SuggestionRequest,
   SuggestionResponse,
@@ -15,15 +15,16 @@ export async function handleSuggestion(
 ): Promise<SuggestionResponse> {
   const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
 
-  const systemPrompt = buildSystemPrompt(body.style_archetypes);
+  const systemPrompt = buildSystemPrompt(body.style_archetypes, body.language);
 
   const userMessage = buildUserMessage(body);
+  const tool = buildSuggestOutfitTool(body.language);
 
   const response = await client.messages.create({
     model: "claude-sonnet-4-20250514",
     max_tokens: 1024,
     system: systemPrompt,
-    tools: [SUGGEST_OUTFIT_TOOL],
+    tools: [tool],
     tool_choice: { type: "tool", name: "suggest_outfit" },
     messages: [{ role: "user", content: userMessage }],
   });
@@ -81,6 +82,10 @@ function buildUserMessage(body: SuggestionRequest): string {
         `- ${s.date}: [${s.piece_ids.join(", ")}] → ${s.feedback}`
       );
     }
+  }
+
+  if (body.language) {
+    parts.push(`\nRespond in ${body.language}.`);
   }
 
   return parts.join("\n");

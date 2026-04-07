@@ -3,7 +3,10 @@
 import { describe, it, expect } from "vitest";
 import { buildSystemPrompt } from "../src/prompt";
 import { ARCHETYPE_BRIEFS } from "../src/archetypes";
-import { SUGGEST_OUTFIT_TOOL } from "../src/tool-schema";
+import { buildSuggestOutfitTool } from "../src/tool-schema";
+
+const SUGGEST_OUTFIT_TOOL = buildSuggestOutfitTool();
+
 
 describe("buildSystemPrompt", () => {
   it("includes selected archetype briefs", () => {

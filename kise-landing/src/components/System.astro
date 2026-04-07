@@ -1,0 +1,23 @@
+---
+// kise-landing/src/components/System.astro
+interface Props {
+  title: string;
+  body: string;
+  pullQuote: string;
+}
+
+const { title, body, pullQuote } = Astro.props;
+---
+
+<section class="py-[140px]">
+  <h2 class="font-brand text-5xl font-light tracking-[0.02em] sm:text-[56px]">{title}</h2>
+  <p class="mt-8 font-body text-base leading-relaxed text-pine/70">{body}</p>
+  <blockquote class="mt-14 border-l-2 border-sage pl-6 font-brand text-[28px] font-light italic leading-snug text-pine/80 sm:text-[32px]">
+    {pullQuote}
+  </blockquote>
+</section>
+
+<!-- Separator -->
+<div class="flex justify-center py-[80px]">
+  <div class="h-px w-[60px] bg-sage/30"></div>
+</div>

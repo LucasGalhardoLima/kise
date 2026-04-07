@@ -51,7 +51,10 @@ struct ColorCompositionView: View {
                                 }
                             }
                             .accessibilityLabel(
-                                "\(GarmentColor.resolve(color: piece.color, hex: piece.colorHex).name) \(piece.category.displayName)"
+                                pieceLabel(
+                                    color: piece.resolvedColorName,
+                                    category: piece.category.displayName
+                                )
                             )
                     }
                 }
@@ -75,7 +78,13 @@ struct ColorCompositionView: View {
                             .font(KISEDesign.Typography.subtitle)
                             .foregroundStyle(theme.colors.textPrimary)
                         HStack(spacing: KISEDesign.Spacing.md) {
-                            detailLabel(String(localized: "detail.fit"), piece.fit.displayName)
+                            if piece.category == .shoes {
+                                if let shoeType = piece.shoeType {
+                                    detailLabel(String(localized: "detail.type"), shoeType.displayName)
+                                }
+                            } else {
+                                detailLabel(String(localized: "detail.fit"), piece.fit.displayName)
+                            }
                             detailLabel(String(localized: "detail.material"), materialDisplayName(piece.material))
                             detailLabel(String(localized: "detail.formality"), piece.formality.displayName)
                         }
@@ -103,8 +112,7 @@ struct ColorCompositionView: View {
 
     private var labelText: String {
         sortedPieces.map { piece in
-            let color = GarmentColor.resolve(color: piece.color, hex: piece.colorHex)
-            return "\(color.name) \(piece.category.displayName)"
+            pieceLabel(color: piece.resolvedColorName, category: piece.category.displayName)
         }.joined(separator: " · ")
     }
 

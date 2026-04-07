@@ -103,7 +103,8 @@ final class WeatherService {
 
 final class LocationManager: NSObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
-    private var continuation: CheckedContinuation<CLLocation?, Never>?
+    private var locationContinuation: CheckedContinuation<CLLocation?, Never>?
+    private var authContinuation: CheckedContinuation<CLAuthorizationStatus, Never>?
 
     override init() {
         super.init()
@@ -114,29 +115,45 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
     func currentLocation() async -> CLLocation? {
         let status = manager.authorizationStatus
         if status == .notDetermined {
-            manager.requestWhenInUseAuthorization()
-            // Wait briefly for authorization
-            try? await Task.sleep(for: .seconds(1))
-        }
-
-        guard manager.authorizationStatus == .authorizedWhenInUse ||
-              manager.authorizationStatus == .authorizedAlways else {
-            return nil
+            let granted = await requestAuthorization()
+            guard granted == .authorizedWhenInUse || granted == .authorizedAlways else {
+                return nil
+            }
+        } else {
+            guard status == .authorizedWhenInUse || status == .authorizedAlways else {
+                return nil
+            }
         }
 
         return await withCheckedContinuation { continuation in
-            self.continuation = continuation
+            self.locationContinuation = continuation
             manager.requestLocation()
         }
     }
 
+    private func requestAuthorization() async -> CLAuthorizationStatus {
+        return await withCheckedContinuation { continuation in
+            self.authContinuation = continuation
+            manager.requestWhenInUseAuthorization()
+        }
+    }
+
+    // MARK: - CLLocationManagerDelegate
+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let status = manager.authorizationStatus
+        guard status != .notDetermined else { return }
+        authContinuation?.resume(returning: status)
+        authContinuation = nil
+    }
+
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        continuation?.resume(returning: locations.first)
-        continuation = nil
+        locationContinuation?.resume(returning: locations.first)
+        locationContinuation = nil
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        continuation?.resume(returning: nil)
-        continuation = nil
+        locationContinuation?.resume(returning: nil)
+        locationContinuation = nil
     }
 }

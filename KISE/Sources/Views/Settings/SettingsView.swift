@@ -130,6 +130,8 @@ struct SettingsView: View {
                         .font(KISEDesign.Typography.caption)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(theme.colors.background)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
