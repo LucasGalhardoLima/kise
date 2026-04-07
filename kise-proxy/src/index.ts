@@ -4,6 +4,17 @@ import { handleSuggestion } from "./handler";
 import { handleScheduled, buildDailyPostHtml } from "./palette-handler";
 import type { SuggestionRequest, DailyContent, Env } from "./types";
 
+async function getImageGenerator() {
+  // Dynamic import both satori's yoga WASM and the image generator
+  // @ts-ignore — wrangler bundles .wasm as CompiledWasm (WebAssembly.Module)
+  const [wasmModule, mod] = await Promise.all([
+    import("./yoga.wasm").catch(() => ({ default: undefined })),
+    import("./image-generator"),
+  ]);
+  await mod.initYoga(wasmModule.default);
+  return mod;
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     if (request.method === "OPTIONS") {
@@ -18,7 +29,7 @@ export default {
       if (!cached) return jsonError("No daily content available", 404);
       const content = JSON.parse(cached) as DailyContent;
       try {
-        const { generateSvg } = await import("./image-generator");
+        const { generateSvg } = await getImageGenerator();
         const svg = await generateSvg(content, { dark: false });
         return new Response(svg, {
           headers: {
@@ -38,7 +49,7 @@ export default {
       if (!cached) return jsonError("No daily content available", 404);
       const content = JSON.parse(cached) as DailyContent;
       try {
-        const { generateSvg } = await import("./image-generator");
+        const { generateSvg } = await getImageGenerator();
         const svg = await generateSvg(content, { dark: true });
         return new Response(svg, {
           headers: {

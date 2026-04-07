@@ -1,8 +1,10 @@
 // kise-proxy/src/image-generator.ts
 
-import satori from "satori";
+import satori, { init as initSatori } from "satori/standalone";
 import * as fontsData from "./fonts";
 import type { DailyContent, DailyPalette, DailyWabiColor, DailyReflection } from "./types";
+
+let yogaInitialized = false;
 
 // Helper to convert base64 to ArrayBuffer
 function base64ToArrayBuffer(base64: string): ArrayBuffer {
@@ -24,8 +26,29 @@ async function getFonts() {
   ];
 }
 
+/**
+ * Initialize yoga WASM for satori/standalone.
+ * In Workers, call with a pre-compiled WebAssembly.Module (from static .wasm import).
+ * In Node.js/tests, call with undefined — we'll load the WASM from satori's package.
+ */
+export async function initYoga(wasmModule?: WebAssembly.Module) {
+  if (yogaInitialized) return;
+  if (wasmModule instanceof WebAssembly.Module) {
+    await initSatori(wasmModule);
+  } else {
+    // Node.js: load yoga.wasm from satori package
+    const { readFileSync } = await import("fs");
+    const { resolve } = await import("path");
+    const wasmPath = resolve(import.meta.dirname ?? ".", "../node_modules/satori/yoga.wasm");
+    const wasmBuffer = readFileSync(wasmPath);
+    await initSatori(wasmBuffer);
+  }
+  yogaInitialized = true;
+}
+
 /** Generate SVG string from daily content */
 export async function generateSvg(content: DailyContent, options: { dark?: boolean } = {}): Promise<string> {
+  await initYoga();
   const fonts = await getFonts();
   const vdom = buildVdom(content, options);
   return satori(vdom, { width: 540, height: 540, fonts });
