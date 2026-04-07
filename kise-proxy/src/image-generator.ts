@@ -25,6 +25,7 @@ async function getFonts() {
     { name: "DM Sans", data: base64ToArrayBuffer(fontsData.DMSans_Light), weight: 300 as const, style: "normal" as const },
     { name: "DM Sans", data: base64ToArrayBuffer(fontsData.DMSans_Medium), weight: 500 as const, style: "normal" as const },
     { name: "DM Sans", data: base64ToArrayBuffer(fontsData.DMSans_Regular), weight: 400 as const, style: "normal" as const },
+    { name: "Noto Sans JP", data: base64ToArrayBuffer(fontsData.NotoSansJP_Light), weight: 300 as const, style: "normal" as const },
   ];
 }
 
