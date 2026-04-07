@@ -270,8 +270,8 @@ async function sendPaletteEmail(p: DailyPalette, env: Env): Promise<void> {
       </td></tr>
       <tr><td align="center" style="padding:0 0 24px">
         <div style="display:flex;justify-content:center;gap:12px">
-          <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post/image" style="display:inline-block;padding:12px 20px;background:#344E41;color:#DAD7CD;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">DOWNLOAD PNG</a>
-          <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post" style="display:inline-block;padding:12px 20px;border:1px solid #344E41;color:#344E41;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">OPEN HTML</a>
+          <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post/image" style="display:inline-block;padding:12px 20px;background:#344E41;color:#DAD7CD;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">DOWNLOAD LIGHT</a>
+          <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post/image/dark" style="display:inline-block;padding:12px 20px;background:#2C3E35;color:#DAD7CD;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">DOWNLOAD DARK</a>
         </div>
       </td></tr>
       ${captionBlock(caption, "CAPTION — COPY AND PASTE")}`;
@@ -315,7 +315,6 @@ async function sendWabiEmail(c: DailyWabiColor, env: Env): Promise<void> {
       <tr><td align="center" style="padding:0 0 24px">
         <div style="display:flex;justify-content:center;gap:12px">
           <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post/image" style="display:inline-block;padding:12px 20px;background:#344E41;color:#DAD7CD;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">DOWNLOAD PNG</a>
-          <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post" style="display:inline-block;padding:12px 20px;border:1px solid #344E41;color:#344E41;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">OPEN HTML</a>
         </div>
       </td></tr>
       ${captionBlock(caption, "CAPTION — COPY AND PASTE")}`;
@@ -340,6 +339,9 @@ async function sendReflectionEmail(
       </td></tr>
       <tr><td style="padding:24px 0 32px">
         <p style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:22px;line-height:1.6;color:#344E41;text-align:center">${r.text}</p>
+      </td></tr>
+      <tr><td align="center" style="padding:0 0 24px">
+        <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post/image" style="display:inline-block;padding:12px 20px;background:#344E41;color:#DAD7CD;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">DOWNLOAD PNG</a>
       </td></tr>
       ${captionBlock(r.text, "CAPTION — TEXT ONLY POST")}`;
 

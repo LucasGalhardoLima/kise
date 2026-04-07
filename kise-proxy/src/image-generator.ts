@@ -78,7 +78,7 @@ export async function generatePng(content: DailyContent, options: { dark?: boole
   await initYoga(); // ensure resvg is initialized too
 
   const resvg = new ResvgClass(svg, {
-    fitTo: { mode: "width", value: 1080 }, // 2x for high-quality
+    fitTo: { mode: "width", value: 2048 }, // 2K resolution
   });
 
   const pngData = resvg.render();
