@@ -360,6 +360,7 @@ async function sendReflectionEmail(
       </td></tr>
       ${captionBlock(caption, "CAPTION — TEXT ONLY POST")}`;
 
+
   await sendEmail(
     "KISE — Thursday reflection",
     emailWrapper(inner, "Thursday reflection draft ready for Threads posting."),
