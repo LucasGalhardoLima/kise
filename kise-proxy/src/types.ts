@@ -87,5 +87,6 @@ export interface Env {
   OPENWEATHER_API_KEY: string;
   RESEND_API_KEY: string;
   ADMIN_EMAIL: string;
+  ADMIN_TRIGGER_KEY: string;
   DAILY_PICK: KVNamespace;
 }

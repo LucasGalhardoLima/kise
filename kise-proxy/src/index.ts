@@ -2,7 +2,6 @@
 
 import { handleSuggestion } from "./handler";
 import { handleScheduled, buildDailyPostHtml } from "./palette-handler";
-import { generatePng } from "./image-generator";
 import type { SuggestionRequest, DailyContent, Env } from "./types";
 
 export default {
@@ -13,26 +12,44 @@ export default {
 
     const url = new URL(request.url);
 
-    // GET /daily-post/image — serve today's Threads content as PNG
+    // GET /daily-post/image — serve today's Threads content as SVG (PNG pending Workers WASM fix)
     if (request.method === "GET" && url.pathname === "/daily-post/image") {
       const cached = await env.DAILY_PICK.get("daily-content");
       if (!cached) return jsonError("No daily content available", 404);
       const content = JSON.parse(cached) as DailyContent;
-      const png = await generatePng(content, { dark: false });
-      return new Response(png, {
-        headers: { "Content-Type": "image/png", ...corsHeaders() },
-      });
+      try {
+        const { generateSvg } = await import("./image-generator");
+        const svg = await generateSvg(content, { dark: false });
+        return new Response(svg, {
+          headers: {
+            "Content-Type": "image/svg+xml",
+            "Content-Disposition": 'attachment; filename="kise-daily.svg"',
+            ...corsHeaders(),
+          },
+        });
+      } catch (e) {
+        return jsonError("Image generation unavailable: " + (e instanceof Error ? e.message : "unknown"), 503);
+      }
     }
 
-    // GET /daily-post/image/dark — serve today's Threads content as PNG (dark variant)
+    // GET /daily-post/image/dark — dark variant
     if (request.method === "GET" && url.pathname === "/daily-post/image/dark") {
       const cached = await env.DAILY_PICK.get("daily-content");
       if (!cached) return jsonError("No daily content available", 404);
       const content = JSON.parse(cached) as DailyContent;
-      const png = await generatePng(content, { dark: true });
-      return new Response(png, {
-        headers: { "Content-Type": "image/png", ...corsHeaders() },
-      });
+      try {
+        const { generateSvg } = await import("./image-generator");
+        const svg = await generateSvg(content, { dark: true });
+        return new Response(svg, {
+          headers: {
+            "Content-Type": "image/svg+xml",
+            "Content-Disposition": 'attachment; filename="kise-daily-dark.svg"',
+            ...corsHeaders(),
+          },
+        });
+      } catch (e) {
+        return jsonError("Image generation unavailable: " + (e instanceof Error ? e.message : "unknown"), 503);
+      }
     }
 
     // GET /daily-pick — serve cached palette
@@ -56,6 +73,18 @@ export default {
       const html = buildDailyPostHtml(content);
       return new Response(html, {
         headers: { "Content-Type": "text/html;charset=UTF-8", ...corsHeaders() },
+      });
+    }
+
+    // POST /admin/trigger — manually trigger the scheduled handler
+    if (request.method === "POST" && url.pathname === "/admin/trigger") {
+      const authHeader = request.headers.get("Authorization");
+      if (authHeader !== `Bearer ${env.ADMIN_TRIGGER_KEY}`) {
+        return jsonError("Unauthorized", 401);
+      }
+      await handleScheduled(env);
+      return new Response(JSON.stringify({ ok: true }), {
+        headers: { "Content-Type": "application/json", ...corsHeaders() },
       });
     }
 
@@ -139,6 +168,6 @@ function corsHeaders(): Record<string, string> {
   return {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
   };
 }

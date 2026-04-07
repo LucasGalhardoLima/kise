@@ -1,11 +1,8 @@
 // kise-proxy/src/image-generator.ts
 
 import satori from "satori";
-import { Resvg, initWasm } from "@resvg/resvg-js";
 import * as fontsData from "./fonts";
 import type { DailyContent, DailyPalette, DailyWabiColor, DailyReflection } from "./types";
-
-let wasmInitialized = false;
 
 // Helper to convert base64 to ArrayBuffer
 function base64ToArrayBuffer(base64: string): ArrayBuffer {
@@ -18,21 +15,6 @@ function base64ToArrayBuffer(base64: string): ArrayBuffer {
   return bytes.buffer;
 }
 
-async function initializeResvg() {
-  if (wasmInitialized) return;
-  // If we are in a native environment (like local tests), initWasm won't be a function or will fail.
-  // In Workers, we use @resvg/resvg-wasm and we need it.
-  try {
-    if (typeof initWasm === "function") {
-      await initWasm(fetch("https://unpkg.com/@resvg/resvg-wasm@2.6.2/index_bg.wasm"));
-    }
-    wasmInitialized = true;
-  } catch (e) {
-    // Silently ignore if it's already initialized by the native bindings or if it's not needed.
-    wasmInitialized = true;
-  }
-}
-
 async function getFonts() {
   return [
     { name: "Cormorant Garamond", data: base64ToArrayBuffer(fontsData.CormorantGaramond_Light), weight: 300 as const, style: "normal" as const },
@@ -42,26 +24,33 @@ async function getFonts() {
   ];
 }
 
-export async function generatePng(content: DailyContent, options: { dark?: boolean } = {}): Promise<Uint8Array> {
-  await initializeResvg();
+/** Generate SVG string from daily content */
+export async function generateSvg(content: DailyContent, options: { dark?: boolean } = {}): Promise<string> {
   const fonts = await getFonts();
-
   const vdom = buildVdom(content, options);
+  return satori(vdom, { width: 540, height: 540, fonts });
+}
 
-  const svg = await satori(vdom, {
-    width: 540,
-    height: 540,
-    fonts,
-  });
+/** Generate PNG from daily content — uses resvg (native in tests, WASM in Workers) */
+export async function generatePng(content: DailyContent, options: { dark?: boolean } = {}): Promise<Uint8Array> {
+  const svg = await generateSvg(content, options);
+
+  // Dynamic import with string indirection to prevent bundler from resolving native .node files
+  const modName = ["@resvg/resvg", "-js"].join("");
+  let Resvg: any;
+  try {
+    const mod = await import(/* @vite-ignore */ modName);
+    Resvg = mod.Resvg;
+  } catch {
+    throw new Error("PNG generation not available in this runtime");
+  }
 
   const resvg = new Resvg(svg, {
     fitTo: { mode: "width", value: 1080 }, // 2x for high-quality
   });
 
   const pngData = resvg.render();
-  const pngBuffer = pngData.asPng();
-
-  return pngBuffer;
+  return pngData.asPng();
 }
 
 function buildVdom(content: DailyContent, options: { dark?: boolean }): any {

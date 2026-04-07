@@ -1,6 +1,11 @@
 name = "kise-proxy"
 main = "src/index.ts"
-compatibility_date = "2024-05-01"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat_v2"]
+
+[[rules]]
+type = "CompiledWasm"
+globs = ["**/*.wasm"]
 
 [triggers]
 crons = ["0 14 * * *"]
