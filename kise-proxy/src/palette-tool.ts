@@ -7,25 +7,35 @@ export function buildPaletteTool() {
       "Generate a wearable color palette inspired by a city and its current weather",
     input_schema: {
       type: "object" as const,
-      required: ["paletteName", "description", "colors"],
+      required: [
+        "poeticNameLocal",
+        "poeticNameEnglish",
+        "description",
+        "colors",
+      ],
       properties: {
-        paletteName: {
+        poeticNameLocal: {
           type: "string" as const,
           description:
-            "Evocative palette name (2-5 words). Should feel like a mood or moment, not a label. Examples: 'Manhã Chuvosa em Shibuya', 'Copacabana ao Entardecer'",
+            "Short poetic phrase in the city's cultural language. Examples: '春雲の隙間' (Tokyo), 'entre nuages de printemps' (Paris), 'entre nuvens de primavera' (São Paulo)",
+        },
+        poeticNameEnglish: {
+          type: "string" as const,
+          description:
+            "English translation of the poetic name, lowercase. Example: 'between the spring clouds'",
         },
         description: {
           type: "string" as const,
           description:
-            "One sentence describing the palette's mood and how it relates to the city/weather",
+            "One short poetic line connecting weather to wardrobe. How the climate shapes what to wear. Example: 'Fog erases edges. Dress in tones, not contrasts.'",
         },
         colors: {
           type: "array" as const,
           items: { type: "string" as const },
-          minItems: 3,
+          minItems: 4,
           maxItems: 4,
           description:
-            "3-4 hex color codes (e.g. '#8B6F5E'). Colors should work as garment colors — wearable tones, not neon or pastel extremes",
+            "Exactly 4 hex color codes (e.g. '#8B6F5E'). Colors should work as garment colors — wearable tones, not neon or pastel extremes",
         },
       },
     },

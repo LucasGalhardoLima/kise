@@ -13,6 +13,13 @@ const CITY_COORDS: Record<string, { lat: number; lon: number }> = {
   Marrakech: { lat: 31.6295, lon: -7.9811 },
   Seoul: { lat: 37.5665, lon: 126.978 },
   Lisboa: { lat: 38.7223, lon: -9.1393 },
+  "Buenos Aires": { lat: -34.6037, lon: -58.3816 },
+  Kyoto: { lat: 35.0116, lon: 135.7681 },
+  Milan: { lat: 45.4642, lon: 9.19 },
+  Nairobi: { lat: -1.2921, lon: 36.8219 },
+  "New York": { lat: 40.7128, lon: -74.006 },
+  Paris: { lat: 48.8566, lon: 2.3522 },
+  Stockholm: { lat: 59.3293, lon: 18.0686 },
 };
 
 export const CITIES = Object.keys(CITY_COORDS);

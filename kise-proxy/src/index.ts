@@ -1,8 +1,9 @@
 // kise-proxy/src/index.ts
 
 import { handleSuggestion } from "./handler";
-import { handleScheduled } from "./palette-handler";
-import type { SuggestionRequest, Env } from "./types";
+import { handleScheduled, buildDailyPostHtml } from "./palette-handler";
+import { generatePng } from "./image-generator";
+import type { SuggestionRequest, DailyContent, Env } from "./types";
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -12,6 +13,28 @@ export default {
 
     const url = new URL(request.url);
 
+    // GET /daily-post/image — serve today's Threads content as PNG
+    if (request.method === "GET" && url.pathname === "/daily-post/image") {
+      const cached = await env.DAILY_PICK.get("daily-content");
+      if (!cached) return jsonError("No daily content available", 404);
+      const content = JSON.parse(cached) as DailyContent;
+      const png = await generatePng(content, { dark: false });
+      return new Response(png, {
+        headers: { "Content-Type": "image/png", ...corsHeaders() },
+      });
+    }
+
+    // GET /daily-post/image/dark — serve today's Threads content as PNG (dark variant)
+    if (request.method === "GET" && url.pathname === "/daily-post/image/dark") {
+      const cached = await env.DAILY_PICK.get("daily-content");
+      if (!cached) return jsonError("No daily content available", 404);
+      const content = JSON.parse(cached) as DailyContent;
+      const png = await generatePng(content, { dark: true });
+      return new Response(png, {
+        headers: { "Content-Type": "image/png", ...corsHeaders() },
+      });
+    }
+
     // GET /daily-pick — serve cached palette
     if (request.method === "GET" && url.pathname === "/daily-pick") {
       const cached = await env.DAILY_PICK.get("daily-pick");
@@ -20,6 +43,19 @@ export default {
       }
       return new Response(cached, {
         headers: { "Content-Type": "application/json", ...corsHeaders() },
+      });
+    }
+
+    // GET /daily-post — serve today's Threads content as screenshot-ready HTML
+    if (request.method === "GET" && url.pathname === "/daily-post") {
+      const cached = await env.DAILY_PICK.get("daily-content");
+      if (!cached) {
+        return jsonError("No daily content available", 404);
+      }
+      const content = JSON.parse(cached) as DailyContent;
+      const html = buildDailyPostHtml(content);
+      return new Response(html, {
+        headers: { "Content-Type": "text/html;charset=UTF-8", ...corsHeaders() },
       });
     }
 

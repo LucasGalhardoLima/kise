@@ -55,13 +55,32 @@ export interface SuggestionResponse {
 }
 
 export interface DailyPalette {
+  type: "palette";
   city: string;
   temperature: number;
   condition: string;
-  paletteName: string;
+  poeticNameLocal: string;
+  poeticNameEnglish: string;
   description: string;
   colors: string[];
 }
+
+export interface DailyWabiColor {
+  type: "wabi-color";
+  kanji: string;
+  romanization: string;
+  meaning: string;
+  hex: string;
+  poeticDescription: string;
+  howToWear: string;
+}
+
+export interface DailyReflection {
+  type: "reflection";
+  text: string;
+}
+
+export type DailyContent = DailyPalette | DailyWabiColor | DailyReflection;
 
 export interface Env {
   ANTHROPIC_API_KEY: string;

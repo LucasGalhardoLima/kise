@@ -20,11 +20,25 @@ PHILOSOPHY:
 - The weather and season should influence warmth/coolness and saturation
 - Each color should work as a garment piece (jacket, trousers, shoes, top)
 
+POETIC NAME:
+- Write a short evocative phrase in the cultural language of the city (Japanese for Tokyo, Danish for Copenhagen, Portuguese for São Paulo, Korean for Seoul, etc.)
+- It should capture a specific mood or moment — not a generic label
+- The English translation should be lowercase and poetic
+
+DESCRIPTION:
+- One short poetic line connecting the weather to wardrobe
+- How the climate shapes what to wear today
+- Concrete, sensory, intentional — not generic
+- Tone examples:
+  - "Fog erases edges. Dress in tones, not contrasts."
+  - "Heat demands lightness. Color does the rest."
+  - "Cold invites depth. In color and in fabric."
+  - "Open sky, open palette."
+  - "Rain simplifies. Wear the essential."
+
 RULES:
-- Return 3-4 hex colors
+- Return exactly 4 hex colors
 - All colors must be wearable — no neon, no pure white (#FFFFFF), no pure black (#000000)
-- The palette name should evoke a specific mood or moment in the city
-- Write the palette name in the cultural language of the city (Japanese for Tokyo, Danish for Copenhagen, Portuguese for São Paulo, etc.)
 
 Use the generate_palette tool to return your palette.`;
 }
