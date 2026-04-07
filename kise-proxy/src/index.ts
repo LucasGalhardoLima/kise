@@ -5,13 +5,14 @@ import { handleScheduled, buildDailyPostHtml } from "./palette-handler";
 import type { SuggestionRequest, DailyContent, Env } from "./types";
 
 async function getImageGenerator() {
-  // Dynamic import both satori's yoga WASM and the image generator
+  // Dynamic import WASM modules and image generator to avoid startup WASM errors
   // @ts-ignore — wrangler bundles .wasm as CompiledWasm (WebAssembly.Module)
-  const [wasmModule, mod] = await Promise.all([
+  const [yogaModule, resvgModule, mod] = await Promise.all([
     import("./yoga.wasm").catch(() => ({ default: undefined })),
+    import("./resvg.wasm").catch(() => ({ default: undefined })),
     import("./image-generator"),
   ]);
-  await mod.initYoga(wasmModule.default);
+  await mod.initYoga(yogaModule.default, resvgModule.default);
   return mod;
 }
 
@@ -23,21 +24,24 @@ export default {
 
     const url = new URL(request.url);
 
-    // GET /daily-post/image — serve today's Threads content as SVG (PNG pending Workers WASM fix)
+    // GET /daily-post/image — serve today's Threads content as PNG (fallback: SVG)
     if (request.method === "GET" && url.pathname === "/daily-post/image") {
       const cached = await env.DAILY_PICK.get("daily-content");
       if (!cached) return jsonError("No daily content available", 404);
       const content = JSON.parse(cached) as DailyContent;
       try {
-        const { generateSvg } = await getImageGenerator();
-        const svg = await generateSvg(content, { dark: false });
-        return new Response(svg, {
-          headers: {
-            "Content-Type": "image/svg+xml",
-            "Content-Disposition": 'attachment; filename="kise-daily.svg"',
-            ...corsHeaders(),
-          },
-        });
+        const mod = await getImageGenerator();
+        try {
+          const png = await mod.generatePng(content, { dark: false });
+          return new Response(png, {
+            headers: { "Content-Type": "image/png", ...corsHeaders() },
+          });
+        } catch {
+          const svg = await mod.generateSvg(content, { dark: false });
+          return new Response(svg, {
+            headers: { "Content-Type": "image/svg+xml", ...corsHeaders() },
+          });
+        }
       } catch (e) {
         return jsonError("Image generation unavailable: " + (e instanceof Error ? e.message : "unknown"), 503);
       }
@@ -49,15 +53,18 @@ export default {
       if (!cached) return jsonError("No daily content available", 404);
       const content = JSON.parse(cached) as DailyContent;
       try {
-        const { generateSvg } = await getImageGenerator();
-        const svg = await generateSvg(content, { dark: true });
-        return new Response(svg, {
-          headers: {
-            "Content-Type": "image/svg+xml",
-            "Content-Disposition": 'attachment; filename="kise-daily-dark.svg"',
-            ...corsHeaders(),
-          },
-        });
+        const mod = await getImageGenerator();
+        try {
+          const png = await mod.generatePng(content, { dark: true });
+          return new Response(png, {
+            headers: { "Content-Type": "image/png", ...corsHeaders() },
+          });
+        } catch {
+          const svg = await mod.generateSvg(content, { dark: true });
+          return new Response(svg, {
+            headers: { "Content-Type": "image/svg+xml", ...corsHeaders() },
+          });
+        }
       } catch (e) {
         return jsonError("Image generation unavailable: " + (e instanceof Error ? e.message : "unknown"), 503);
       }

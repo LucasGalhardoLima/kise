@@ -5,6 +5,8 @@ import * as fontsData from "./fonts";
 import type { DailyContent, DailyPalette, DailyWabiColor, DailyReflection } from "./types";
 
 let yogaInitialized = false;
+let resvgInitialized = false;
+let ResvgClass: any;
 
 // Helper to convert base64 to ArrayBuffer
 function base64ToArrayBuffer(base64: string): ArrayBuffer {
@@ -27,23 +29,38 @@ async function getFonts() {
 }
 
 /**
- * Initialize yoga WASM for satori/standalone.
- * In Workers, call with a pre-compiled WebAssembly.Module (from static .wasm import).
- * In Node.js/tests, call with undefined — we'll load the WASM from satori's package.
+ * Initialize yoga + resvg WASM modules.
+ * In Workers, pass pre-compiled WebAssembly.Modules from static .wasm imports.
+ * In Node.js/tests, pass undefined — we'll load from packages.
  */
-export async function initYoga(wasmModule?: WebAssembly.Module) {
-  if (yogaInitialized) return;
-  if (wasmModule instanceof WebAssembly.Module) {
-    await initSatori(wasmModule);
-  } else {
-    // Node.js: load yoga.wasm from satori package
-    const { readFileSync } = await import("fs");
-    const { resolve } = await import("path");
-    const wasmPath = resolve(import.meta.dirname ?? ".", "../node_modules/satori/yoga.wasm");
-    const wasmBuffer = readFileSync(wasmPath);
-    await initSatori(wasmBuffer);
+export async function initYoga(yogaWasm?: WebAssembly.Module, resvgWasm?: WebAssembly.Module) {
+  // Init yoga for satori
+  if (!yogaInitialized) {
+    if (yogaWasm instanceof WebAssembly.Module) {
+      await initSatori(yogaWasm);
+    } else {
+      const { readFileSync } = await import("fs");
+      const { resolve } = await import("path");
+      const wasmPath = resolve(import.meta.dirname ?? ".", "../node_modules/satori/yoga.wasm");
+      await initSatori(readFileSync(wasmPath));
+    }
+    yogaInitialized = true;
   }
-  yogaInitialized = true;
+
+  // Init resvg for PNG conversion
+  if (!resvgInitialized) {
+    if (resvgWasm instanceof WebAssembly.Module) {
+      const { Resvg, initWasm } = await import("@resvg/resvg-wasm");
+      await initWasm(resvgWasm);
+      ResvgClass = Resvg;
+    } else {
+      // Node.js: use native bindings
+      const modName = ["@resvg/resvg", "-js"].join("");
+      const mod = await import(/* @vite-ignore */ modName);
+      ResvgClass = mod.Resvg;
+    }
+    resvgInitialized = true;
+  }
 }
 
 /** Generate SVG string from daily content */
@@ -57,18 +74,9 @@ export async function generateSvg(content: DailyContent, options: { dark?: boole
 /** Generate PNG from daily content — uses resvg (native in tests, WASM in Workers) */
 export async function generatePng(content: DailyContent, options: { dark?: boolean } = {}): Promise<Uint8Array> {
   const svg = await generateSvg(content, options);
+  await initYoga(); // ensure resvg is initialized too
 
-  // Dynamic import with string indirection to prevent bundler from resolving native .node files
-  const modName = ["@resvg/resvg", "-js"].join("");
-  let Resvg: any;
-  try {
-    const mod = await import(/* @vite-ignore */ modName);
-    Resvg = mod.Resvg;
-  } catch {
-    throw new Error("PNG generation not available in this runtime");
-  }
-
-  const resvg = new Resvg(svg, {
+  const resvg = new ResvgClass(svg, {
     fitTo: { mode: "width", value: 1080 }, // 2x for high-quality
   });
 
