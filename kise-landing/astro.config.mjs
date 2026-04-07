@@ -1,12 +1,12 @@
 // kise-landing/astro.config.mjs
 import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
-import vercel from "@astrojs/vercel";
+import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
 
 export default defineConfig({
   output: "static",
-  adapter: vercel(),
+  adapter: cloudflare(),
   integrations: [tailwind(), react()],
   i18n: {
     defaultLocale: "pt-BR",

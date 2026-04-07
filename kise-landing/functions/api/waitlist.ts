@@ -1,5 +1,8 @@
-// kise-landing/api/waitlist.ts
-import type { VercelRequest, VercelResponse } from "@vercel/node";
+// kise-landing/functions/api/waitlist.ts
+
+interface Env {
+  RESEND_API_KEY: string;
+}
 
 function waitlistHtml(lang: "en" | "pt-BR") {
   const heading = lang === "en" ? "You're on the list." : "Você está na lista.";
@@ -31,25 +34,40 @@ function waitlistHtml(lang: "en" | "pt-BR") {
 </table>`;
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+export const onRequestPost: PagesFunction<Env> = async (context) => {
+  const { request, env } = context;
+
+  let body: { email?: string };
+  try {
+    body = await request.json();
+  } catch {
+    return new Response(JSON.stringify({ error: "Invalid JSON" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
-  const { email } = req.body;
+  const { email } = body;
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return res.status(400).json({ error: "Invalid email" });
+    return new Response(JSON.stringify({ error: "Invalid email" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = env.RESEND_API_KEY;
 
   if (!apiKey) {
-    return res.status(500).json({ error: "Server configuration error" });
+    return new Response(JSON.stringify({ error: "Server configuration error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   try {
-    const lang = req.headers["accept-language"]?.includes("en") ? "en" as const : "pt-BR" as const;
+    const acceptLang = request.headers.get("accept-language") || "";
+    const lang = acceptLang.includes("en") ? "en" as const : "pt-BR" as const;
     const subject = lang === "en" ? "You're on the list!" : "Você está na lista!";
 
     await fetch("https://api.resend.com/emails", {
@@ -81,9 +99,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }),
     });
 
-    return res.status(200).json({ ok: true });
+    return new Response(JSON.stringify({ ok: true }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (err) {
     console.error("Waitlist error:", err);
-    return res.status(500).json({ error: "Failed to join waitlist" });
+    return new Response(JSON.stringify({ error: "Failed to join waitlist" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
-}
+};
