@@ -666,10 +666,6 @@ function buildReflectionPostHtml(r: DailyReflection): string {
 }
 
 // ---------------------------------------------------------------------------
-// Topics & Hashtags
-// ---------------------------------------------------------------------------
-
-// ---------------------------------------------------------------------------
 // Threads topic tags (official enum, KISE-relevant subset)
 // ---------------------------------------------------------------------------
 
@@ -714,7 +710,7 @@ Text: ${content.text}`;
 
 Given this post content, select:
 1. The single best Threads topic tag from this list: ${tagsLine}
-2. Up to 3 hashtags that are specific to this post's content. Always include #kise as the last hashtag.
+2. Up to 3 hashtags total. Choose 1–2 specific to this post's content, and always end with #kise.
 
 Post content:
 ${contentSummary}`;

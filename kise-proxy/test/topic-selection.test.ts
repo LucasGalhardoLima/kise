@@ -6,16 +6,17 @@ import {
 import type { DailyContent } from "../src/types";
 
 describe("THREADS_TOPIC_TAGS", () => {
-  it("contains FASHION_STYLE", () => {
-    expect(THREADS_TOPIC_TAGS).toContain("FASHION_STYLE");
-  });
-
-  it("contains ART_CULTURE", () => {
-    expect(THREADS_TOPIC_TAGS).toContain("ART_CULTURE");
-  });
-
-  it("contains INSPIRATIONAL_MOTIVATIONAL", () => {
-    expect(THREADS_TOPIC_TAGS).toContain("INSPIRATIONAL_MOTIVATIONAL");
+  it("contains exactly the expected KISE-relevant topic tags", () => {
+    expect(THREADS_TOPIC_TAGS).toEqual([
+      "FASHION_STYLE",
+      "ART_CULTURE",
+      "BEAUTY",
+      "INSPIRATIONAL_MOTIVATIONAL",
+      "LIFESTYLE",
+      "DIY_DESIGN_CRAFT",
+      "HEALTH",
+      "MENTAL_HEALTH",
+    ]);
   });
 });
 
