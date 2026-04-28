@@ -137,25 +137,31 @@ export async function handleReflectionDay(env: Env): Promise<void> {
 // Captions
 // ---------------------------------------------------------------------------
 
-function buildPaletteCaption(p: DailyPalette): string {
+export function buildPaletteCaption(p: DailyPalette, selection: TopicSelection): string {
   return `${p.poeticNameLocal} — ${p.poeticNameEnglish}.
 
 ${p.city}, ${p.temperature}°C, ${p.condition}.
 ${p.description}
 
-${p.colors.join(" · ")}`;
+${p.colors.join(" · ")}
+
+${selection.hashtags.join(" ")}`;
 }
 
-function buildWabiCaption(c: DailyWabiColor): string {
+export function buildWabiCaption(c: DailyWabiColor, selection: TopicSelection): string {
   return `${c.kanji} (${c.romanization}) — ${c.meaning}.
 
 ${c.poeticDescription}
 
-${c.hex}. ${c.howToWear}`;
+${c.hex}. ${c.howToWear}
+
+${selection.hashtags.join(" ")}`;
 }
 
-function buildReflectionCaption(r: DailyReflection): string {
-  return r.text;
+export function buildReflectionCaption(r: DailyReflection, selection: TopicSelection): string {
+  return `${r.text}
+
+${selection.hashtags.join(" ")}`;
 }
 
 // ---------------------------------------------------------------------------

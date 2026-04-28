@@ -3,8 +3,11 @@ import {
   THREADS_TOPIC_TAGS,
   buildTopicSelectionPrompt,
   buildTopicFallback,
+  buildPaletteCaption,
+  buildWabiCaption,
+  buildReflectionCaption,
 } from "../src/palette-handler";
-import type { DailyContent, TopicSelection } from "../src/types";
+import type { DailyContent, DailyPalette, DailyWabiColor, DailyReflection, TopicSelection } from "../src/types";
 
 describe("THREADS_TOPIC_TAGS", () => {
   it("contains exactly the expected KISE-relevant topic tags", () => {
@@ -119,5 +122,69 @@ describe("buildTopicFallback", () => {
     const result = buildTopicFallback(content);
     expect(result.topicTag).toBe("INSPIRATIONAL_MOTIVATIONAL");
     expect(result.hashtags[2]).toBe("#kise");
+  });
+});
+
+const mockSelection: TopicSelection = {
+  topicTag: "FASHION_STYLE",
+  hashtags: ["#colorstory", "#wardrobegoals", "#kise"],
+};
+
+describe("buildPaletteCaption", () => {
+  it("includes dynamic hashtags from selection", () => {
+    const palette: DailyPalette = {
+      type: "palette",
+      city: "Tokyo",
+      temperature: 18,
+      condition: "clear sky",
+      poeticNameLocal: "霞色",
+      poeticNameEnglish: "Haze",
+      description: "A soft grey morning.",
+      colors: ["#B0B0B0", "#C8C8C8"],
+    };
+    const caption = buildPaletteCaption(palette, mockSelection);
+    expect(caption).toContain("#colorstory");
+    expect(caption).toContain("#wardrobegoals");
+    expect(caption).toContain("#kise");
+    expect(caption).not.toContain("#colorpalette");
+  });
+});
+
+describe("buildWabiCaption", () => {
+  it("includes dynamic hashtags from selection", () => {
+    const color: DailyWabiColor = {
+      type: "wabi-color",
+      kanji: "藍色",
+      romanization: "ai-iro",
+      meaning: "Japanese indigo",
+      hex: "#264F73",
+      poeticDescription: "The deepest blue.",
+      howToWear: "The anchor of any cold-weather palette.",
+    };
+    const wabiSelection: TopicSelection = {
+      topicTag: "ART_CULTURE",
+      hashtags: ["#japaneseaesthetics", "#和色", "#kise"],
+    };
+    const caption = buildWabiCaption(color, wabiSelection);
+    expect(caption).toContain("#japaneseaesthetics");
+    expect(caption).toContain("#kise");
+    expect(caption).not.toContain("#japanesecolor");
+  });
+});
+
+describe("buildReflectionCaption", () => {
+  it("includes dynamic hashtags from selection", () => {
+    const reflection: DailyReflection = {
+      type: "reflection",
+      text: "Style is confidence.",
+    };
+    const reflectionSelection: TopicSelection = {
+      topicTag: "INSPIRATIONAL_MOTIVATIONAL",
+      hashtags: ["#slowfashion", "#intentionalstyle", "#kise"],
+    };
+    const caption = buildReflectionCaption(reflection, reflectionSelection);
+    expect(caption).toContain("#slowfashion");
+    expect(caption).toContain("#kise");
+    expect(caption).not.toContain("#intentionalliving");
   });
 });
