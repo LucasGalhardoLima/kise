@@ -666,6 +666,61 @@ function buildReflectionPostHtml(r: DailyReflection): string {
 }
 
 // ---------------------------------------------------------------------------
+// Topics & Hashtags
+// ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Threads topic tags (official enum, KISE-relevant subset)
+// ---------------------------------------------------------------------------
+
+export const THREADS_TOPIC_TAGS = [
+  "FASHION_STYLE",
+  "ART_CULTURE",
+  "BEAUTY",
+  "INSPIRATIONAL_MOTIVATIONAL",
+  "LIFESTYLE",
+  "DIY_DESIGN_CRAFT",
+  "HEALTH",
+  "MENTAL_HEALTH",
+] as const;
+
+export function buildTopicSelectionPrompt(content: DailyContent): string {
+  const tagsLine = THREADS_TOPIC_TAGS.join(", ");
+
+  let contentSummary: string;
+  switch (content.type) {
+    case "palette":
+      contentSummary = `Type: color palette
+City: ${content.city}
+Temperature: ${content.temperature}°C, ${content.condition}
+Palette name: ${content.poeticNameLocal} (${content.poeticNameEnglish})
+Description: ${content.description}
+Colors: ${content.colors.join(", ")}`;
+      break;
+    case "wabi-color":
+      contentSummary = `Type: Japanese wabi color
+Kanji: ${content.kanji} (${content.romanization})
+Meaning: ${content.meaning}
+Description: ${content.poeticDescription}
+How to wear: ${content.howToWear}`;
+      break;
+    case "reflection":
+      contentSummary = `Type: style reflection
+Text: ${content.text}`;
+      break;
+  }
+
+  return `You are a social media strategist for KISE, a fashion and Japanese aesthetics brand posting on Threads.
+
+Given this post content, select:
+1. The single best Threads topic tag from this list: ${tagsLine}
+2. Up to 3 hashtags that are specific to this post's content. Always include #kise as the last hashtag.
+
+Post content:
+${contentSummary}`;
+}
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
