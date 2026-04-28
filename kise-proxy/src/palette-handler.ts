@@ -10,6 +10,7 @@ import type {
   DailyWabiColor,
   DailyReflection,
   DailyContent,
+  TopicSelection,
   Env,
 } from "./types";
 
@@ -714,6 +715,89 @@ Given this post content, select:
 
 Post content:
 ${contentSummary}`;
+}
+
+export function buildTopicFallback(content: DailyContent): TopicSelection {
+  switch (content.type) {
+    case "palette":
+      return {
+        topicTag: "FASHION_STYLE",
+        hashtags: ["#colorpalette", "#designinspiration", "#kise"],
+      };
+    case "wabi-color":
+      return {
+        topicTag: "ART_CULTURE",
+        hashtags: ["#japanesecolor", "#和色", "#kise"],
+      };
+    case "reflection":
+      return {
+        topicTag: "INSPIRATIONAL_MOTIVATIONAL",
+        hashtags: ["#intentionalliving", "#wardrobephilosophy", "#kise"],
+      };
+  }
+}
+
+export async function selectTopicAndHashtags(
+  content: DailyContent,
+  env: Env
+): Promise<TopicSelection> {
+  try {
+    const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 256,
+      system: buildTopicSelectionPrompt(content),
+      tools: [
+        {
+          name: "select_topic_hashtags",
+          description:
+            "Select the best Threads topic tag and up to 3 hashtags for this post.",
+          input_schema: {
+            type: "object" as const,
+            properties: {
+              topicTag: {
+                type: "string",
+                enum: [...THREADS_TOPIC_TAGS],
+                description: "The Threads topic tag that best fits this post.",
+              },
+              hashtags: {
+                type: "array",
+                items: { type: "string" },
+                maxItems: 3,
+                description:
+                  "Up to 3 hashtags total. Always end with #kise.",
+              },
+            },
+            required: ["topicTag", "hashtags"],
+          },
+        },
+      ],
+      tool_choice: { type: "tool", name: "select_topic_hashtags" },
+      messages: [
+        {
+          role: "user",
+          content: "Select the topic tag and hashtags for this post.",
+        },
+      ],
+    });
+
+    const toolBlock = response.content.find(
+      (block) => block.type === "tool_use" && block.name === "select_topic_hashtags"
+    );
+
+    if (!toolBlock || toolBlock.type !== "tool_use") {
+      return buildTopicFallback(content);
+    }
+
+    const input = toolBlock.input as { topicTag: string; hashtags: string[] };
+    return {
+      topicTag: input.topicTag,
+      hashtags: input.hashtags.slice(0, 3),
+    };
+  } catch {
+    return buildTopicFallback(content);
+  }
 }
 
 // ---------------------------------------------------------------------------

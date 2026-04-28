@@ -2,8 +2,9 @@ import { describe, it, expect } from "vitest";
 import {
   THREADS_TOPIC_TAGS,
   buildTopicSelectionPrompt,
+  buildTopicFallback,
 } from "../src/palette-handler";
-import type { DailyContent } from "../src/types";
+import type { DailyContent, TopicSelection } from "../src/types";
 
 describe("THREADS_TOPIC_TAGS", () => {
   it("contains exactly the expected KISE-relevant topic tags", () => {
@@ -74,5 +75,49 @@ describe("buildTopicSelectionPrompt", () => {
     expect(prompt).toContain("FASHION_STYLE");
     expect(prompt).toContain("3 hashtags");
     expect(prompt).toContain("#kise");
+  });
+});
+
+describe("buildTopicFallback", () => {
+  it("returns FASHION_STYLE and 3 hashtags for palette", () => {
+    const content: DailyContent = {
+      type: "palette",
+      city: "Tokyo",
+      temperature: 20,
+      condition: "clear",
+      poeticNameLocal: "霞色",
+      poeticNameEnglish: "Haze",
+      description: "soft",
+      colors: ["#aaa"],
+    };
+    const result = buildTopicFallback(content);
+    expect(result.topicTag).toBe("FASHION_STYLE");
+    expect(result.hashtags).toHaveLength(3);
+    expect(result.hashtags[2]).toBe("#kise");
+  });
+
+  it("returns ART_CULTURE for wabi-color", () => {
+    const content: DailyContent = {
+      type: "wabi-color",
+      kanji: "藍色",
+      romanization: "ai-iro",
+      meaning: "indigo",
+      hex: "#264F73",
+      poeticDescription: "deep blue",
+      howToWear: "in winter",
+    };
+    const result = buildTopicFallback(content);
+    expect(result.topicTag).toBe("ART_CULTURE");
+    expect(result.hashtags[2]).toBe("#kise");
+  });
+
+  it("returns INSPIRATIONAL_MOTIVATIONAL for reflection", () => {
+    const content: DailyContent = {
+      type: "reflection",
+      text: "Style is confidence.",
+    };
+    const result = buildTopicFallback(content);
+    expect(result.topicTag).toBe("INSPIRATIONAL_MOTIVATIONAL");
+    expect(result.hashtags[2]).toBe("#kise");
   });
 });
