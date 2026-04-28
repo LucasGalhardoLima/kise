@@ -90,3 +90,8 @@ export interface Env {
   ADMIN_TRIGGER_KEY: string;
   DAILY_PICK: KVNamespace;
 }
+
+export interface TopicSelection {
+  topicTag: string;   // Threads topic tag enum value e.g. "FASHION_STYLE"
+  hashtags: string[]; // up to 3 items, each starting with #
+}
