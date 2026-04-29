@@ -263,7 +263,7 @@ async function sendPaletteEmail(p: DailyPalette, selection: TopicSelection, env:
 
   const inner = `
       <tr><td align="center" style="padding-bottom:6px">
-        <span style="font-size:10px;color:#A3B18A;letter-spacing:0.15em;text-transform:uppercase">DAILY PALETTE</span>
+        <span style="font-size:10px;color:#A3B18A;letter-spacing:0.15em;text-transform:uppercase">DAILY PALETTE · ${selection.topicTag.replace(/_/g, " ")}</span>
       </td></tr>
       <tr><td align="center" style="padding-bottom:6px">
         <span style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:28px;color:#344E41">${p.poeticNameLocal}</span>
@@ -302,7 +302,7 @@ async function sendWabiEmail(c: DailyWabiColor, selection: TopicSelection, env: 
 
   const inner = `
       <tr><td align="center" style="padding-bottom:6px">
-        <span style="font-size:10px;color:#A3B18A;letter-spacing:0.15em;text-transform:uppercase">和色 — JAPANESE COLOR</span>
+        <span style="font-size:10px;color:#A3B18A;letter-spacing:0.15em;text-transform:uppercase">和色 — JAPANESE COLOR · ${selection.topicTag.replace(/_/g, " ")}</span>
       </td></tr>
       <tr><td align="center" style="padding-bottom:24px">
         <div style="width:200px;height:200px;background:${c.hex};border-radius:4px;display:flex;align-items:center;justify-content:center;margin:0 auto">
@@ -350,7 +350,7 @@ async function sendReflectionEmail(
   const caption = buildReflectionCaption(r, selection);
   const inner = `
       <tr><td align="center" style="padding-bottom:6px">
-        <span style="font-size:10px;color:#A3B18A;letter-spacing:0.15em;text-transform:uppercase">REFLECTION</span>
+        <span style="font-size:10px;color:#A3B18A;letter-spacing:0.15em;text-transform:uppercase">REFLECTION · ${selection.topicTag.replace(/_/g, " ")}</span>
       </td></tr>
       <tr><td style="padding:24px 0 32px">
         <p style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:22px;line-height:1.6;color:#344E41;text-align:center">${r.text}</p>
