@@ -52,8 +52,10 @@ export async function handlePaletteDay(env: Env): Promise<void> {
     expirationTtl: 86400,
   });
 
-  await sendPaletteEmail(palette, env);
-  console.log(`Palette: ${palette.poeticNameLocal} (${city})`);
+  const selection = await selectTopicAndHashtags(palette, env);
+
+  await sendPaletteEmail(palette, selection, env);
+  console.log(`Palette: ${palette.poeticNameLocal} (${city}) — topic: ${selection.topicTag}`);
 }
 
 async function generatePalette(
@@ -114,8 +116,10 @@ export async function handleWabiDay(env: Env): Promise<void> {
     expirationTtl: 86400,
   });
 
-  await sendWabiEmail(color, env);
-  console.log(`和色: ${color.kanji} (${color.romanization})`);
+  const selection = await selectTopicAndHashtags(color, env);
+
+  await sendWabiEmail(color, selection, env);
+  console.log(`和色: ${color.kanji} (${color.romanization}) — topic: ${selection.topicTag}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -129,8 +133,10 @@ export async function handleReflectionDay(env: Env): Promise<void> {
     expirationTtl: 86400,
   });
 
-  await sendReflectionEmail(reflection, env);
-  console.log(`Reflection: ${reflection.text.slice(0, 50)}…`);
+  const selection = await selectTopicAndHashtags(reflection, env);
+
+  await sendReflectionEmail(reflection, selection, env);
+  console.log(`Reflection: ${reflection.text.slice(0, 50)}… — topic: ${selection.topicTag}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -244,8 +250,8 @@ function buildPaletteSubject(p: DailyPalette): string {
   return variants[hash % variants.length];
 }
 
-async function sendPaletteEmail(p: DailyPalette, env: Env): Promise<void> {
-  const caption = buildPaletteCaption(p);
+async function sendPaletteEmail(p: DailyPalette, selection: TopicSelection, env: Env): Promise<void> {
+  const caption = buildPaletteCaption(p, selection);
   const hexLine = p.colors.join(" · ");
   const preheader = `Palette for ${p.city}: ${p.poeticNameEnglish}. ${hexLine}.`;
   const swatches = p.colors
@@ -290,8 +296,8 @@ async function sendPaletteEmail(p: DailyPalette, env: Env): Promise<void> {
   );
 }
 
-async function sendWabiEmail(c: DailyWabiColor, env: Env): Promise<void> {
-  const caption = buildWabiCaption(c);
+async function sendWabiEmail(c: DailyWabiColor, selection: TopicSelection, env: Env): Promise<void> {
+  const caption = buildWabiCaption(c, selection);
   const textColor = isLightColor(c.hex) ? "#344E41" : "#F5F4F0";
 
   const inner = `
@@ -338,8 +344,10 @@ async function sendWabiEmail(c: DailyWabiColor, env: Env): Promise<void> {
 
 async function sendReflectionEmail(
   r: DailyReflection,
+  selection: TopicSelection,
   env: Env
 ): Promise<void> {
+  const caption = buildReflectionCaption(r, selection);
   const inner = `
       <tr><td align="center" style="padding-bottom:6px">
         <span style="font-size:10px;color:#A3B18A;letter-spacing:0.15em;text-transform:uppercase">REFLECTION</span>
@@ -350,7 +358,7 @@ async function sendReflectionEmail(
       <tr><td align="center" style="padding:0 0 24px">
         <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post/image" style="display:inline-block;padding:12px 20px;background:#344E41;color:#DAD7CD;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">DOWNLOAD PNG</a>
       </td></tr>
-      ${captionBlock(r.text, "CAPTION — TEXT ONLY POST")}`;
+      ${captionBlock(caption, "CAPTION — TEXT ONLY POST")}`;
 
   await sendEmail(
     "KISE — Thursday reflection",
@@ -483,7 +491,8 @@ function grainSvg(): string {
 }
 
 function buildPalettePostHtml(p: DailyPalette): string {
-  const caption = buildPaletteCaption(p);
+  const selection = buildTopicFallback(p);
+  const caption = buildPaletteCaption(p, selection);
   const hexLine = p.colors.join(" · ");
   const seed = Math.floor(Date.now() / 86_400_000);
   const blocks = generateBlockLayout(seed);
@@ -575,7 +584,8 @@ ${blockDivs}
 }
 
 function buildWabiPostHtml(c: DailyWabiColor): string {
-  const caption = buildWabiCaption(c);
+  const selection = buildTopicFallback(c);
+  const caption = buildWabiCaption(c, selection);
   const textColor = isLightColor(c.hex) ? "#344E41" : "#F5F4F0";
   const subtextColor = isLightColor(c.hex)
     ? "rgba(52,78,65,0.5)"
@@ -633,7 +643,8 @@ function buildWabiPostHtml(c: DailyWabiColor): string {
 }
 
 function buildReflectionPostHtml(r: DailyReflection): string {
-  const caption = buildReflectionCaption(r);
+  const selection = buildTopicFallback(r);
+  const caption = buildReflectionCaption(r, selection);
 
   return `<!DOCTYPE html>
 <html lang="en">
