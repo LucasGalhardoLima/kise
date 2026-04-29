@@ -10,6 +10,7 @@ import type {
   DailyWabiColor,
   DailyReflection,
   DailyContent,
+  TopicSelection,
   Env,
 } from "./types";
 
@@ -51,8 +52,10 @@ export async function handlePaletteDay(env: Env): Promise<void> {
     expirationTtl: 86400,
   });
 
-  await sendPaletteEmail(palette, env);
-  console.log(`Palette: ${palette.poeticNameLocal} (${city})`);
+  const selection = await selectTopicAndHashtags(palette, env);
+
+  await sendPaletteEmail(palette, selection, env);
+  console.log(`Palette: ${palette.poeticNameLocal} (${city}) — topic: ${selection.topicTag}`);
 }
 
 async function generatePalette(
@@ -113,8 +116,10 @@ export async function handleWabiDay(env: Env): Promise<void> {
     expirationTtl: 86400,
   });
 
-  await sendWabiEmail(color, env);
-  console.log(`和色: ${color.kanji} (${color.romanization})`);
+  const selection = await selectTopicAndHashtags(color, env);
+
+  await sendWabiEmail(color, selection, env);
+  console.log(`和色: ${color.kanji} (${color.romanization}) — topic: ${selection.topicTag}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -128,33 +133,41 @@ export async function handleReflectionDay(env: Env): Promise<void> {
     expirationTtl: 86400,
   });
 
-  await sendReflectionEmail(reflection, env);
-  console.log(`Reflection: ${reflection.text.slice(0, 50)}…`);
+  const selection = await selectTopicAndHashtags(reflection, env);
+
+  await sendReflectionEmail(reflection, selection, env);
+  console.log(`Reflection: ${reflection.text.slice(0, 50)}… — topic: ${selection.topicTag}`);
 }
 
 // ---------------------------------------------------------------------------
 // Captions
 // ---------------------------------------------------------------------------
 
-function buildPaletteCaption(p: DailyPalette): string {
+export function buildPaletteCaption(p: DailyPalette, selection: TopicSelection): string {
   return `${p.poeticNameLocal} — ${p.poeticNameEnglish}.
 
 ${p.city}, ${p.temperature}°C, ${p.condition}.
 ${p.description}
 
-${p.colors.join(" · ")}`;
+${p.colors.join(" · ")}
+
+${selection.hashtags.join(" ")}`;
 }
 
-function buildWabiCaption(c: DailyWabiColor): string {
+export function buildWabiCaption(c: DailyWabiColor, selection: TopicSelection): string {
   return `${c.kanji} (${c.romanization}) — ${c.meaning}.
 
 ${c.poeticDescription}
 
-${c.hex}. ${c.howToWear}`;
+${c.hex}. ${c.howToWear}
+
+${selection.hashtags.join(" ")}`;
 }
 
-function buildReflectionCaption(r: DailyReflection): string {
-  return r.text;
+export function buildReflectionCaption(r: DailyReflection, selection: TopicSelection): string {
+  return `${r.text}
+
+${selection.hashtags.join(" ")}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -237,8 +250,8 @@ function buildPaletteSubject(p: DailyPalette): string {
   return variants[hash % variants.length];
 }
 
-async function sendPaletteEmail(p: DailyPalette, env: Env): Promise<void> {
-  const caption = buildPaletteCaption(p);
+async function sendPaletteEmail(p: DailyPalette, selection: TopicSelection, env: Env): Promise<void> {
+  const caption = buildPaletteCaption(p, selection);
   const hexLine = p.colors.join(" · ");
   const preheader = `Palette for ${p.city}: ${p.poeticNameEnglish}. ${hexLine}.`;
   const swatches = p.colors
@@ -250,7 +263,7 @@ async function sendPaletteEmail(p: DailyPalette, env: Env): Promise<void> {
 
   const inner = `
       <tr><td align="center" style="padding-bottom:6px">
-        <span style="font-size:10px;color:#A3B18A;letter-spacing:0.15em;text-transform:uppercase">DAILY PALETTE</span>
+        <span style="font-size:10px;color:#A3B18A;letter-spacing:0.15em;text-transform:uppercase">DAILY PALETTE · ${selection.topicTag.replace(/_/g, " ")}</span>
       </td></tr>
       <tr><td align="center" style="padding-bottom:6px">
         <span style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:28px;color:#344E41">${p.poeticNameLocal}</span>
@@ -270,8 +283,8 @@ async function sendPaletteEmail(p: DailyPalette, env: Env): Promise<void> {
       </td></tr>
       <tr><td align="center" style="padding:0 0 24px">
         <div style="display:flex;justify-content:center;gap:12px">
-          <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post/image" style="display:inline-block;padding:12px 20px;background:#344E41;color:#DAD7CD;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">DOWNLOAD PNG</a>
-          <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post" style="display:inline-block;padding:12px 20px;border:1px solid #344E41;color:#344E41;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">OPEN HTML</a>
+          <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post/image" style="display:inline-block;padding:12px 20px;background:#344E41;color:#DAD7CD;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">DOWNLOAD LIGHT</a>
+          <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post/image/dark" style="display:inline-block;padding:12px 20px;background:#2C3E35;color:#DAD7CD;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">DOWNLOAD DARK</a>
         </div>
       </td></tr>
       ${captionBlock(caption, "CAPTION — COPY AND PASTE")}`;
@@ -283,13 +296,13 @@ async function sendPaletteEmail(p: DailyPalette, env: Env): Promise<void> {
   );
 }
 
-async function sendWabiEmail(c: DailyWabiColor, env: Env): Promise<void> {
-  const caption = buildWabiCaption(c);
+async function sendWabiEmail(c: DailyWabiColor, selection: TopicSelection, env: Env): Promise<void> {
+  const caption = buildWabiCaption(c, selection);
   const textColor = isLightColor(c.hex) ? "#344E41" : "#F5F4F0";
 
   const inner = `
       <tr><td align="center" style="padding-bottom:6px">
-        <span style="font-size:10px;color:#A3B18A;letter-spacing:0.15em;text-transform:uppercase">和色 — JAPANESE COLOR</span>
+        <span style="font-size:10px;color:#A3B18A;letter-spacing:0.15em;text-transform:uppercase">和色 — JAPANESE COLOR · ${selection.topicTag.replace(/_/g, " ")}</span>
       </td></tr>
       <tr><td align="center" style="padding-bottom:24px">
         <div style="width:200px;height:200px;background:${c.hex};border-radius:4px;display:flex;align-items:center;justify-content:center;margin:0 auto">
@@ -315,7 +328,6 @@ async function sendWabiEmail(c: DailyWabiColor, env: Env): Promise<void> {
       <tr><td align="center" style="padding:0 0 24px">
         <div style="display:flex;justify-content:center;gap:12px">
           <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post/image" style="display:inline-block;padding:12px 20px;background:#344E41;color:#DAD7CD;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">DOWNLOAD PNG</a>
-          <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post" style="display:inline-block;padding:12px 20px;border:1px solid #344E41;color:#344E41;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">OPEN HTML</a>
         </div>
       </td></tr>
       ${captionBlock(caption, "CAPTION — COPY AND PASTE")}`;
@@ -332,16 +344,22 @@ async function sendWabiEmail(c: DailyWabiColor, env: Env): Promise<void> {
 
 async function sendReflectionEmail(
   r: DailyReflection,
+  selection: TopicSelection,
   env: Env
 ): Promise<void> {
+  const caption = buildReflectionCaption(r, selection);
   const inner = `
       <tr><td align="center" style="padding-bottom:6px">
-        <span style="font-size:10px;color:#A3B18A;letter-spacing:0.15em;text-transform:uppercase">REFLECTION</span>
+        <span style="font-size:10px;color:#A3B18A;letter-spacing:0.15em;text-transform:uppercase">REFLECTION · ${selection.topicTag.replace(/_/g, " ")}</span>
       </td></tr>
       <tr><td style="padding:24px 0 32px">
         <p style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:22px;line-height:1.6;color:#344E41;text-align:center">${r.text}</p>
       </td></tr>
-      ${captionBlock(r.text, "CAPTION — TEXT ONLY POST")}`;
+      <tr><td align="center" style="padding:0 0 24px">
+        <a href="https://kise-proxy.lima-galhardo.workers.dev/daily-post/image" style="display:inline-block;padding:12px 20px;background:#344E41;color:#DAD7CD;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;border-radius:6px">DOWNLOAD PNG</a>
+      </td></tr>
+      ${captionBlock(caption, "CAPTION — TEXT ONLY POST")}`;
+
 
   await sendEmail(
     "KISE — Thursday reflection",
@@ -474,7 +492,8 @@ function grainSvg(): string {
 }
 
 function buildPalettePostHtml(p: DailyPalette): string {
-  const caption = buildPaletteCaption(p);
+  const selection = buildTopicFallback(p);
+  const caption = buildPaletteCaption(p, selection);
   const hexLine = p.colors.join(" · ");
   const seed = Math.floor(Date.now() / 86_400_000);
   const blocks = generateBlockLayout(seed);
@@ -566,7 +585,8 @@ ${blockDivs}
 }
 
 function buildWabiPostHtml(c: DailyWabiColor): string {
-  const caption = buildWabiCaption(c);
+  const selection = buildTopicFallback(c);
+  const caption = buildWabiCaption(c, selection);
   const textColor = isLightColor(c.hex) ? "#344E41" : "#F5F4F0";
   const subtextColor = isLightColor(c.hex)
     ? "rgba(52,78,65,0.5)"
@@ -624,7 +644,8 @@ function buildWabiPostHtml(c: DailyWabiColor): string {
 }
 
 function buildReflectionPostHtml(r: DailyReflection): string {
-  const caption = buildReflectionCaption(r);
+  const selection = buildTopicFallback(r);
+  const caption = buildReflectionCaption(r, selection);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -661,6 +682,140 @@ function buildReflectionPostHtml(r: DailyReflection): string {
   </div>
 </body>
 </html>`;
+}
+
+// ---------------------------------------------------------------------------
+// Threads topic tags (official enum, KISE-relevant subset)
+// ---------------------------------------------------------------------------
+
+export const THREADS_TOPIC_TAGS = [
+  "FASHION_STYLE",
+  "ART_CULTURE",
+  "BEAUTY",
+  "INSPIRATIONAL_MOTIVATIONAL",
+  "LIFESTYLE",
+  "DIY_DESIGN_CRAFT",
+  "HEALTH",
+  "MENTAL_HEALTH",
+] as const;
+
+export function buildTopicSelectionPrompt(content: DailyContent): string {
+  const tagsLine = THREADS_TOPIC_TAGS.join(", ");
+
+  let contentSummary: string;
+  switch (content.type) {
+    case "palette":
+      contentSummary = `Type: color palette
+City: ${content.city}
+Temperature: ${content.temperature}°C, ${content.condition}
+Palette name: ${content.poeticNameLocal} (${content.poeticNameEnglish})
+Description: ${content.description}
+Colors: ${content.colors.join(", ")}`;
+      break;
+    case "wabi-color":
+      contentSummary = `Type: Japanese wabi color
+Kanji: ${content.kanji} (${content.romanization})
+Meaning: ${content.meaning}
+Description: ${content.poeticDescription}
+How to wear: ${content.howToWear}`;
+      break;
+    case "reflection":
+      contentSummary = `Type: style reflection
+Text: ${content.text}`;
+      break;
+  }
+
+  return `You are a social media strategist for KISE, a fashion and Japanese aesthetics brand posting on Threads.
+
+Given this post content, select:
+1. The single best Threads topic tag from this list: ${tagsLine}
+2. Up to 3 hashtags total. Choose 1–2 specific to this post's content, and always end with #kise.
+
+Post content:
+${contentSummary}`;
+}
+
+export function buildTopicFallback(content: DailyContent): TopicSelection {
+  switch (content.type) {
+    case "palette":
+      return {
+        topicTag: "FASHION_STYLE",
+        hashtags: ["#colorpalette", "#designinspiration", "#kise"],
+      };
+    case "wabi-color":
+      return {
+        topicTag: "ART_CULTURE",
+        hashtags: ["#japanesecolor", "#和色", "#kise"],
+      };
+    case "reflection":
+      return {
+        topicTag: "INSPIRATIONAL_MOTIVATIONAL",
+        hashtags: ["#intentionalliving", "#wardrobephilosophy", "#kise"],
+      };
+  }
+}
+
+export async function selectTopicAndHashtags(
+  content: DailyContent,
+  env: Env
+): Promise<TopicSelection> {
+  try {
+    const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 256,
+      system: buildTopicSelectionPrompt(content),
+      tools: [
+        {
+          name: "select_topic_hashtags",
+          description:
+            "Select the best Threads topic tag and up to 3 hashtags for this post.",
+          input_schema: {
+            type: "object" as const,
+            properties: {
+              topicTag: {
+                type: "string",
+                enum: [...THREADS_TOPIC_TAGS],
+                description: "The Threads topic tag that best fits this post.",
+              },
+              hashtags: {
+                type: "array",
+                items: { type: "string" },
+                maxItems: 3,
+                description:
+                  "Up to 3 hashtags total. Always end with #kise.",
+              },
+            },
+            required: ["topicTag", "hashtags"],
+          },
+        },
+      ],
+      tool_choice: { type: "tool", name: "select_topic_hashtags" },
+      messages: [
+        {
+          role: "user",
+          content: "Select the topic tag and hashtags for this post.",
+        },
+      ],
+    });
+
+    const toolBlock = response.content.find(
+      (block) => block.type === "tool_use" && block.name === "select_topic_hashtags"
+    );
+
+    if (!toolBlock || toolBlock.type !== "tool_use") {
+      return buildTopicFallback(content);
+    }
+
+    const input = toolBlock.input as { topicTag: string; hashtags: string[] };
+    return {
+      topicTag: input.topicTag,
+      hashtags: input.hashtags.slice(0, 3),
+    };
+  } catch {
+    return buildTopicFallback(content);
+  }
 }
 
 // ---------------------------------------------------------------------------
