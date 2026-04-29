@@ -25,6 +25,7 @@ async function getFonts() {
     { name: "DM Sans", data: base64ToArrayBuffer(fontsData.DMSans_Light), weight: 300 as const, style: "normal" as const },
     { name: "DM Sans", data: base64ToArrayBuffer(fontsData.DMSans_Medium), weight: 500 as const, style: "normal" as const },
     { name: "DM Sans", data: base64ToArrayBuffer(fontsData.DMSans_Regular), weight: 400 as const, style: "normal" as const },
+    { name: "Noto Sans JP", data: base64ToArrayBuffer(fontsData.NotoSansJP_Light), weight: 300 as const, style: "normal" as const },
   ];
 }
 
@@ -77,7 +78,7 @@ export async function generatePng(content: DailyContent, options: { dark?: boole
   await initYoga(); // ensure resvg is initialized too
 
   const resvg = new ResvgClass(svg, {
-    fitTo: { mode: "width", value: 1080 }, // 2x for high-quality
+    fitTo: { mode: "width", value: 2048 }, // 2K resolution
   });
 
   const pngData = resvg.render();
