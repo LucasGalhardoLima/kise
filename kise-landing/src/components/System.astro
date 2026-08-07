@@ -10,14 +10,14 @@ const { title, body, pullQuote } = Astro.props;
 ---
 
 <section class="py-[140px]">
-  <h2 class="font-brand text-5xl font-light tracking-[0.02em] sm:text-[56px]">{title}</h2>
-  <p class="mt-8 font-body text-base leading-relaxed text-pine/70">{body}</p>
-  <blockquote class="mt-14 border-l-2 border-sage pl-6 font-brand text-[28px] font-light italic leading-snug text-pine/80 sm:text-[32px]">
+  <h2 data-reveal class="font-brand text-5xl font-light tracking-[0.02em] sm:text-[56px]">{title}</h2>
+  <p data-reveal data-reveal-delay="100" class="mt-8 font-body text-base leading-relaxed text-pine/70">{body}</p>
+  <blockquote data-reveal data-reveal-delay="200" class="mt-14 border-l-2 border-sage pl-6 font-brand text-[28px] font-light italic leading-snug text-pine/80 sm:text-[32px]">
     {pullQuote}
   </blockquote>
 </section>
 
 <!-- Separator -->
 <div class="flex justify-center py-[80px]">
-  <div class="h-px w-[60px] bg-sage/30"></div>
+  <div data-reveal class="h-px w-0 bg-sage/30 transition-all duration-700 [&.revealed]:w-[60px]"></div>
 </div>

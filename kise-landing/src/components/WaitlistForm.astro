@@ -12,20 +12,20 @@ const { title, body, cta, success, placeholder = "" } = Astro.props;
 ---
 
 <section class="pb-[80px] pt-[140px] text-center">
-  <h2 class="font-brand text-5xl font-light tracking-[0.02em] sm:text-[56px]">{title}</h2>
-  <p class="mt-4 font-body text-base text-pine/60">{body}</p>
+  <h2 data-reveal class="font-brand text-5xl font-light tracking-[0.02em] sm:text-[56px]">{title}</h2>
+  <p data-reveal data-reveal-delay="100" class="mt-4 font-body text-base text-pine/60">{body}</p>
 
-  <form class="mt-8 flex justify-center gap-3" data-waitlist>
+  <form data-reveal data-reveal-delay="200" class="mt-8 flex justify-center gap-3" data-waitlist>
     <input
       type="email"
       name="email"
       required
       placeholder={placeholder}
-      class="w-64 rounded-lg border border-sage/40 bg-white px-4 py-3 font-body text-sm text-pine placeholder:text-pine/30 focus:border-fern focus:outline-none"
+      class="w-64 rounded-lg border border-sage/40 bg-white px-4 py-3 font-body text-sm text-pine transition-colors duration-200 placeholder:text-pine/30 focus:border-fern focus:outline-none"
     />
     <button
       type="submit"
-      class="rounded-lg bg-fern px-6 py-3 font-body text-sm font-medium text-dust transition hover:bg-hunter"
+      class="rounded-lg bg-fern px-6 py-3 font-body text-sm font-medium text-dust transition-all duration-200 hover:-translate-y-px hover:bg-hunter hover:shadow-md"
     >
       {cta}
     </button>

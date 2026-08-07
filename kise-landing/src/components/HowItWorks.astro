@@ -18,10 +18,10 @@ const icons = [
 ---
 
 <section class="py-[140px]">
-  <h2 class="font-brand text-5xl font-light tracking-[0.02em] sm:text-[56px]">{title}</h2>
+  <h2 data-reveal class="font-brand text-5xl font-light tracking-[0.02em] sm:text-[56px]">{title}</h2>
   <div class="mt-12 grid gap-10 sm:grid-cols-3">
     {steps.map((step, i) => (
-      <div>
+      <div data-reveal data-reveal-delay={String(i * 150)}>
         <div class="text-hunter" set:html={icons[i]} />
         <h3 class="mt-3 font-brand text-xl font-light">{step.title}</h3>
         <p class="mt-2 font-body text-sm text-pine/60">{step.body}</p>

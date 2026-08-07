@@ -16,6 +16,7 @@ export default function LivePalette({ label, subtitle, fallbackCity, proxyBaseUr
   const [city, setCity] = useState(fallbackCity);
   const [temp, setTemp] = useState<number | null>(null);
   const [condition, setCondition] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const lang = navigator.language?.startsWith("pt") ? "pt_br" : "en";
@@ -64,6 +65,11 @@ export default function LivePalette({ label, subtitle, fallbackCity, proxyBaseUr
     fetchPalette();
   }, []);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setMounted(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const cityLine = [city, temp != null ? `${temp}°C` : null, condition]
     .filter(Boolean)
     .join(" · ");
@@ -73,13 +79,17 @@ export default function LivePalette({ label, subtitle, fallbackCity, proxyBaseUr
 
   const descriptionText = description.replace("{city}", city);
 
+  const fadeClass = mounted
+    ? "opacity-100 translate-y-0"
+    : "opacity-0 translate-y-4";
+
   return (
     <section className="-mx-6 bg-pine px-6 py-[140px] text-center">
-      <p className="font-body text-sm uppercase tracking-widest text-dust/50">
+      <p className={`font-body text-sm uppercase tracking-widest text-dust/50 transition-all duration-700 ${fadeClass}`}>
         {label}
       </p>
 
-      <p className="mx-auto mt-4 max-w-md font-body text-xs leading-relaxed text-dust/40">
+      <p className={`mx-auto mt-4 max-w-md font-body text-xs leading-relaxed text-dust/40 transition-all duration-700 delay-100 ${fadeClass}`}>
         {subtitle}
       </p>
 
@@ -103,9 +113,9 @@ export default function LivePalette({ label, subtitle, fallbackCity, proxyBaseUr
         })}
       </div>
 
-      <p className="mt-6 font-body text-sm text-dust/70">{cityLineDisplay}</p>
+      <p className={`mt-6 font-body text-sm text-dust/70 transition-all duration-700 delay-200 ${fadeClass}`}>{cityLineDisplay}</p>
 
-      <div className="mt-2 flex justify-center gap-3">
+      <div className={`mt-2 flex justify-center gap-3 transition-all duration-700 delay-300 ${fadeClass}`}>
         {colors.map((color, i) => (
           <span key={i} className="font-body text-xs text-dust/40">
             {color.toUpperCase()}
@@ -113,7 +123,7 @@ export default function LivePalette({ label, subtitle, fallbackCity, proxyBaseUr
         ))}
       </div>
 
-      <p className="mx-auto mt-5 max-w-md font-body text-xs leading-relaxed text-sage/70">
+      <p className={`mx-auto mt-5 max-w-md font-body text-xs leading-relaxed text-sage/70 transition-all duration-700 delay-[400ms] ${fadeClass}`}>
         {descriptionText}
       </p>
     </section>
